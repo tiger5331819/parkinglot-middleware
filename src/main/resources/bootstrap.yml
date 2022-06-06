@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: parkinglot-service
+  cloud:
+    nacos:
+      config:
+        enabled: true
+        refresh-enabled: true
+        server-addr: 192.168.0.35:8848
+        username: nacos
+        password: yfky2021
+        namespace: ${spring.profiles.active:}
+        shared-configs:
+          - data-id: share-nacos-discovery.yml
+          - data-id: share-redis.yml
+          - data-id: share-shardingsphere.yml
+            refresh: true
+
+logging:
+  file:
+    path: D:/work/logs
