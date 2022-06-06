@@ -7,7 +7,6 @@ import springfox.documentation.builders.ParameterBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.schema.ModelRef;
-import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Parameter;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
@@ -26,7 +25,7 @@ public class Knife4jConfiguration {
 
     @Bean(value = "daoerProxyAPI")
     public Docket daoerProxyAPI() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
                 .apiInfo(new ApiInfoBuilder()
                         .title("道尔云API")
@@ -44,12 +43,11 @@ public class Knife4jConfiguration {
                 // 需要生效的uri路径
                 .paths(PathSelectors.any())
                 .build();
-        return docket;
     }
 
     @Bean(value = "defaultApiV2")
     public Docket defaultApiV2() {
-        Docket docket = new Docket(DocumentationType.SWAGGER_2)
+        return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
                 .apiInfo(new ApiInfoBuilder()
                         .title("道尔云API代理")
@@ -67,7 +65,6 @@ public class Knife4jConfiguration {
                 // 需要生效的uri路径
                 .paths(PathSelectors.any())
                 .build();
-        return docket;
     }
 
     private List<Parameter> globalOperationParameters() {

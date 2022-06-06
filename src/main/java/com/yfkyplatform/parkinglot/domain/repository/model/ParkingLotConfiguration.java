@@ -2,14 +2,11 @@ package com.yfkyplatform.parkinglot.domain.repository.model;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Transient;
-import java.lang.reflect.ParameterizedType;
 
 /**
  * 停车场配置项
@@ -18,15 +15,11 @@ import java.lang.reflect.ParameterizedType;
  */
 @Entity
 @Table(name="pl_cfg")
-//@TypeDef(name="json",typeClass = JsonStringType.class)
 @NoArgsConstructor
 public class ParkingLotConfiguration<T> {
     @Id
     private String parkingLotId;
 
-    //@JoinColumn(name = "config", columnDefinition = "json")
-    //@Column(columnDefinition = "json")
-    //@Type(type = "json")
     private String config;
 
     private String parkingType;

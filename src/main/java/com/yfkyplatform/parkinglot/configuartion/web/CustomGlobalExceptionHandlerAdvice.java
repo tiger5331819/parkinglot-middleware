@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 /**
- * @author tiger
+ * @author Suhuyuan
  */
 @RestControllerAdvice()
 public class CustomGlobalExceptionHandlerAdvice {
