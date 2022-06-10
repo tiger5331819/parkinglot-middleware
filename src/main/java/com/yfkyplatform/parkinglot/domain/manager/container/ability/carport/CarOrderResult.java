@@ -25,7 +25,7 @@ public class CarOrderResult {
      * 订单创建时间（计费时间） yyyy-MM-dd HH:mm:ss
      */
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime CreateTime;
+    private LocalDateTime createTime;
     /**
      * 停车时长  单位:分
      */

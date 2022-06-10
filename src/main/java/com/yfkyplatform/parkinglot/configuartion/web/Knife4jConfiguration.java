@@ -39,7 +39,7 @@ public class Knife4jConfiguration {
                 // 切换到select构建器
                 .select()
                 // 需要扫描的Controller包路径
-                .apis(RequestHandlerSelectors.basePackage("com.yfkyplatform.parkinglot.daoerparkinglot"))
+                .apis(RequestHandlerSelectors.basePackage("com.yfkyplatform.parkinglot.carpark.daoer"))
                 // 需要生效的uri路径
                 .paths(PathSelectors.any())
                 .build();
@@ -50,18 +50,18 @@ public class Knife4jConfiguration {
         return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
                 .apiInfo(new ApiInfoBuilder()
-                        .title("道尔云API代理")
+                        .title("停车场API")
                         .description("Knife4j Description")
                         .build())
                 // 全局参数
                 .globalOperationParameters(globalOperationParameters())
                 // 该Api文档分组名称
-                .groupName("测试")
+                .groupName("停车场业务")
                 .enable(true)
                 // 切换到select构建器
                 .select()
                 // 需要扫描的Controller包路径
-                .apis(RequestHandlerSelectors.basePackage("com.yfkyplatform.parkinglot.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.yfkyplatform.parkinglot.api.web"))
                 // 需要生效的uri路径
                 .paths(PathSelectors.any())
                 .build();

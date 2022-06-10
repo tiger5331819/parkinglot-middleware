@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglot.controller;
+package com.yfkyplatform.parkinglot.api.web;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -15,10 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @Api(tags = {"测试控制器"})
-@RequestMapping(value = "/test")
+@RequestMapping(value = "api/test")
 @RestController
 public class TestController {
-
 
     public TestController(){
     }
@@ -34,5 +33,4 @@ public class TestController {
     public String stringTest(String txt){
         return txt;
     }
-
 }

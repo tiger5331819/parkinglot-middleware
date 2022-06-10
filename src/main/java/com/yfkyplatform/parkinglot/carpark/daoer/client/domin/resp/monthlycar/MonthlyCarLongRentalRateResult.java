@@ -1,7 +1,9 @@
 package com.yfkyplatform.parkinglot.carpark.daoer.client.domin.resp.monthlycar;
 
 import lombok.Data;
-import org.apache.poi.hpsf.Decimal;
+
+import java.math.BigDecimal;
+
 
 /**
  * 月卡费率结果
@@ -21,7 +23,7 @@ public class MonthlyCarLongRentalRateResult {
     /**
      * 月卡费用
      */
-    private Decimal packageCharge;
+    private BigDecimal packageCharge;
     /**
      * 月卡持续时间
      */

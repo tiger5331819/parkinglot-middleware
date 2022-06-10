@@ -11,14 +11,7 @@ import java.util.List;
  * @author Suhuyuan
  */
 
-public interface ParkingLotConfigurationRepository extends CrudRepository<ParkingLotConfiguration,String> {
-    /**
-     * 通过Id 获取停车场配置
-     * @param Id
-     * @return
-     */
-    ParkingLotConfiguration findParkingLotConfigurationByParkingLotId(String Id);
-
+public interface IParkingLotConfigurationRepository extends CrudRepository<ParkingLotConfiguration,String> {
     /**
      * 通过停车场类型来获取停车场配置
      * @param parkingType

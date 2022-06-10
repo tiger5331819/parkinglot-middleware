@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * @author Suhuyuan
  */
 @Data
-public class BlankCarInResult {
+public class BlankCarScanInResult {
     /**
      * 该车入场时间 yyyy-MM-dd HH:mm:ss
      */

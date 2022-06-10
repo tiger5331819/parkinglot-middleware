@@ -1,11 +1,16 @@
 package com.yfkyplatform.parkinglot.carpark.daoer;
 
+import cn.hutool.core.util.StrUtil;
+import com.yfkyplatform.parkinglot.carpark.daoer.ability.DaoerCarPortAbility;
+import com.yfkyplatform.parkinglot.carpark.daoer.ability.DaoerToolAbility;
 import com.yfkyplatform.parkinglot.carpark.daoer.client.DaoerClient;
 import com.yfkyplatform.parkinglot.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglot.domain.manager.container.ParkingLotPod;
-import com.yfkyplatform.parkinglot.domain.manager.container.ability.carport.*;
-
-import java.util.List;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.carport.ICarPortAblitity;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.coupon.ICouponAblitity;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.guest.IGuestAblitity;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.monthly.IMonthlyAblitity;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.tool.IToolAblitity;
 
 /**
  * 道尔停车场容器
@@ -13,73 +18,74 @@ import java.util.List;
  * @author Suhuyuan
  */
 
-public class DaoerParkingLot extends ParkingLotPod  implements ICarPortAblitity {
-    private DaoerClient client;
-
-    private DaoerParkingLotConfiguration cfg;
+public class DaoerParkingLot extends ParkingLotPod{
+    private DaoerClient Daoer;
 
     public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis){
         super(daoerParkingLotInfo);
-        client=new DaoerClient(daoerParkingLotInfo.getAppName(),daoerParkingLotInfo.getParkId(),daoerParkingLotInfo.getBaseUrl(),redis);
+        Daoer=new DaoerClient(daoerParkingLotInfo.getId(),daoerParkingLotInfo.getAppName(),daoerParkingLotInfo.getParkId(),daoerParkingLotInfo.getBaseUrl(),redis);
     }
 
     @Override
     public <T> T client() {
-        return (T) client;
+        return (T) Daoer;
     }
 
     @Override
     public boolean healthCheck() {
-        return false;
+        String token=Daoer.getToken();
+        return !StrUtil.isEmpty(token)&&!StrUtil.isBlank(token);
     }
 
+    /**
+     * 工具
+     *
+     * @return
+     */
     @Override
-    public byte[] getImage(String imgPath) {
-        return new byte[0];
+    public IToolAblitity tool() {
+        return new DaoerToolAbility(Daoer);
     }
 
+    /**
+     * 车场
+     *
+     * @return
+     */
     @Override
-    public CarPortSpaceResult getCarPortSpace() {
-        return null;
+    public ICarPortAblitity carport() {
+        return new DaoerCarPortAbility(Daoer);
     }
 
+    /**
+     * 优惠券
+     *
+     * @return
+     */
     @Override
-    public CarOrderResult getCarFeeInfo(String carNo) {
-        return null;
+    public ICouponAblitity coupon() {
+        throw new UnsupportedOperationException();
     }
 
+    /**
+     * 访客
+     *
+     * @return
+     */
     @Override
-    public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
-        return null;
+    public IGuestAblitity guest() {
+        throw new UnsupportedOperationException();
     }
 
+    /**
+     * 月卡
+     *
+     * @return
+     */
     @Override
-    public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
-        return null;
+    public IMonthlyAblitity monthly() {
+        throw new UnsupportedOperationException();
     }
 
-    @Override
-    public BlankCarInResult blankCarIn(String openId, int scanType, String channelId) {
-        return null;
-    }
 
-    @Override
-    public BlankCarOutResult blankCarOut(String openId, int scanType, String channelId) {
-        return null;
-    }
-
-    @Override
-    public List<ChannelResult> getChannelsInfo() {
-        return null;
-    }
-
-    @Override
-    public List<ChannelStateResult> getChannelStates() {
-        return null;
-    }
-
-    @Override
-    public List<ChannelStatusResult> controlChannel(String channelId, int channelIdStatus) {
-        return null;
-    }
 }

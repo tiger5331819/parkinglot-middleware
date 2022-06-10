@@ -3,20 +3,26 @@ package com.yfkyplatform.parkinglot.domain.manager.container.ability.carport;
 import lombok.Data;
 
 /**
- * 通道状态结果
- *
  * @author Suhuyuan
  */
 @Data
-public class ChannelStateResult {
+public class ChannelInfoResult {
+    /**
+     * 通道ID
+     */
+    private String channelId;
+    /**
+     * 通道名称
+     */
+    private String channelName;
+    /**
+     * 0 入口 1出口
+     */
+    private int type;
     /**
      * 道闸状态，0 关到位 1-中间位 2-开到位 3-关闸中
      */
     private int door;
-    /**
-     * 	通道名
-     */
-    private String channelName;
     /**
      * 地感状态 0正常 -1 离线
      */
@@ -25,10 +31,6 @@ public class ChannelStateResult {
      * 相机状态 0正常 -1 离线
      */
     private int camera;
-    /**
-     * 通道ID
-     */
-    private String channelId;
     /**
      * 主板状态 0正常 -1 离线
      */

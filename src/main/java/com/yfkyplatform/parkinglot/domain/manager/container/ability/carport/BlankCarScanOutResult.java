@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Suhuyuan
  */
 @Data
-public class BlankCarOutResult {
+public class BlankCarScanOutResult {
     /**
      * 通过openid生成的临时车牌
      */

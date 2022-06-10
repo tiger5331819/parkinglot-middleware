@@ -39,7 +39,7 @@ public abstract class DaoerWebClient {
 
     protected RedisTool redis;
 
-    public DaoerWebClient(String appName, String parkId, String baseUrl, RedisTool redisTool){
+    public DaoerWebClient(String id,String appName, String parkId, String baseUrl, RedisTool redisTool){
         client= WebClient
                 .builder()
                 .baseUrl(baseUrl)
@@ -48,7 +48,7 @@ public abstract class DaoerWebClient {
         redis= redisTool;
         this.appName=appName;
         this.parkId=parkId;
-        tokenName="token:"+parkId;
+        tokenName="token:"+id;
     }
 
     protected  Consumer<? super Throwable> errFunction(){

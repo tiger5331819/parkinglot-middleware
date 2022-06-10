@@ -1,6 +1,6 @@
 spring:
   application:
-    name: parkinglot-service
+    name: parkinglot-middleware
   cloud:
     nacos:
       config:

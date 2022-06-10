@@ -4,11 +4,11 @@ import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglot.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglot.domain.manager.container.ParkingLotPod;
-import com.yfkyplatform.parkinglot.domain.manager.container.ability.carport.ICarPortAblitity;
-import com.yfkyplatform.parkinglot.domain.repository.ParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglot.domain.repository.IParkingLotConfigurationRepository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -20,11 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends ParkingLotConfiguration> {
     protected Map<String, T> parkingLotMap=new ConcurrentHashMap<>();
 
-    protected ParkingLotConfigurationRepository cfgRepository;
+    protected IParkingLotConfigurationRepository cfgRepository;
 
     protected RedisTool redis;
 
-    public ParkingLotManager(RedisTool redisTool,ParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
+    public ParkingLotManager(RedisTool redisTool, IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
         redis= redisTool;
         this.cfgRepository=cfgRepository;
         load(loadData());
@@ -45,6 +45,13 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
     protected  abstract List<Data> loadData() throws JsonProcessingException;
 
     /**
+     * 保存配置数据
+     * @param data
+     * @return
+     */
+    protected  abstract boolean SaveData(Data data) throws JsonProcessingException;
+
+    /**
      * 基本参数配置
      * @param dataList
      */
@@ -52,6 +59,22 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
         for (Data item:dataList) {
             T parkingLot=load(item);
             parkingLotMap.put(item.getId(),parkingLot);
+        }
+    }
+
+    /**
+     * 添加停车场
+     * @param data 停车场配置数据
+     * @return
+     * @throws JsonProcessingException
+     */
+    public boolean addParkingLot(Data data) throws JsonProcessingException {
+        if(SaveData(data)){
+            T parkingLot=load(data);
+            parkingLotMap.put(data.getId(),parkingLot);
+            return true;
+        } else{
+          return false;
         }
     }
 
@@ -65,8 +88,17 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
             throw new IllegalArgumentException("parkingLotId 不能为空");
         }
 
-        return parkingLotMap.containsKey(parkingLotId)
-                ?(T)parkingLotMap.get(parkingLotId)
-                :null;
+        if(parkingLotMap.containsKey(parkingLotId)){
+            return (T)parkingLotMap.get(parkingLotId);
+        }else {
+            throw new NoSuchElementException(parkingLotId+"不存在");
+        }
     }
+
+    /**
+     * 通过车场Id获取停车场
+     * @param parkingId
+     * @return
+     */
+    public abstract  <T extends ParkingLotPod>T parkingLotFromPark(String parkingId);
 }

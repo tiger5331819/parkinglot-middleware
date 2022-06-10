@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglot.domain.manager.container.ability.carport;
 
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.PageResult;
+
 import java.util.List;
 
 
@@ -40,31 +42,38 @@ public interface ICarPortAblitity {
      *
      * @return
      */
-    BlankCarInResult blankCarIn(String openId, int scanType, String channelId);
+    BlankCarScanInResult blankCarIn(String openId, int scanType, String channelId);
     /**
      * 无牌车出场
      *
      * @return
      */
-    BlankCarOutResult blankCarOut(String openId, int scanType, String channelId);
+    BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId);
     /**
      * 获取通道列表
      *
      * @return
      */
-    List<ChannelResult> getChannelsInfo();
-
-    /**
-     * 获取设备状态
-     *
-     * @return
-     */
-     List<ChannelStateResult> getChannelStates();
+    List<ChannelInfoResult> getChannelsInfo();
 
     /**
      * 控制道闸开、关。
      *
      * @return
      */
-    List<ChannelStatusResult> controlChannel(String channelId, int channelIdStatus);
+    ChannelDoorStateResult controlChannel(String channelId, boolean channelIdStatus);
+
+    /**
+     * 获取入场记录
+     * @param carNo 车牌号码
+     * @return
+     */
+    PageResult<CarInResult> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+    /**
+     * 获取出场记录
+     *
+     * @param carNo 车牌号码
+     * @return
+     */
+    PageResult<CarOutResult> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
 }

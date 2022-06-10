@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -42,6 +43,10 @@ public class ParkingLotManagerFactory {
         if(StrUtil.isBlank(parkingLotManagerName)){
             throw new IllegalArgumentException("parkingLotManagerName 不能为空");
         }
-        return parkingLotManagerMap.containsKey(parkingLotManagerName)?parkingLotManagerMap.get(parkingLotManagerName):null;
+        if(parkingLotManagerMap.containsKey(parkingLotManagerName)){
+            return parkingLotManagerMap.get(parkingLotManagerName);
+        }else {
+            throw new NoSuchElementException(parkingLotManagerName+"不存在");
+        }
     }
 }

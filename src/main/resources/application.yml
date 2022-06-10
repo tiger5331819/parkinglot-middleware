@@ -1,28 +1,18 @@
-dao:
-  app: a909fb0eb10240979b2b374273bf6342
-  park: X24400000001
-  uri: https://parklot.q-parking.com
-
 server:
   port: 8082
 
 dubbo:
   protocol:
     name: dubbo
-    port: 20881
+    port: 31000
   consumer:
     check: false
-#  cloud:
-#    subscribed-services: pay-service,passthrough-service,ordercenter-service
+  cloud:
+    subscribed-services: ordercenter-service
 
 spring:
   main:
     allow-bean-definition-overriding: true
-  redis:
-    password: 850aa64cedcfb8cb78f4a2b1f2bf4fa3f4e09df7e02c7501fc18ec725f765bc9
-    cluster:
-      nodes: 192.168.0.119:7001,192.168.0.119:7002,192.168.0.119:7003
-    prefix: parkinglot-service
   cloud:
     nacos:
       discovery:
@@ -32,58 +22,4 @@ spring:
 
   mvc:
     format:
-      date-time: yyyy-MM-dd
-#  shardingsphere:
-#    enabled: true
-#    props:
-#      sql:
-#        show: true
-#    datasource:
-#      names: m1
-#      m1:
-#        type: com.zaxxer.hikari.HikariDataSource
-#        driver-class-name: com.mysql.cj.jdbc.Driver
-#        jdbc-url: jdbc:mysql://14.18.232.165:7736/TestSql
-#        username: root
-#        password: Alltosea@147258
-#    sharding:
-#      tables:
-#        t_order:
-#          keyGenerator:
-#            column: test_id
-#            type: SNOWFLAKE
-#          actualDataNodes: m1.t_order_$->{1..2}
-#          tableStrategy:
-#            inline:
-#              shardingColumn: test_id
-#              algorithmExpression: t_order_$->{test_id % 2+1}
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
-    database: mysql
-  datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://14.18.232.165:7736/TestSql
-    username: root
-    password: Alltosea@147258
-
-
-
-
----
-
-spring:
-  profiles: dev
-
----
-
-spring:
-  profiles: test
-
----
-
-spring:
-  profiles: prod
-
----
+      date-time: yyyy-MM-dd HH:mm:ss

@@ -36,18 +36,4 @@ class ParkingLotManagerFactoryTest {
 
         System.out.println(daoerParkingLotConfiguration);
     }
-
-    @Test
-    void useParkingManagerHealthCheckTest(){
-        Boolean check = factory.manager("Daoer").parkingLot("DaoerTest").healthCheck();
-
-        Assert.assertTrue(check);
-    }
-
-    @Test
-    void useParkingManagerAbilityTest(){
-        DaoerParkingLot daoerParkingLot= factory.manager("Daoer").parkingLot("DaoerTest");
-        CarPortSpaceResult carPortSpace= daoerParkingLot.getCarPortSpace();
-        System.out.println(carPortSpace);
-    }
 }

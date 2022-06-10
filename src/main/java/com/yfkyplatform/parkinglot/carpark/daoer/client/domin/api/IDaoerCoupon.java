@@ -21,9 +21,9 @@ public interface IDaoerCoupon {
     Mono<DaoerBaseResp<List<CouponResult>>> getCoupon(String openId);
 
     /**
-     * 查询优惠券
+     * 使用优惠券
      *
      * @return
      */
-    Mono<DaoerBaseResp<List<CouponUseResult>>> useCoupon(String objectId, String carNo);
+    Mono<DaoerBaseResp<CouponUseResult>> useCoupon(String objectId, String carNo);
 }

@@ -32,8 +32,8 @@ import java.util.List;
 @Slf4j
 public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
 
-    public DaoerClient(String appName, String parkId, String baseUrl, RedisTool redisTool){
-        super(appName, parkId, baseUrl, redisTool);
+    public DaoerClient(String id,String appName, String parkId, String baseUrl, RedisTool redisTool){
+        super(id,appName, parkId, baseUrl, redisTool);
     }
 
     /**
@@ -258,16 +258,16 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     }
 
     /**
-     * 查询优惠券
+     * 使用优惠券
      *
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<List<CouponUseResult>>> useCoupon(String objectId, String carNo){
+    public Mono<DaoerBaseResp<CouponUseResult>> useCoupon(String objectId, String carNo){
         CouponUse model=new CouponUse("api/index/coupon/bindcar");
         model.setObjectId(objectId);
         model.setCarNo(carNo);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<CouponUseResult>>>() {});
+        return post(model,new ParameterizedTypeReference<DaoerBaseResp<CouponUseResult>>() {});
     }
 
     /**

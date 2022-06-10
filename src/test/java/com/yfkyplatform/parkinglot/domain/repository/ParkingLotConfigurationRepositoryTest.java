@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -14,13 +15,13 @@ import java.util.List;
 @SpringBootTest
 class ParkingLotConfigurationRepositoryTest {
 
+    @Qualifier("parkingLotConfigurationRepositoryByRedis")
     @Autowired
-    private ParkingLotConfigurationRepository repository;
+    private IParkingLotConfigurationRepository repository;
 
     @Test
     void addTest() throws JsonProcessingException {
         ParkingLotConfiguration<DaoerConfiguration> data=new ParkingLotConfiguration("DaoerTest","Daoer");
-        data.setParkingLotId("DaoerTest");
         data.setConfig(new DaoerConfiguration("a909fb0eb10240979b2b374273bf6342","X24400000001","https://parklot.q-parking.com"));
         repository.save(data);
     }
@@ -28,7 +29,7 @@ class ParkingLotConfigurationRepositoryTest {
     @ParameterizedTest
     @ValueSource(strings={"DaoerTest"})
     void getTest(String Id){
-        ParkingLotConfiguration<DaoerConfiguration> data=repository.findParkingLotConfigurationByParkingLotId(Id);
+        ParkingLotConfiguration<DaoerConfiguration> data=repository.findById(Id).get();
         System.out.println(data);
     }
 
@@ -38,7 +39,7 @@ class ParkingLotConfigurationRepositoryTest {
         List<ParkingLotConfiguration> data=repository.findParkingLotConfigurationByParkingType(Id);
         for (ParkingLotConfiguration cfg:data){
             System.out.println(cfg);
-            System.out.println(cfg.getConfig(DaoerConfiguration.class));
+            System.out.println(cfg.getConfig());
         }
 
     }

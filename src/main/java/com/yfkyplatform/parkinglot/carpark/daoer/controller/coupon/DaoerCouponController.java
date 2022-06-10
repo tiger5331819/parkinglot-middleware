@@ -21,25 +21,28 @@ import java.util.List;
  */
 @Slf4j
 @Api(tags = {"优惠券"})
-@RequestMapping(value = "/api/coupon")
+@RequestMapping(value = "/Daoer/api/{parkingLotId}/coupon")
 @RestController
-public class CouponController {
+public class DaoerCouponController {
 
-    private IDaoerCoupon api;
+    private ParkingLotManager manager;
 
-    public CouponController(ParkingLotManager manager){
-        this.api=manager.parkingLot("DaoerTest").client();
+    private IDaoerCoupon api(String parkingLotId){
+        return manager.parkingLot(parkingLotId).client();
+    }
+    public DaoerCouponController(ParkingLotManager manager){
+        this.manager=manager;
     }
 
     @ApiOperation(value = "查询优惠券")
     @GetMapping
-    public DaoerBaseResp<List<CouponResult>> getCoupon(@ApiParam(value = "微信openId") String openId){
-        return api.getCoupon(openId).block();
+    public DaoerBaseResp<List<CouponResult>> getCoupon(@PathVariable String parkingLotId,@ApiParam(value = "微信openId") String openId){
+        return api(parkingLotId).getCoupon(openId).block();
     }
 
     @ApiOperation(value = "使用优惠券")
     @PostMapping
-    public DaoerBaseResp<List<CouponUseResult>> useCoupon(@RequestBody UseCouponRequest request){
-        return api.useCoupon(request.getObjectId(),request.getCarNo()).block();
+    public DaoerBaseResp<CouponUseResult> useCoupon(@PathVariable String parkingLotId,@RequestBody UseCouponRequest request){
+        return api(parkingLotId).useCoupon(request.getObjectId(),request.getCarNo()).block();
     }
 }

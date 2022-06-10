@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglot.domain.manager.container;
 
 import com.yfkyplatform.parkinglot.domain.manager.ParkingLotConfiguration;
+import com.yfkyplatform.parkinglot.domain.manager.container.ability.ParkingLotAbility;
 
 /**
  * 停车场容器
@@ -8,14 +9,13 @@ import com.yfkyplatform.parkinglot.domain.manager.ParkingLotConfiguration;
  * @author Suhuyuan
  */
 
-public abstract class ParkingLotPod {
+public abstract class ParkingLotPod implements ParkingLotAbility {
 
     protected ParkingLotConfiguration cfg;
 
     public ParkingLotPod(ParkingLotConfiguration parkingLotConfiguration){
         this.cfg= parkingLotConfiguration;
     }
-
 
     /**
      * 获取驱动
@@ -40,9 +40,11 @@ public abstract class ParkingLotPod {
     public abstract boolean healthCheck();
 
     /**
-     * 获取图片
-     * @param imgPath 图片路径
+     * 获取停车场Id
      * @return
+     * @param
      */
-    public abstract byte[] getImage(String imgPath);
+    public String Id(){
+        return cfg.getId();
+    }
 }

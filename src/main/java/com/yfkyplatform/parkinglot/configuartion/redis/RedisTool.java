@@ -15,14 +15,16 @@ import java.time.Duration;
 @Component
 public class RedisTool {
     private RedisTemplate redisTemplate;
-    @Value("${spring.redis.prefix}")
+    @Value("${spring.application.name}")
     private String prefix;
+
+    public RedisTemplate client(){return redisTemplate;}
 
     public RedisTool(RedisTemplate redisTemplate){
         this.redisTemplate=redisTemplate;
     }
 
-    private<K> String MakeKey(K key){
+    public <K> String MakeKey(K key){
         return prefix+":"+key;
     }
 
