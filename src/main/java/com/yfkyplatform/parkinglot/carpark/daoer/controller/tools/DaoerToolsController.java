@@ -3,10 +3,11 @@ package com.yfkyplatform.parkinglot.carpark.daoer.controller.tools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yfkyplatform.parkinglot.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglot.carpark.daoer.client.domin.api.IDaoerTool;
 import com.yfkyplatform.parkinglot.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglot.carpark.daoer.controller.tools.request.ViewHttpApiProxy;
-import com.yfkyplatform.parkinglot.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglot.domain.manager.ParkingLotManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -26,32 +27,34 @@ import java.util.Map;
  */
 @Slf4j
 @Api(tags = {"基础支持（工具）"})
-@RequestMapping(value = "/api/tools")
+@RequestMapping(value = "/Daoer/api/{parkingLotId}/tools")
 @RestController
-public class ToolsController {
+public class DaoerToolsController {
 
     private RestTemplate restTemplate;
     private ObjectMapper mapper;
+    private ParkingLotManager manager;
+    private IDaoerTool api(String parkingLotId){
+        return manager.parkingLot(parkingLotId).client();
+    }
 
-    private IDaoerTool api;
-
-    public ToolsController(RestTemplate restTemplate, ObjectMapper mapper, ParkingLotManagerFactory factory){
+    public DaoerToolsController(RestTemplate restTemplate, ObjectMapper mapper, DaoerParkingLotManager manager){
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.api= factory.manager("Daoer").parkingLot("DaoerTest").client();
+        this.manager=manager;
     }
 
     @ApiOperation(value = "图片")
     @GetMapping(value = "/img",produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImg(String imgPath){
-        return api.getImage(imgPath).block();
+    public byte[] getImg(@PathVariable String parkingLotId,String imgPath){
+        return api(parkingLotId).getImage(imgPath).block();
     }
 
     @ApiOperation(value = "Access_Token")
     @GetMapping(value = "/token")
-    public DaoerBaseResp<String> getToken(){
+    public DaoerBaseResp<String> getToken(@PathVariable String parkingLotId){
         DaoerBaseResp<String> result=new DaoerBaseResp<String>();
-        result.setBody(api.getToken());
+        result.setBody(api(parkingLotId).getToken());
         return result;
     }
 
@@ -95,17 +98,4 @@ public class ToolsController {
         Map<String,Object> resultJson= mapper.readValue(result.block(), new TypeReference<Map<String, Object>>() {});
         return resultJson;
     }
-
-    @ApiOperation(value = "路径参数测试")
-    @GetMapping("/test/{txt}")
-    public String testPathVariable(@PathVariable String txt){
-        return txt;
-    }
-
-    @ApiOperation(value = "查询字符串测试")
-    @GetMapping("/test")
-    public String stringTest(String txt){
-        return txt;
-    }
-
 }

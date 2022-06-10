@@ -21,31 +21,34 @@ import javax.validation.constraints.NotNull;
  */
 @Slf4j
 @Api(tags = {"访客"})
-@RequestMapping(value = "/api/guest")
+@RequestMapping(value = "/Daoer/api/{parkingLotId}/guest")
 @RestController
-public class GuestController {
+public class DaoerGuestController {
+    private ParkingLotManager manager;
 
-    private final IDaoerGuest api;
+    private IDaoerGuest api(String parkingLotId){
+        return manager.parkingLot(parkingLotId).client();
+    }
 
-    public GuestController(ParkingLotManager manager){
-        this.api=manager.parkingLot("DaoerTest").client();
+    public DaoerGuestController(ParkingLotManager manager){
+        this.manager=manager;
     }
 
     @ApiOperation(value = "创建访客")
     @PostMapping(value = "/guest")
-    public DaoerBaseResp<GuestResult> createGuest(@RequestBody CreateGuestRequest request){
-        return api.createGuest(request.getGuestName(), request.getCarNo(), request.getVisitTime(), request.getPhone(), request.getDescription()).block();
+    public DaoerBaseResp<GuestResult> createGuest(@PathVariable String parkingLotId,@RequestBody CreateGuestRequest request){
+        return api(parkingLotId).createGuest(request.getGuestName(), request.getCarNo(), request.getVisitTime(), request.getPhone(), request.getDescription()).block();
     }
 
     @ApiOperation(value = "更新访客")
     @PatchMapping(value = "/guest")
-    public DaoerBaseResp changeGuest(@RequestBody ChangeGuestRequest request){
-        return api.changeGuestMessage(request.getObjectId(), request.getGuestName(),request.getVisitTime(), request.getPhone(), request.getDescription()).block();
+    public DaoerBaseResp changeGuest(@PathVariable String parkingLotId,@RequestBody ChangeGuestRequest request){
+        return api(parkingLotId).changeGuestMessage(request.getObjectId(), request.getGuestName(),request.getVisitTime(), request.getPhone(), request.getDescription()).block();
     }
 
     @ApiOperation(value = "取消访客")
     @DeleteMapping(value = "/guest")
-    public DaoerBaseResp removeGuest(@ApiParam(value = "唯一记录标识", required = true)@NotNull(message = "唯一记录标识不能为空") String objectId){
-        return api.removeGuestMessage(objectId).block();
+    public DaoerBaseResp removeGuest(@PathVariable String parkingLotId,@ApiParam(value = "唯一记录标识", required = true)@NotNull(message = "唯一记录标识不能为空") String objectId){
+        return api(parkingLotId).removeGuestMessage(objectId).block();
     }
 }
