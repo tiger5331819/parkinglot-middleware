@@ -1,45 +1,5 @@
 <?xml version="1.0" encoding="utf-8" ?>
 
 <configuration>
-
     <include resource="META-INF/logback/common-logback-spring.xml" />
-    <appender name="ELASTIC" class="com.internetitem.logback.elasticsearch.ElasticsearchAppender">
-        <url>http://192.168.0.150:9201/_bulk</url>
-        <index>${app.name}-logs</index>
-        <includeMdc>true</includeMdc>
-        <authentication class="com.internetitem.logback.elasticsearch.config.BasicAuthentication"/>
-        <!-- 配置属性 -->
-        <properties>
-            <property>
-                <name>level</name>
-                <value>%level</value>
-            </property>
-            <property>
-                <name>stacktrace</name>
-                <value>%ex</value>
-            </property>
-            <property>
-                <name>logger</name>
-                <value>%logger</value>
-            </property>
-        </properties>
-        <!-- 头部信息 -->
-        <headers>
-            <header>
-                <name>Content-Type</name>
-                <value>application/json</value>
-            </header>
-        </headers>
-    </appender>
-
-    <!-- LOG everything at INFO level -->
-    <root level="info">
-        <!--所有的日志都会通过ELASTIC为名的appender计入es-->
-        <appender-ref ref="stdout"/>
-        <appender-ref ref="ELASTIC"/>
-    </root>
-
-    <logger name="es-logger" level="INFO" additivity="false">
-        <appender-ref ref="ELASTIC"/>
-    </logger>
 </configuration>
