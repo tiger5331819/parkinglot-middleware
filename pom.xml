@@ -125,6 +125,11 @@
             <artifactId>yfky-common-web-starter</artifactId>
             <version>1.0.1-RELEASE</version>
         </dependency>
+        <dependency>
+            <groupId>com.yfkyframework</groupId>
+            <artifactId>yfky-common-provider-starter</artifactId>
+            <version>1.0.1-RELEASE</version>
+        </dependency>
 
     </dependencies>
 

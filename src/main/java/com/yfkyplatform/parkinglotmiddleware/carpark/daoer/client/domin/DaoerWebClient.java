@@ -23,19 +23,19 @@ import java.util.function.Consumer;
  */
 @Slf4j
 public abstract class DaoerWebClient {
-    private WebClient client;
+    private final WebClient client;
     /**
      * 令牌名称
      */
-    private String tokenName;
+    private final String tokenName;
     /**
      * 应用名称（应用ID）
      */
-    private String appName;
+    private final String appName;
     /**
      * 车场ID
      */
-    private String parkId;
+    private final String parkId;
 
     protected RedisTool redis;
 
@@ -55,8 +55,6 @@ public abstract class DaoerWebClient {
         return (Throwable err)->{
             if(err instanceof  WebClientResponseException) {
                 String errResult=((WebClientResponseException)err).getResponseBodyAsString();
-                Throwable ex=new RuntimeException(errResult);
-                log.error(ex.getMessage(),ex);
                 throw new RuntimeException(errResult);
             }
         };
