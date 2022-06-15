@@ -13,7 +13,7 @@ spring:
         shared-configs:
           - data-id: share-nacos-discovery.yml
           - data-id: share-redis.yml
-          - data-id: share-shardingsphere.yml
+          - data-id: share-rocketmq.yml
             refresh: true
 
 logging:

@@ -8,7 +8,7 @@ dubbo:
   consumer:
     check: false
   cloud:
-    subscribed-services: ordercenter-service
+    subscribed-services: ordercenter-service,parkinglot-middleware
 
 spring:
   main:
@@ -23,3 +23,8 @@ spring:
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
+
+rocketmq:
+  # Producer 配置项
+  producer:
+    group: parkinglot-middleware-producer-group # 生产者分组
