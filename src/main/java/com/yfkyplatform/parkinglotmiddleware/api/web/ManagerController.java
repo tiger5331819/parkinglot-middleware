@@ -2,7 +2,6 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -26,7 +25,7 @@ import java.util.Set;
 @RestController
 public class ManagerController {
 
-    private IManagerService managerService;
+    private final IManagerService managerService;
 
     public ManagerController(IManagerService managerService){
         this.managerService=managerService;

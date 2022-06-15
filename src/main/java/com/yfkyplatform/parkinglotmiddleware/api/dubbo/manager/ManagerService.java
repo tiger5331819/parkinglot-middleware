@@ -2,7 +2,6 @@ package com.yfkyplatform.parkinglotmiddleware.api.dubbo.manager;
 
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.DaoerParkingLotCfgRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
@@ -26,7 +25,7 @@ import java.util.Set;
 @Component
 public class ManagerService implements IManagerService {
 
-    private ParkingLotManagerFactory factory;
+    private final ParkingLotManagerFactory factory;
 
     public ManagerService(ParkingLotManagerFactory factory){
         this.factory=factory;
