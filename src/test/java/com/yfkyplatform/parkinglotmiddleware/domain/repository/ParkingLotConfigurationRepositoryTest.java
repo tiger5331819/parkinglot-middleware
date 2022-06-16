@@ -21,7 +21,7 @@ class ParkingLotConfigurationRepositoryTest {
 
     @Test
     void addTest() throws JsonProcessingException {
-        ParkingLotConfiguration<DaoerConfiguration> data=new ParkingLotConfiguration("DaoerTest","Daoer");
+        ParkingLotConfiguration<DaoerConfiguration> data = new ParkingLotConfiguration("DaoerTest", "Daoer", "道尔测试");
         data.setConfig(new DaoerConfiguration("a909fb0eb10240979b2b374273bf6342","X24400000001","https://parklot.q-parking.com"));
         repository.save(data);
     }

@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
@@ -7,7 +8,6 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLot
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 停车场管理
@@ -16,38 +16,38 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 
 public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends ParkingLotConfiguration> {
-    protected Map<String, T> parkingLotMap=new ConcurrentHashMap<>();
 
     protected IParkingLotConfigurationRepository cfgRepository;
 
     protected RedisTool redis;
 
     public ParkingLotManager(RedisTool redisTool, IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
-        redis= redisTool;
-        this.cfgRepository=cfgRepository;
-        load(loadData());
+        redis = redisTool;
+        this.cfgRepository = cfgRepository;
     }
 
     /**
      * 根据配置数据加载实例
-     * @param data
+     *
+     * @param parkingLotId
      * @return
      */
-    protected abstract T  load(Data data);
+    protected abstract T load(String parkingLotId);
+
+    /**
+     * 根据配置数据加载所有实例
+     *
+     * @return
+     */
+    protected abstract List<T> load();
 
     /**
      * 检查配置数据
+     *
      * @param data
      * @return
      */
-    protected abstract void dataCheck (Data data);
-
-    /**
-     * 加载配置数据
-     * @return
-     * @throws JsonProcessingException
-     */
-    protected  abstract List<Data> loadData() throws JsonProcessingException;
+    protected abstract void dataCheck(Data data);
 
     /**
      * 保存配置数据
@@ -57,17 +57,6 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
     protected  abstract boolean SaveData(Data data) throws JsonProcessingException;
 
     /**
-     * 基本参数配置
-     * @param dataList
-     */
-    private void load(List<Data> dataList){
-        for (Data item:dataList) {
-            T parkingLot=load(item);
-            parkingLotMap.put(item.getId(),parkingLot);
-        }
-    }
-
-    /**
      * 添加停车场
      * @param data 停车场配置数据
      * @return
@@ -75,38 +64,27 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      */
     public boolean addParkingLot(Data data) throws JsonProcessingException {
         dataCheck(data);
-        if(SaveData(data)){
-            T parkingLot=load(data);
-            parkingLotMap.put(data.getId(),parkingLot);
-            return true;
-        } else{
-          return false;
-        }
+        return SaveData(data);
     }
 
     /**
      * 获取停车场
+     *
      * @param parkingLotId
      * @return
      */
-    public <T extends ParkingLotPod>T parkingLot(String parkingLotId){
-        if(StrUtil.isBlank(parkingLotId)){
+    public <T extends ParkingLotPod> T parkingLot(String parkingLotId) {
+        if (StrUtil.isBlank(parkingLotId)) {
             throw new IllegalArgumentException("parkingLotId 不能为空");
         }
 
-        if(parkingLotMap.containsKey(parkingLotId)){
-            return (T)parkingLotMap.get(parkingLotId);
-        }else {
-            throw new NoSuchElementException(parkingLotId+"不存在");
+        T parkingLot = (T) load(parkingLotId);
+        if (!ObjectUtil.isNull(parkingLot)) {
+            return parkingLot;
+        } else {
+            throw new NoSuchElementException(parkingLotId + "不存在");
         }
     }
-
-    /**
-     * 通过车场Id获取停车场
-     * @param parkingId
-     * @return
-     */
-    public abstract  <T extends ParkingLotPod>T parkingLotFromPark(String parkingId);
 
     /**
      * 获取停车场配置信息
@@ -116,12 +94,10 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
     public List<ParkingLotConfiguration> configurationList(String parkingLotId){
         List cfgList=new ArrayList();
 
-        if(!StrUtil.isBlank(parkingLotId)){
-            cfgList.add(parkingLotMap.get(parkingLotId).configuration());
-        }else{
-            parkingLotMap.values().forEach(parkingLot->{
-                cfgList.add(parkingLot.configuration());
-            });
+        if(!StrUtil.isBlank(parkingLotId)) {
+            cfgList.add(load(parkingLotId).configuration());
+        } else {
+            load().forEach(item -> cfgList.add(item.configuration()));
         }
         return cfgList;
     }
@@ -131,15 +107,13 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public Map<String,Boolean> parkingLotHealthCheck(String parkingLotId){
-        Map healthCheckMap=new HashMap();
-        if(!StrUtil.isBlank(parkingLotId)){
-            T parkingLot=parkingLotMap.get(parkingLotId);
+    public Map<String,Boolean> parkingLotHealthCheck(String parkingLotId) {
+        Map healthCheckMap=new HashMap(100);
+        if(!StrUtil.isBlank(parkingLotId)) {
+            T parkingLot=load(parkingLotId);
             healthCheckMap.put(parkingLot.Id(),parkingLot.healthCheck());
-        }else{
-            parkingLotMap.values().forEach(parkingLot->{
-                healthCheckMap.put(parkingLot.Id(),parkingLot.healthCheck());
-            });
+        } else {
+            load().forEach(item -> healthCheckMap.put(item.Id(),item.healthCheck()));
         }
         return healthCheckMap;
     }

@@ -11,5 +11,12 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class ParkingLotConfiguration {
+    /**
+     * 配置信息唯一标识
+     */
     private String id;
+    /**
+     * 描述
+     */
+    private String description;
 }

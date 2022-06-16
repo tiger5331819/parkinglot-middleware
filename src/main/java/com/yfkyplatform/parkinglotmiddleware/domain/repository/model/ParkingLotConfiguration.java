@@ -18,8 +18,11 @@ public class ParkingLotConfiguration<T> {
 
     private String parkingType;
 
-    public ParkingLotConfiguration(String parkingLotId, String parkingType) {
+    private String description;
+
+    public ParkingLotConfiguration(String parkingLotId, String parkingType, String description) {
         this.parkingLotId = parkingLotId;
         this.parkingType = parkingType;
+        this.description = description;
     }
 }

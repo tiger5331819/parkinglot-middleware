@@ -1,10 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web.carinorout;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
-import com.yfkyplatform.parkinglotmiddleware.api.mq.CarOutNotice;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerCarOutMessage;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerParkingLotPostResp;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.order.OrderExtensionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -28,19 +26,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CarOutController {
 
-    private OrderExtensionService orderExtensionService;
-    private RocketMQTemplate rocketMQTemplate;
+    private final RocketMQTemplate rocketMQTemplate;
 
-    public CarOutController(OrderExtensionService orderExtensionService, RocketMQTemplate rocketMQTemplate){
-        this.orderExtensionService=orderExtensionService;
-        this.rocketMQTemplate=rocketMQTemplate;
+    public CarOutController(RocketMQTemplate rocketMQTemplate) {
+        this.rocketMQTemplate = rocketMQTemplate;
     }
 
     @ApiOperation(value = "道尔车辆出场通知")
     @PostMapping("/daoer")
     public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody DaoerCarOutMessage message){
-        CarOutNotice carOutNotice=orderExtensionService.makeCarOutNotice("Daoer", message.getParkingNo(), message.getCarNo(), message.getCardTypeId(), message.getOutTime(),message.getOutPic());
-        rocketMQTemplate.asyncSend("parkingLot-carIn", carOutNotice, new SendCallback() {
+        rocketMQTemplate.asyncSend("parkingLot-carIn", message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
 

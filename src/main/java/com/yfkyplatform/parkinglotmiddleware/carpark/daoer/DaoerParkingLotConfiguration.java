@@ -12,12 +12,12 @@ import lombok.ToString;
 @Getter
 @ToString
 public class DaoerParkingLotConfiguration extends ParkingLotConfiguration {
-    private String appName;
-    private String parkId;
-    private String baseUrl;
+    private final String appName;
+    private final String parkId;
+    private final String baseUrl;
 
-    public DaoerParkingLotConfiguration(String id, String appName, String parkId, String baseUrl) {
-        super(id);
+    public DaoerParkingLotConfiguration(String id, String appName, String parkId, String baseUrl, String descritption) {
+        super(id, descritption);
         this.appName = appName;
         this.parkId = parkId;
         this.baseUrl = baseUrl;

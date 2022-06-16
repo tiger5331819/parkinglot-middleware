@@ -18,7 +18,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ManagerConfigurationService implements IManagerConfigurationService {
 
-    private ParkingLotManagerFactory factory;
+    private final ParkingLotManagerFactory factory;
 
     public ManagerConfigurationService(ParkingLotManagerFactory factory){
         this.factory=factory;
@@ -35,14 +35,14 @@ public class ManagerConfigurationService implements IManagerConfigurationService
      * @return
      */
     @Override
-    public Boolean addDaoerCongfiguration(String id, String appName, String parkId, String baseUrl){
-        ParkingLotManager daoerManager=factory.manager("Daoer");
-        DaoerParkingLotConfiguration cfg=new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl);
+    public Boolean addDaoerCongfiguration(String id, String appName, String parkId, String baseUrl, String description) {
+        ParkingLotManager daoerManager = factory.manager("Daoer");
+        DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description);
 
-        try{
+        try {
             return daoerManager.addParkingLot(cfg);
-        }catch (JsonProcessingException ex){
-            throw new ExposerException(-1,"道尔配置文件不正确",ex);
+        } catch (JsonProcessingException ex) {
+            throw new ExposerException(-1, "道尔配置文件不正确", ex);
         }
     }
 }

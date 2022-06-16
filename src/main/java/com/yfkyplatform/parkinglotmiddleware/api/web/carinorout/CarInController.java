@@ -1,10 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web.carinorout;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
-import com.yfkyplatform.parkinglotmiddleware.api.mq.CarInNotice;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerCarInMessage;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerParkingLotPostResp;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.order.OrderExtensionService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -27,20 +25,16 @@ import org.springframework.web.bind.annotation.RestController;
 @IgnoreCommonResponse
 @RestController
 public class CarInController {
+    private final RocketMQTemplate rocketMQTemplate;
 
-    private OrderExtensionService orderExtensionService;
-    private RocketMQTemplate rocketMQTemplate;
-
-    public CarInController(OrderExtensionService orderExtensionService,RocketMQTemplate rocketMQTemplate){
-        this.orderExtensionService=orderExtensionService;
-        this.rocketMQTemplate=rocketMQTemplate;
+    public CarInController(RocketMQTemplate rocketMQTemplate) {
+        this.rocketMQTemplate = rocketMQTemplate;
     }
 
     @ApiOperation(value = "道尔车辆入场通知")
     @PostMapping("/daoer")
     public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody DaoerCarInMessage message){
-        CarInNotice carInNotice=orderExtensionService.makeCarInNotice("Daoer", message.getParkingNo(), message.getCarNo(), message.getCardTypeId(), message.getInTime(),message.getInPic());
-        rocketMQTemplate.asyncSend("parkingLot-carIn", carInNotice, new SendCallback() {
+        rocketMQTemplate.asyncSend("parkingLot-carIn", message, new SendCallback() {
             @Override
             public void onSuccess(SendResult sendResult) {
 

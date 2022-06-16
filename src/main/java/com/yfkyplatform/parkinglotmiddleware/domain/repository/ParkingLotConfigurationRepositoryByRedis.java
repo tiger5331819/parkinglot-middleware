@@ -15,9 +15,9 @@ import java.util.Optional;
 @Component
 public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConfigurationRepository {
 
-    private RedisTool redis;
+    private final RedisTool redis;
 
-    private String prefix="cfg:";
+    private final String prefix = "cfg:";
 
     public ParkingLotConfigurationRepositoryByRedis(RedisTool redisTool){
         redis=redisTool;
@@ -31,18 +31,30 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
      */
     @Override
     public List<ParkingLotConfiguration> findParkingLotConfigurationByParkingType(String parkingType) {
-        return redis.hash().values(redis.MakeKey(prefix+parkingType));
+        return redis.hash().values(redis.MakeKey(prefix + parkingType));
+    }
+
+    /**
+     * 通过停车场类型与停车场Id获取停车场配置
+     *
+     * @param parkingType  停车场类型
+     * @param parkingLotId 停车场Id
+     * @return
+     */
+    @Override
+    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, String parkingLotId) {
+        return (ParkingLotConfiguration) redis.hash().get(redis.MakeKey(prefix + parkingType), parkingLotId);
     }
 
     @Override
     public <S extends ParkingLotConfiguration> S save(S s) {
-        redis.hash().put(redis.MakeKey(prefix+s.getParkingType()),s.getParkingLotId(),s);
+        redis.hash().put(redis.MakeKey(prefix + s.getParkingType()), s.getParkingLotId(), s);
         return s;
     }
 
     @Override
     public <S extends ParkingLotConfiguration> Iterable<S> saveAll(Iterable<S> iterable) {
-        for (S data:iterable) {
+        for (S data : iterable) {
             redis.hash().put(redis.MakeKey(prefix+data.getParkingType()),data.getParkingLotId(),data);
         }
         return iterable;
