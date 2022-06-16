@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo;
 
+import com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.ITestService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +15,15 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("dev")
-public class TestServiceTest {
+public class TestServiceTestExposer {
     @DubboReference
     private ITestService ttt;
     @Autowired
     private ITestService ttt2;
 
     @Test
-    void dubboTest(){
-        int result=ttt.add(2003001,1);
+    void dubboTest() {
+        int result = ttt.add(2003001, 1);
         assertNotNull(result);
     }
 

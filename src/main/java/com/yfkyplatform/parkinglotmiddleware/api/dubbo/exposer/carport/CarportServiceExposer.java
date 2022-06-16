@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo.carport;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
@@ -21,16 +21,16 @@ import java.util.List;
  */
 @DubboService
 @Component
-public class CarportService implements ICarPortService {
+public class CarportServiceExposer implements ICarPortService {
 
-    private ParkingLotManagerFactory factory;
+    private final ParkingLotManagerFactory factory;
 
-    public CarportService(ParkingLotManagerFactory factory){
-        this.factory=factory;
+    public CarportServiceExposer(ParkingLotManagerFactory factory) {
+        this.factory = factory;
     }
 
-    private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data){
-        CarOrderResultRpcResp result=new CarOrderResultRpcResp();
+    private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
+        CarOrderResultRpcResp result = new CarOrderResultRpcResp();
         result.setCarNo(data.getCarNo());
         result.setStartTime(data.getStartTime());
         result.setCreateTime(data.getCreateTime());

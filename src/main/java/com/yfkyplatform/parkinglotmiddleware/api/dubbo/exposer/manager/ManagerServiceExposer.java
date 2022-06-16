@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo.manager;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager;
 
 
 import cn.hutool.core.bean.BeanUtil;
@@ -23,12 +23,12 @@ import java.util.Set;
  */
 @DubboService
 @Component
-public class ManagerService implements IManagerService {
+public class ManagerServiceExposer implements IManagerService {
 
     private final ParkingLotManagerFactory factory;
 
-    public ManagerService(ParkingLotManagerFactory factory){
-        this.factory=factory;
+    public ManagerServiceExposer(ParkingLotManagerFactory factory) {
+        this.factory = factory;
     }
 
 

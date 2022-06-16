@@ -34,6 +34,9 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
     @Override
     protected DaoerParkingLot load(String parkingLotId) {
         ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId("Daoer", parkingLotId);
+        if (ObjectUtil.isNull(cfg)) {
+            return null;
+        }
         DaoerConfiguration daoerCfg = cfg.getConfig();
         DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(cfg.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription());
         return new DaoerParkingLot(parkingLotConfiguration, redis);

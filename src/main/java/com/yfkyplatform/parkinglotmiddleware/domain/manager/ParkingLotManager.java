@@ -95,7 +95,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
         List cfgList=new ArrayList();
 
         if(!StrUtil.isBlank(parkingLotId)) {
-            cfgList.add(load(parkingLotId).configuration());
+            cfgList.add(parkingLot(parkingLotId).configuration());
         } else {
             load().forEach(item -> cfgList.add(item.configuration()));
         }
@@ -110,7 +110,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
     public Map<String,Boolean> parkingLotHealthCheck(String parkingLotId) {
         Map healthCheckMap=new HashMap(100);
         if(!StrUtil.isBlank(parkingLotId)) {
-            T parkingLot=load(parkingLotId);
+            T parkingLot = parkingLot(parkingLotId);
             healthCheckMap.put(parkingLot.Id(),parkingLot.healthCheck());
         } else {
             load().forEach(item -> healthCheckMap.put(item.Id(),item.healthCheck()));

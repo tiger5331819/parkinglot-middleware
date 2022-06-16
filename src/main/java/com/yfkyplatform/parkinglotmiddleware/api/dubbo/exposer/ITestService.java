@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer;
 
 import java.util.Set;
 

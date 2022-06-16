@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer;
 
 import com.yfkyframework.common.core.exception.ExposerException;
 import org.apache.dubbo.config.annotation.DubboService;
@@ -14,16 +14,16 @@ import java.util.Set;
  */
 @DubboService
 @Component
-public class TestService implements ITestService{
+public class TestServiceExposer implements ITestService {
 
     @Override
-    public int add(int a,int b){
-        return a+b;
+    public int add(int a, int b) {
+        return a + b;
     }
 
     @Override
     public Set<String> add(String item) {
-        Set<String> data=new HashSet();
+        Set<String> data = new HashSet();
         data.add(item);
         data.add(item+"123");
         data.add(item+"over");

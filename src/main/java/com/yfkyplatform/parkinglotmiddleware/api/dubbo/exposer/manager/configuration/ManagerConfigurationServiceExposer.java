@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo.manager.configuration;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager.configuration;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyframework.common.core.exception.ExposerException;
@@ -16,12 +16,12 @@ import org.springframework.stereotype.Component;
  */
 @DubboService
 @Component
-public class ManagerConfigurationService implements IManagerConfigurationService {
+public class ManagerConfigurationServiceExposer implements IManagerConfigurationService {
 
     private final ParkingLotManagerFactory factory;
 
-    public ManagerConfigurationService(ParkingLotManagerFactory factory){
-        this.factory=factory;
+    public ManagerConfigurationServiceExposer(ParkingLotManagerFactory factory) {
+        this.factory = factory;
     }
 
 
