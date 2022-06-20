@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.coupon;
 
+import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCoupon;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponUseResult;
@@ -22,10 +23,11 @@ import java.util.List;
 @Slf4j
 @Api(tags = {"优惠券"})
 @RequestMapping(value = "/Daoer/api/{parkingLotId}/coupon")
+@IgnoreCommonResponse
 @RestController
 public class DaoerCouponController {
 
-    private ParkingLotManager manager;
+    private final ParkingLotManager manager;
 
     private IDaoerCoupon api(String parkingLotId){
         return manager.parkingLot(parkingLotId).client();

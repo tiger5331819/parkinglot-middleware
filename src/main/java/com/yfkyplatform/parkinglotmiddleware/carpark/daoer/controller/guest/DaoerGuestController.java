@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.guest;
 
+import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerGuest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.guest.GuestResult;
@@ -22,9 +23,10 @@ import javax.validation.constraints.NotNull;
 @Slf4j
 @Api(tags = {"访客"})
 @RequestMapping(value = "/Daoer/api/{parkingLotId}/guest")
+@IgnoreCommonResponse
 @RestController
 public class DaoerGuestController {
-    private ParkingLotManager manager;
+    private final ParkingLotManager manager;
 
     private IDaoerGuest api(String parkingLotId){
         return manager.parkingLot(parkingLotId).client();

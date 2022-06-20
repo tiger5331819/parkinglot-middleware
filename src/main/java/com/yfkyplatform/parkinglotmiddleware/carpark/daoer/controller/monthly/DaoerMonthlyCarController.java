@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly;
 
+import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
@@ -23,10 +24,11 @@ import java.util.List;
 @Slf4j
 @Api(tags = {"月卡车"})
 @RequestMapping(value = "/Daoer/api/{parkingLotId}/monthlycar")
+@IgnoreCommonResponse
 @RestController
 public class DaoerMonthlyCarController {
 
-    private ParkingLotManager manager;
+    private final ParkingLotManager manager;
 
     private IDaoerMonthlyCar api(String parkingLotId){
         return manager.parkingLot(parkingLotId).client();

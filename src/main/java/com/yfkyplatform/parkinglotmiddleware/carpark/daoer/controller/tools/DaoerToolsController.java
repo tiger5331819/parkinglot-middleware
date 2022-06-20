@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
@@ -28,20 +29,22 @@ import java.util.Map;
 @Slf4j
 @Api(tags = {"基础支持（工具）"})
 @RequestMapping(value = "/Daoer/api/{parkingLotId}/tools")
+@IgnoreCommonResponse
 @RestController
 public class DaoerToolsController {
 
-    private RestTemplate restTemplate;
-    private ObjectMapper mapper;
-    private ParkingLotManager manager;
-    private IDaoerTool api(String parkingLotId){
+    private final RestTemplate restTemplate;
+    private final ObjectMapper mapper;
+    private final ParkingLotManager manager;
+
+    private IDaoerTool api(String parkingLotId) {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    public DaoerToolsController(RestTemplate restTemplate, ObjectMapper mapper, DaoerParkingLotManager manager){
+    public DaoerToolsController(RestTemplate restTemplate, ObjectMapper mapper, DaoerParkingLotManager manager) {
         this.restTemplate = restTemplate;
         this.mapper = mapper;
-        this.manager=manager;
+        this.manager = manager;
     }
 
     @ApiOperation(value = "图片")

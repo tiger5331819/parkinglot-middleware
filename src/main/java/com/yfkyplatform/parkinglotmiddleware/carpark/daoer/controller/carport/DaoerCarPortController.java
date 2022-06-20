@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport;
 
+import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
@@ -24,10 +25,11 @@ import java.util.List;
 @Slf4j
 @Api(tags = {"车场"})
 @RequestMapping(value = "/Daoer/api/{parkingLotId}/carport")
+@IgnoreCommonResponse
 @RestController
 public class DaoerCarPortController {
 
-    private ParkingLotManager manager;
+    private final ParkingLotManager manager;
 
     private IDaoerCarPort api(String parkingLotId){
         return manager.parkingLot(parkingLotId).client();
