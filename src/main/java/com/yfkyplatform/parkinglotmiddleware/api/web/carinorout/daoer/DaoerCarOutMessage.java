@@ -20,6 +20,7 @@ public class DaoerCarOutMessage {
     private int cardTypeId;
     @ApiModelProperty(value = "出场时间", required = true)
     //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss.SS")
+
     private String outTime;
     @ApiModelProperty(value = "出场图片地址", required = true)
     private String outPic;
