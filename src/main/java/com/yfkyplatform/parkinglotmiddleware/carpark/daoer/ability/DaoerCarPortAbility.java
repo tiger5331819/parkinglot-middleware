@@ -6,6 +6,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
+import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -16,10 +17,10 @@ import java.util.stream.Collectors;
  *
  * @author Suhuyuan
  */
-
+@Slf4j
 public class DaoerCarPortAbility implements ICarPortAblitity {
 
-    private IDaoerCarPort api;
+    private final IDaoerCarPort api;
 
     public DaoerCarPortAbility(IDaoerCarPort daoerClient){
         api=daoerClient;
@@ -139,18 +140,26 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         Mono<DaoerBaseResp<List<ChannelStateResult>>> channelStatesMono=api.getChannelStates();
 
         List<ChannelInfoResult> result = Mono.zip(channelMono, channelStatesMono, (channelsInfo, channelsStates) -> {
-                    List<ChannelResult> channelsInfoBody=channelsInfo.getBody();
-                    List<ChannelStateResult> channelsStatesBody=channelsStates.getBody();
+            List<ChannelResult> channelsInfoBody = channelsInfo.getBody();
+            List<ChannelStateResult> channelsStatesBody = channelsStates.getBody();
 
-                    return channelsInfoBody.stream().map(channelResult -> {
-                        ChannelStateResult channelStateResult=channelsStatesBody.stream().filter(item->item.getChannelId()==channelResult.getChannelId()).findFirst().get();
-                        if(ObjectUtil.isNotNull(channelStateResult)){
-                            ChannelInfoResult data=new ChannelInfoResult();
-                            data.setChannelId(channelResult.getChannelId());
-                            data.setChannelName(channelResult.getChannelName());
-                            data.setType(channelResult.getType());
-                            data.setBoard(channelStateResult.getBoard());
-                            data.setCamera(channelStateResult.getCamera());
+            channelsInfoBody.forEach(item -> {
+                log.debug(item.toString());
+            });
+
+            channelsStatesBody.forEach(item -> {
+                log.debug(item.toString());
+            });
+
+            return channelsInfoBody.stream().map(channelResult -> {
+                ChannelStateResult channelStateResult = channelsStatesBody.stream().filter(item -> item.getChannelId() == channelResult.getChannelId()).findFirst().get();
+                if (ObjectUtil.isNotNull(channelStateResult)) {
+                    ChannelInfoResult data = new ChannelInfoResult();
+                    data.setChannelId(channelResult.getChannelId());
+                    data.setChannelName(channelResult.getChannelName());
+                    data.setType(channelResult.getType());
+                    data.setBoard(channelStateResult.getBoard());
+                    data.setCamera(channelStateResult.getCamera());
                             data.setDoor(channelStateResult.getDoor());
                             data.setSense(channelStateResult.getSense());
                             return data;
