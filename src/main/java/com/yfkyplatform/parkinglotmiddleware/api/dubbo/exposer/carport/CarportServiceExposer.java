@@ -30,6 +30,7 @@ public class CarportServiceExposer implements ICarPortService {
     }
 
     private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
+
         CarOrderResultRpcResp result = new CarOrderResultRpcResp();
         result.setCarNo(data.getCarNo());
         result.setStartTime(data.getStartTime());
