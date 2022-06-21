@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
  * @author Suhuyuan
  */
 @Data
+@Deprecated
 public class DaoerCarInMessage {
     @ApiModelProperty(value = "入场记录ID",required = true)
     private String objectId;

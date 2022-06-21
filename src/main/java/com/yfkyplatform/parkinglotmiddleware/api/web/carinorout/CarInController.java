@@ -29,14 +29,6 @@ public class CarInController {
         this.redis = redis;
     }
 
-
-/*    @ApiOperation(value = "道尔车辆入场通知")
-    @PostMapping("/daoer")
-    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody DaoerCarInMessage message) {
-        redis.set("carIn:" + message.hashCode(), message);
-        return new DaoerParkingLotPostResp();
-    }*/
-
     @ApiOperation(value = "道尔车辆入场通知")
     @PostMapping("/daoer")
     public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody String message) {
