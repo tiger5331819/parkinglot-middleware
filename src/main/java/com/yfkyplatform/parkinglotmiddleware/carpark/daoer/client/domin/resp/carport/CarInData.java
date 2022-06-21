@@ -45,7 +45,7 @@ public class CarInData {
     /**
      * 入场时间 yyyy-MM-dd HH:mm:ss
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss.SSS")
     private LocalDateTime inTime;
 
    /* public LocalDateTime getInTime() {
