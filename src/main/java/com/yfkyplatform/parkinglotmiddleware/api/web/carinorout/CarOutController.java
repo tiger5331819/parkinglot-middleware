@@ -7,6 +7,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,7 +38,7 @@ public class CarOutController {
 
     @ApiOperation(value = "道尔车辆出场通知")
     @PostMapping("/daoer")
-    public DaoerParkingLotPostResp daoerCarInMessage(String message) {
+    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody String message) {
         redis.set("carOut:" + message.hashCode(), message);
         return new DaoerParkingLotPostResp();
     }
