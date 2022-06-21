@@ -3,6 +3,8 @@ package com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * 车辆入场记录通知
  *
@@ -19,9 +21,7 @@ public class DaoerCarOutMessage {
     @ApiModelProperty(value = "卡类型", required = true)
     private int cardTypeId;
     @ApiModelProperty(value = "出场时间", required = true)
-    //@JsonFormat(shape = JsonFormat.Shape.STRING, pattern= "yyyy-MM-dd HH:mm:ss.SS")
-
-    private String outTime;
+    private LocalDateTime outTime;
     @ApiModelProperty(value = "出场图片地址", required = true)
     private String outPic;
 }

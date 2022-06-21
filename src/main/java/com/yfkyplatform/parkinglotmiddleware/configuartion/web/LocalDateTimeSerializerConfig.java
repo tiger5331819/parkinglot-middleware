@@ -16,19 +16,21 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
+
 /**
  * @author lizhuquan
  * @date 2021-10-21 22:29
  */
+
 @Configuration
 public class LocalDateTimeSerializerConfig {
 
     @Value("${spring.jackson.date-format:yyyy-MM-dd HH:mm:ss}")
     private String dateTimePattern;
 
-    private String datePattern = "yyyy-MM-dd";
+    private final String datePattern = "yyyy-MM-dd";
 
-    private String timePattern = "HH:mm:ss";
+    private final String timePattern = "HH:mm:ss";
 
     @Bean
     public LocalDateTimeSerializer localDateTimeSerializer() {

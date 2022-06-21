@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.api.web.carinorout;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerCarOutMessage;
 import com.yfkyplatform.parkinglotmiddleware.api.web.carinorout.daoer.DaoerParkingLotPostResp;
+import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -23,13 +24,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class CarOutController {
 
-    public CarOutController() {
+    private final RedisTool redis;
+
+    public CarOutController(RedisTool redis) {
+        this.redis = redis;
     }
 
     @ApiOperation(value = "道尔车辆出场通知")
     @PostMapping("/daoer")
-    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody DaoerCarOutMessage message){
-        log.info(message.toString());
+    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody DaoerCarOutMessage message) {
+        redis.set("carOut:" + message.hashCode(), message);
         return new DaoerParkingLotPostResp();
     }
 
