@@ -143,16 +143,11 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
             List<ChannelResult> channelsInfoBody = channelsInfo.getBody();
             List<ChannelStateResult> channelsStatesBody = channelsStates.getBody();
 
-            channelsInfoBody.forEach(item -> {
-                log.debug(item.toString());
-            });
-
-            channelsStatesBody.forEach(item -> {
-                log.debug(item.toString());
-            });
-
             return channelsInfoBody.stream().map(channelResult -> {
-                ChannelStateResult channelStateResult = channelsStatesBody.stream().filter(item -> item.getChannelId() == channelResult.getChannelId()).findFirst().get();
+                ChannelStateResult channelStateResult = channelsStatesBody.stream()
+                        .filter(item -> item.getChannelId().contains(channelResult.getChannelId()))
+                        .findFirst()
+                        .get();
                 if (ObjectUtil.isNotNull(channelStateResult)) {
                     ChannelInfoResult data = new ChannelInfoResult();
                     data.setChannelId(channelResult.getChannelId());
@@ -160,9 +155,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                     data.setType(channelResult.getType());
                     data.setBoard(channelStateResult.getBoard());
                     data.setCamera(channelStateResult.getCamera());
-                            data.setDoor(channelStateResult.getDoor());
-                            data.setSense(channelStateResult.getSense());
-                            return data;
+                    data.setDoor(channelStateResult.getDoor());
+                    data.setSense(channelStateResult.getSense());
+                    return data;
                         } else {
                             return null;
                         }
