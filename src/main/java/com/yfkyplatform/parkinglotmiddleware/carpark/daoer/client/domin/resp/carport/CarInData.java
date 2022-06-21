@@ -1,9 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import cn.hutool.core.date.DateUtil;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 /**
@@ -44,13 +45,13 @@ public class CarInData {
     private String cardTypeName;
     /**
      * 入场时间 yyyy-MM-dd HH:mm:ss
+     * 实际是：2022-06-21T01:50:13.000+0000
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
-    private LocalDateTime inTime;
+    private String inTime;
 
-   /* public LocalDateTime getInTime() {
+    public LocalDateTime getInTime() {
         return LocalDateTime.ofInstant(DateUtil.parse(inTime).toInstant(), ZoneId.systemDefault());
-    }*/
+    }
 
     /**
      * 入场图片
