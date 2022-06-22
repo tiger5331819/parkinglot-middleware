@@ -31,7 +31,7 @@ public class CarOutController {
 
     @ApiOperation(value = "道尔车辆出场通知")
     @PostMapping("/daoer")
-    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody String message) {
+    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody Object message) {
         redis.set("carOut:" + message.hashCode(), message);
         return new DaoerParkingLotPostResp();
     }

@@ -19,4 +19,8 @@ public class ParkingLotConfiguration {
      * 描述
      */
     private String description;
+    /**
+     * 所属管理器类型
+     */
+    private String managerType;
 }
