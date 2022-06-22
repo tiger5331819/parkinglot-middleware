@@ -6,7 +6,10 @@ import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 测试控制器
@@ -27,8 +30,8 @@ public class CarInController {
     }
 
     @ApiOperation(value = "道尔车辆入场通知")
-    @PostMapping("/daoer/{ttt}")
-    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody Object message, @PathVariable int ttt) {
+    @PostMapping("/daoer")
+    public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody Object message) {
         log.debug("message test");
         redis.set("carIn:" + message.hashCode(), message);
         return new DaoerParkingLotPostResp();
