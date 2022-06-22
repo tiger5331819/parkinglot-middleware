@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.StrUtil;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.*;
@@ -13,7 +14,7 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 @Component
 public class ParkingLotManagerFactory {
-    private Map<String, ParkingLotManager> parkingLotManagerMap=new ConcurrentHashMap<>();
+    private final Map<String, ParkingLotManager> parkingLotManagerMap = new ConcurrentHashMap<>();
 
     public ParkingLotManagerFactory(List<ParkingLotManager> parkingLotManagerList){
         loadParkingLotManager(parkingLotManagerList);
@@ -58,15 +59,15 @@ public class ParkingLotManagerFactory {
 
     /**
      * 获取配置文件
+     *
      * @param parkingLotManagerName
      * @return
      */
-    public List<ParkingLotConfiguration> getParkingLotConfiguration(String parkingLotManagerName,String parkingLotId){
-        if(!StrUtil.isBlank(parkingLotManagerName)){
+    public List<ParkingLotConfiguration> getParkingLotConfiguration(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
+        if (!StrUtil.isBlank(parkingLotManagerName)) {
             return parkingLotManagerMap.get(parkingLotManagerName).configurationList(parkingLotId);
-        }
-        else {
-            List dataList=new ArrayList();
+        } else {
+            List dataList = new ArrayList();
             parkingLotManagerMap.values().forEach(manager -> {
                 dataList.addAll(manager.configurationList(parkingLotId));
             });
@@ -76,19 +77,19 @@ public class ParkingLotManagerFactory {
 
     /**
      * 健康检查
+     *
      * @param parkingLotManagerName
      * @param parkingLotId
      * @return
      */
-    public Map<String,Map<String,Boolean>> healthCheck(String parkingLotManagerName,String parkingLotId){
-        Map<String,Map<String,Boolean>> dataMap=new HashMap<>(100);
-        if(!StrUtil.isBlank(parkingLotManagerName)){
-            ParkingLotManager manager=parkingLotManagerMap.get(parkingLotManagerName);
-            dataMap.put(parkingLotManagerName,manager.parkingLotHealthCheck(parkingLotId));
-        }
-        else {
-            parkingLotManagerMap.forEach((name,manager) -> {
-                dataMap.put(name,manager.parkingLotHealthCheck(parkingLotId));
+    public Map<String, Map<String, Boolean>> healthCheck(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
+        Map<String, Map<String, Boolean>> dataMap = new HashMap<>(100);
+        if (!StrUtil.isBlank(parkingLotManagerName)) {
+            ParkingLotManager manager = parkingLotManagerMap.get(parkingLotManagerName);
+            dataMap.put(parkingLotManagerName, manager.parkingLotHealthCheck(parkingLotId));
+        } else {
+            parkingLotManagerMap.forEach((name, manager) -> {
+                dataMap.put(name, manager.parkingLotHealthCheck(parkingLotId));
             });
         }
         return dataMap;

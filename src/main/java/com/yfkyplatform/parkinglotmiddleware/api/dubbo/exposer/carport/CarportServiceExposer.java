@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoRes
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -141,8 +142,8 @@ public class CarportServiceExposer implements ICarPortService {
      * @return
      */
     @Override
-    public CarOrderResultRpcResp getChannelCarFee(String parkingLotManager, String parkingLotId,String channelId, String carNo, String openId) {
-        ICarPortAblitity carPortService=factory.manager(parkingLotManager).parkingLot(parkingLotId).carport();
+    public CarOrderResultRpcResp getChannelCarFee(String parkingLotManager, String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
+        ICarPortAblitity carPortService = factory.manager(parkingLotManager).parkingLot(parkingLotId).carport();
         return makeCarOrderResultRpcResp(carPortService.getChannelCarFee(channelId, carNo, openId));
     }
 

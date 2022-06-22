@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoRes
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -62,7 +63,7 @@ public class CarPortController {
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
-    public CarOrderResultRpcResp getChannelCarFee(@PathVariable String parkingLotManager, @PathVariable String parkingLotId, String channelId, String carNo, String openId) {
+    public CarOrderResultRpcResp getChannelCarFee(@PathVariable String parkingLotManager, @PathVariable String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
         return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, carNo, openId);
     }
 

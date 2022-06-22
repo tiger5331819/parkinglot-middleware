@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfig
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import org.apache.dubbo.config.annotation.DubboService;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -50,12 +51,12 @@ public class ManagerServiceExposer implements IManagerService {
      * @return
      */
     @Override
-    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(String parkingLotManagerName, String parkingLotId) {
-        List<ParkingLotConfiguration> cfgList=factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
+    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
+        List<ParkingLotConfiguration> cfgList = factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
 
-        List<ParkingLotCfgRpcResp> result=new ArrayList<>();
-        cfgList.forEach(item->{
-            if((item instanceof DaoerParkingLotConfiguration)){
+        List<ParkingLotCfgRpcResp> result = new ArrayList<>();
+        cfgList.forEach(item -> {
+            if ((item instanceof DaoerParkingLotConfiguration)) {
                 result.add(BeanUtil.copyProperties(item, DaoerParkingLotCfgRpcResp.class));
             }
         });
@@ -70,7 +71,7 @@ public class ManagerServiceExposer implements IManagerService {
      * @return
      */
     @Override
-    public Map<String, Map<String, Boolean>> parkingManagerHealthCheck(String parkingLotManagerName, String parkingLotId) {
+    public Map<String, Map<String, Boolean>> parkingManagerHealthCheck(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
         return factory.healthCheck(parkingLotManagerName, parkingLotId);
     }
 }

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import org.springframework.lang.Nullable;
 
 import java.util.*;
 
@@ -88,13 +89,14 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
 
     /**
      * 获取停车场配置信息
+     *
      * @param parkingLotId
      * @return
      */
-    public List<ParkingLotConfiguration> configurationList(String parkingLotId){
-        List cfgList=new ArrayList();
+    public List<ParkingLotConfiguration> configurationList(@Nullable String parkingLotId) {
+        List cfgList = new ArrayList();
 
-        if(!StrUtil.isBlank(parkingLotId)) {
+        if (!StrUtil.isBlank(parkingLotId)) {
             cfgList.add(parkingLot(parkingLotId).configuration());
         } else {
             load().forEach(item -> cfgList.add(item.configuration()));
@@ -104,16 +106,17 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
 
     /**
      * 获取停车场健康检查结果
+     *
      * @param parkingLotId
      * @return
      */
-    public Map<String,Boolean> parkingLotHealthCheck(String parkingLotId) {
-        Map healthCheckMap=new HashMap(100);
-        if(!StrUtil.isBlank(parkingLotId)) {
+    public Map<String, Boolean> parkingLotHealthCheck(@Nullable String parkingLotId) {
+        Map healthCheckMap = new HashMap(100);
+        if (!StrUtil.isBlank(parkingLotId)) {
             T parkingLot = parkingLot(parkingLotId);
-            healthCheckMap.put(parkingLot.Id(),parkingLot.healthCheck());
+            healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
         } else {
-            load().forEach(item -> healthCheckMap.put(item.Id(),item.healthCheck()));
+            load().forEach(item -> healthCheckMap.put(item.Id(), item.healthCheck()));
         }
         return healthCheckMap;
     }
