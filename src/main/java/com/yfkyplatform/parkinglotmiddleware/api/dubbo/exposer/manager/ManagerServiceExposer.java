@@ -8,6 +8,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgR
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,7 @@ import java.util.Set;
  */
 @DubboService
 @Component
+@Slf4j
 public class ManagerServiceExposer implements IManagerService {
 
     private final ParkingLotManagerFactory factory;
@@ -56,6 +58,7 @@ public class ManagerServiceExposer implements IManagerService {
         List<ParkingLotCfgRpcResp> result=new ArrayList<>();
         cfgList.forEach(item->{
             if((item instanceof DaoerParkingLotConfiguration)){
+                log.info(item.toString());
                 result.add(BeanUtil.copyProperties(item, DaoerParkingLotCfgRpcResp.class));
             }
         });
