@@ -6,6 +6,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.Da
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 /**
  * 临停车缴费
  *
@@ -26,11 +28,11 @@ public class CarFeePay extends DaoerBase {
     /**
      * 应收金额 单位：元
      */
-    private double totalAmount;
+    private BigDecimal totalAmount;
     /**
      * 优惠金额 单位：元
      */
-    private double disAmount;
+    private BigDecimal disAmount;
     /**
      * 0 出口缴费 1 定点缴费 2 超时缴费
      */
@@ -46,7 +48,7 @@ public class CarFeePay extends DaoerBase {
     /**
      * 实收金额,单位：元
      */
-    private double couponAmount;
+    private BigDecimal couponAmount;
     /**
      * 通道ID
      */

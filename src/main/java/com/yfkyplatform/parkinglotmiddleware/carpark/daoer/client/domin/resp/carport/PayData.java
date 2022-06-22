@@ -2,6 +2,8 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.ca
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 
 /**
  * 支付信息
@@ -13,7 +15,7 @@ public class PayData {
     /**
      * 实收金额
      */
-    private Double payCharge;
+    private BigDecimal payCharge;
     /**
      * 支付方式 0 现金 1微信 2支付宝
      */
@@ -29,9 +31,9 @@ public class PayData {
     /**
      * 余额
      */
-    private Double balanceMoney;
+    private BigDecimal balanceMoney;
     /**
      * 应收金额
      */
-    private Double accountCharge;
+    private BigDecimal accountCharge;
 }

@@ -2,6 +2,8 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.c
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 车辆订单缴费信息
  *
@@ -24,11 +26,11 @@ public class CarOrderPayMessage {
     /**
      * 应缴金额,单位元
      */
-    double totalFee;
+    BigDecimal totalFee;
     /**
      * 优惠金额,单位元
      */
-    double discountFee;
+    BigDecimal discountFee;
     /**
      * 支付模式类型
      */
@@ -44,7 +46,7 @@ public class CarOrderPayMessage {
     /**
      * 支付金额
      */
-    double payFee;
+    BigDecimal payFee;
     /**
      * 通道ID
      */

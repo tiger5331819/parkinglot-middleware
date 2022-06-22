@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.ca
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,14 +34,14 @@ public class CarFeeResult {
     /**
      * 需实金额,单位元
      */
-    private Double payCharge;
+    private BigDecimal payCharge;
     /**
      * 营收金额,单位元
      */
-    private Double amount;
+    private BigDecimal amount;
     /**
      * 优惠金额,单位元
      */
-    private Double discountAmount;
+    private BigDecimal discountAmount;
 
 }

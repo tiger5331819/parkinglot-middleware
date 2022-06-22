@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.c
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -33,13 +34,13 @@ public class CarOrderResult {
     /**
      * 应缴金额,单位元
      */
-    private Double totalFee;
+    private BigDecimal totalFee;
     /**
      * 实缴金额,单位元
      */
-    private Double payFee;
+    private BigDecimal payFee;
     /**
      * 优惠金额,单位元
      */
-    private Double discountFee;
+    private BigDecimal discountFee;
 }

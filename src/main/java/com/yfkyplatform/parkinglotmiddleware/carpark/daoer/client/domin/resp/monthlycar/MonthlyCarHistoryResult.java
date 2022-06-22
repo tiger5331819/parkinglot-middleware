@@ -2,6 +2,8 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.mo
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * 月租车缴费历史结果
  *
@@ -16,7 +18,7 @@ public class MonthlyCarHistoryResult {
     /**
      * 缴费金额
      */
-    private double amount;
+    private BigDecimal amount;
     /**
      * 0 现金 1微信 2支付宝
      */

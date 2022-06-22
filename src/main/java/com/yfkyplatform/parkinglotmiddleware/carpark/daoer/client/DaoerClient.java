@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -67,9 +68,9 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String payTime, int duration, double totalAmount, double disAmount,
-                                                                             int paymentType,int payType,String paymentTnx,double couponAmount,String channelId){
-        CarFeePay model=new CarFeePay("api/index/tempFee/paysuccess");
+    public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
+                                               int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId) {
+        CarFeePay model = new CarFeePay("api/index/tempFee/paysuccess");
 
         model.setCarNo(carNo);
         model.setPayTime(payTime);
