@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ParkingLotConfiguration<T> {
 
-    private String parkingLotId;
+    private Long parkingLotId;
 
     private T config;
 
@@ -20,7 +20,7 @@ public class ParkingLotConfiguration<T> {
 
     private String description;
 
-    public ParkingLotConfiguration(String parkingLotId, String parkingType, String description) {
+    public ParkingLotConfiguration(Long parkingLotId, String parkingType, String description) {
         this.parkingLotId = parkingLotId;
         this.parkingType = parkingType;
         this.description = description;

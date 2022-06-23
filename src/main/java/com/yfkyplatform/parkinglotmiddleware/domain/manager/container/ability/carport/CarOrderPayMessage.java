@@ -20,18 +20,6 @@ public class CarOrderPayMessage {
      */
     String payTime;
     /**
-     * 停车时长
-     */
-    int serviceTime;
-    /**
-     * 应缴金额,单位元
-     */
-    BigDecimal totalFee;
-    /**
-     * 优惠金额,单位元
-     */
-    BigDecimal discountFee;
-    /**
      * 支付模式类型
      */
     int paymentType;
@@ -47,8 +35,4 @@ public class CarOrderPayMessage {
      * 支付金额
      */
     BigDecimal payFee;
-    /**
-     * 通道ID
-     */
-    String channelId;
 }

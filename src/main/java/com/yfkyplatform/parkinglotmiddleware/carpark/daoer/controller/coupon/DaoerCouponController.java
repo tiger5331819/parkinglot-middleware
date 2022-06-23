@@ -29,22 +29,23 @@ public class DaoerCouponController {
 
     private final ParkingLotManager manager;
 
-    private IDaoerCoupon api(String parkingLotId){
+    private IDaoerCoupon api(Long parkingLotId) {
         return manager.parkingLot(parkingLotId).client();
     }
-    public DaoerCouponController(ParkingLotManager manager){
-        this.manager=manager;
+
+    public DaoerCouponController(ParkingLotManager manager) {
+        this.manager = manager;
     }
 
     @ApiOperation(value = "查询优惠券")
     @GetMapping
-    public DaoerBaseResp<List<CouponResult>> getCoupon(@PathVariable String parkingLotId,@ApiParam(value = "微信openId") String openId){
+    public DaoerBaseResp<List<CouponResult>> getCoupon(@PathVariable Long parkingLotId, @ApiParam(value = "微信openId") String openId) {
         return api(parkingLotId).getCoupon(openId).block();
     }
 
     @ApiOperation(value = "使用优惠券")
     @PostMapping
-    public DaoerBaseResp<CouponUseResult> useCoupon(@PathVariable String parkingLotId,@RequestBody UseCouponRequest request){
-        return api(parkingLotId).useCoupon(request.getObjectId(),request.getCarNo()).block();
+    public DaoerBaseResp<CouponUseResult> useCoupon(@PathVariable Long parkingLotId, @RequestBody UseCouponRequest request) {
+        return api(parkingLotId).useCoupon(request.getObjectId(), request.getCarNo()).block();
     }
 }

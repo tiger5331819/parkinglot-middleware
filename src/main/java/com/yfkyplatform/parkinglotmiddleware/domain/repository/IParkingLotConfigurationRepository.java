@@ -27,5 +27,5 @@ public interface IParkingLotConfigurationRepository extends CrudRepository<Parki
      * @param parkingLotId 停车场Id
      * @return
      */
-    ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, String parkingLotId);
+    ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, Long parkingLotId);
 }

@@ -8,14 +8,13 @@ import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgR
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
 import org.apache.dubbo.config.annotation.DubboService;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import javax.annotation.Nullable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 管理服务
@@ -39,20 +38,21 @@ public class ManagerServiceExposer implements IManagerService {
      * @return
      */
     @Override
-    public Set<String> managerSupport() {
-        return factory.getManagerSupport();
+    public Set<Integer> managerSupport() {
+        Set<String> managerSet = factory.getManagerSupport();
+        return managerSet.stream().map(item -> ParkingLotManagerEnum.valueOf(item).value()).collect(Collectors.toSet());
     }
 
     /**
      * 获取配置文件
      *
-     * @param parkingLotManagerName 停车场管理名称
+     * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @return
      */
     @Override
-    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
-        List<ParkingLotConfiguration> cfgList = factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
+    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
+        List<ParkingLotConfiguration> cfgList = factory.getParkingLotConfiguration(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message(), parkingLotId);
 
         List<ParkingLotCfgRpcResp> result = new ArrayList<>();
         cfgList.forEach(item -> {
@@ -66,12 +66,17 @@ public class ManagerServiceExposer implements IManagerService {
     /**
      * 健康检查
      *
-     * @param parkingLotManagerName 停车场管理名称
+     * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @return
      */
     @Override
-    public Map<String, Map<String, Boolean>> parkingManagerHealthCheck(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
-        return factory.healthCheck(parkingLotManagerName, parkingLotId);
+    public Map<Integer, Map<Long, Boolean>> parkingManagerHealthCheck(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
+        Map<String, Map<Long, Boolean>> health = factory.healthCheck(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message(), parkingLotId);
+        Map<Integer, Map<Long, Boolean>> result = new HashMap<>();
+        health.forEach((key, value) -> {
+            result.put(ParkingLotManagerEnum.valueOf(key).value(), value);
+        });
+        return result;
     }
 }

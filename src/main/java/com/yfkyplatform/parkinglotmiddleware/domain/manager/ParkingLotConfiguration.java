@@ -14,7 +14,7 @@ public class ParkingLotConfiguration {
     /**
      * 配置信息唯一标识
      */
-    private String id;
+    private Long id;
     /**
      * 描述
      */

@@ -20,11 +20,11 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.to
  */
 
 public class DaoerParkingLot extends ParkingLotPod{
-    private DaoerClient Daoer;
+    private final DaoerClient Daoer;
 
-    public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis){
-        super(daoerParkingLotInfo);
-        Daoer=new DaoerClient(daoerParkingLotInfo.getId(),daoerParkingLotInfo.getAppName(),daoerParkingLotInfo.getParkId(),daoerParkingLotInfo.getBaseUrl(),redis);
+    public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis) {
+        super(daoerParkingLotInfo, redis);
+        Daoer = new DaoerClient(daoerParkingLotInfo.getId().toString(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), redis);
     }
 
     @Override
@@ -54,7 +54,7 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public ICarPortAblitity carport() {
-        return new DaoerCarPortAbility(Daoer);
+        return new DaoerCarPortAbility(Daoer, redis);
     }
 
     /**

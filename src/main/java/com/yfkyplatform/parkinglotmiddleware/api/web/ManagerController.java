@@ -33,7 +33,7 @@ public class ManagerController {
 
     @ApiOperation(value = "获取支持的管理器列表")
     @GetMapping("/manager/support")
-    public Set<String> getManagerSupport(){
+    public Set<Integer> getManagerSupport() {
         return managerService.managerSupport();
     }
 
@@ -45,43 +45,43 @@ public class ManagerController {
 
     @ApiOperation(value = "获取指定停车场管理的所有停车场配置文件")
     @GetMapping("/{parkingLotManager}/configuration")
-    public List<ParkingLotCfgRpcResp> getManagerConfiguartion(@PathVariable String parkingLotManager){
-        return managerService.parkingMangerConfiguration(parkingLotManager,null);
+    public List<ParkingLotCfgRpcResp> getManagerConfiguartion(@PathVariable Integer parkingLotManager) {
+        return managerService.parkingMangerConfiguration(parkingLotManager, null);
     }
 
     @ApiOperation(value = "获取指定停车场管理的指定停车场配置文件")
     @GetMapping("/{parkingLotManager}/{parkingLotId}/configuration")
-    public List<ParkingLotCfgRpcResp> getManagerConfiguartion(@PathVariable String parkingLotManager,@PathVariable String parkingLotId){
-        return managerService.parkingMangerConfiguration(parkingLotManager,parkingLotId);
+    public List<ParkingLotCfgRpcResp> getManagerConfiguartion(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
+        return managerService.parkingMangerConfiguration(parkingLotManager, parkingLotId);
     }
 
     @ApiOperation(value = "获取指定停车场配置文件")
     @GetMapping("/manager/{parkingLotId}/configuration")
-    public List<ParkingLotCfgRpcResp> getParkingLotConfiguartion(@PathVariable String parkingLotId){
-        return managerService.parkingMangerConfiguration(null,parkingLotId);
+    public List<ParkingLotCfgRpcResp> getParkingLotConfiguartion(@PathVariable Long parkingLotId) {
+        return managerService.parkingMangerConfiguration(null, parkingLotId);
     }
 
     @ApiOperation(value = "所有健康检查")
     @GetMapping("/manager/healthcheck")
-    public Map<String, Map<String,Boolean>> getAllManagerhealthCheck(){
-        return managerService.parkingManagerHealthCheck(null,null);
+    public Map<Integer, Map<Long, Boolean>> getAllManagerhealthCheck() {
+        return managerService.parkingManagerHealthCheck(null, null);
     }
 
     @ApiOperation(value = "指定停车场健康检查")
     @GetMapping("/manager/{parkingLotId}/healthcheck")
-    public Map<String, Map<String,Boolean>> getParkingLotHealthCheck(@PathVariable String parkingLotId){
-        return managerService.parkingManagerHealthCheck(null,parkingLotId);
+    public Map<Integer, Map<Long, Boolean>> getParkingLotHealthCheck(@PathVariable Long parkingLotId) {
+        return managerService.parkingManagerHealthCheck(null, parkingLotId);
     }
 
     @ApiOperation(value = "指定停车场健康检查")
     @GetMapping("/{parkingLotManager}/{parkingLotId}/healthcheck")
-    public Map<String, Map<String,Boolean>> getManagerHealthCheck(@PathVariable String parkingLotManager,@PathVariable String parkingLotId){
-        return managerService.parkingManagerHealthCheck(parkingLotManager,parkingLotId);
+    public Map<Integer, Map<Long, Boolean>> getManagerHealthCheck(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
+        return managerService.parkingManagerHealthCheck(parkingLotManager, parkingLotId);
     }
 
     @ApiOperation(value = "指定停车场管理健康检查")
     @GetMapping("/{parkingLotManager}/healthcheck")
-    public Map<String, Map<String,Boolean>> getManagerHealthCheck(@PathVariable String parkingLotManager){
-        return managerService.parkingManagerHealthCheck(parkingLotManager,null);
+    public Map<Integer, Map<Long, Boolean>> getManagerHealthCheck(@PathVariable Integer parkingLotManager) {
+        return managerService.parkingManagerHealthCheck(parkingLotManager, null);
     }
 }

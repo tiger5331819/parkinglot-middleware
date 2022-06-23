@@ -1,9 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.StrUtil;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -63,7 +63,7 @@ public class ParkingLotManagerFactory {
      * @param parkingLotManagerName
      * @return
      */
-    public List<ParkingLotConfiguration> getParkingLotConfiguration(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
+    public List<ParkingLotConfiguration> getParkingLotConfiguration(@Nullable String parkingLotManagerName, @Nullable Long parkingLotId) {
         if (!StrUtil.isBlank(parkingLotManagerName)) {
             return parkingLotManagerMap.get(parkingLotManagerName).configurationList(parkingLotId);
         } else {
@@ -82,8 +82,8 @@ public class ParkingLotManagerFactory {
      * @param parkingLotId
      * @return
      */
-    public Map<String, Map<String, Boolean>> healthCheck(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
-        Map<String, Map<String, Boolean>> dataMap = new HashMap<>(100);
+    public Map<String, Map<Long, Boolean>> healthCheck(@Nullable String parkingLotManagerName, @Nullable Long parkingLotId) {
+        Map<String, Map<Long, Boolean>> dataMap = new HashMap<>(100);
         if (!StrUtil.isBlank(parkingLotManagerName)) {
             ParkingLotManager manager = parkingLotManagerMap.get(parkingLotManagerName);
             dataMap.put(parkingLotManagerName, manager.parkingLotHealthCheck(parkingLotId));

@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
+import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import lombok.extern.slf4j.Slf4j;
@@ -22,8 +23,11 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
     private final IDaoerCarPort api;
 
-    public DaoerCarPortAbility(IDaoerCarPort daoerClient){
-        api=daoerClient;
+    private final RedisTool redis;
+
+    public DaoerCarPortAbility(IDaoerCarPort daoerClient, RedisTool redis) {
+        api = daoerClient;
+        this.redis = redis;
     }
 
     /**
@@ -64,17 +68,29 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
-        int payState=api.payCarFeeAccess(payMessage.getCarNo(),
+        String key = "order:daoer:" + payMessage.getCarNo();
+        if (!redis.check(key)) {
+            return false;
+        }
+
+        Mono<DaoerBaseResp<CarFeeResult>> mono = api.getCarFeeInfo(payMessage.getCarNo());
+
+        String channelId = redis.get(key);
+
+
+        CarFeeResult fee = mono.block().getBody();
+
+        int payState = api.payCarFeeAccess(payMessage.getCarNo(),
                 payMessage.getPayTime(),
-                payMessage.getServiceTime(),
-                payMessage.getTotalFee(),
-                payMessage.getDiscountFee(),
+                fee.getChargeDuration(),
+                fee.getPayCharge(),
+                fee.getDiscountAmount(),
                 payMessage.getPaymentType(),
                 payMessage.getPayType(),
                 payMessage.getPaymentTransactionId(),
                 payMessage.getPayFee(),
-                payMessage.getChannelId()).block().getHead().getStatus();
-        return payState==1;
+                channelId).block().getHead().getStatus();
+        return payState == 1;
     }
 
     /**
@@ -88,7 +104,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     @Override
     public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
         CarFeeResult result=api.getChannelCarFee(channelId, carNo, openId).block().getBody();
-
+        redis.set("order:daoer:" + result.getCarNo(), channelId);
         return CarFeeToCarOrder(result);
     }
 

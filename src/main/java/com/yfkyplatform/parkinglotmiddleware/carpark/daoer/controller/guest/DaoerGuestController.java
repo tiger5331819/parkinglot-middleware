@@ -28,7 +28,7 @@ import javax.validation.constraints.NotNull;
 public class DaoerGuestController {
     private final ParkingLotManager manager;
 
-    private IDaoerGuest api(String parkingLotId){
+    private IDaoerGuest api(Long parkingLotId) {
         return manager.parkingLot(parkingLotId).client();
     }
 
@@ -38,19 +38,19 @@ public class DaoerGuestController {
 
     @ApiOperation(value = "创建访客")
     @PostMapping(value = "/guest")
-    public DaoerBaseResp<GuestResult> createGuest(@PathVariable String parkingLotId,@RequestBody CreateGuestRequest request){
+    public DaoerBaseResp<GuestResult> createGuest(@PathVariable Long parkingLotId, @RequestBody CreateGuestRequest request) {
         return api(parkingLotId).createGuest(request.getGuestName(), request.getCarNo(), request.getVisitTime(), request.getPhone(), request.getDescription()).block();
     }
 
     @ApiOperation(value = "更新访客")
     @PatchMapping(value = "/guest")
-    public DaoerBaseResp changeGuest(@PathVariable String parkingLotId,@RequestBody ChangeGuestRequest request){
-        return api(parkingLotId).changeGuestMessage(request.getObjectId(), request.getGuestName(),request.getVisitTime(), request.getPhone(), request.getDescription()).block();
+    public DaoerBaseResp changeGuest(@PathVariable Long parkingLotId, @RequestBody ChangeGuestRequest request) {
+        return api(parkingLotId).changeGuestMessage(request.getObjectId(), request.getGuestName(), request.getVisitTime(), request.getPhone(), request.getDescription()).block();
     }
 
     @ApiOperation(value = "取消访客")
     @DeleteMapping(value = "/guest")
-    public DaoerBaseResp removeGuest(@PathVariable String parkingLotId,@ApiParam(value = "唯一记录标识", required = true)@NotNull(message = "唯一记录标识不能为空") String objectId){
+    public DaoerBaseResp removeGuest(@PathVariable Long parkingLotId, @ApiParam(value = "唯一记录标识", required = true) @NotNull(message = "唯一记录标识不能为空") String objectId) {
         return api(parkingLotId).removeGuestMessage(objectId).block();
     }
 }

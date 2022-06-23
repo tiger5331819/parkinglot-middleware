@@ -1,13 +1,12 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.ObjectUtil;
-import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
-import org.springframework.lang.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.*;
 
 /**
@@ -33,7 +32,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    protected abstract T load(String parkingLotId);
+    protected abstract T load(Long parkingLotId);
 
     /**
      * 根据配置数据加载所有实例
@@ -74,8 +73,8 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public <T extends ParkingLotPod> T parkingLot(String parkingLotId) {
-        if (StrUtil.isBlank(parkingLotId)) {
+    public <T extends ParkingLotPod> T parkingLot(Long parkingLotId) {
+        if (ObjectUtil.isNull(parkingLotId)) {
             throw new IllegalArgumentException("parkingLotId 不能为空");
         }
 
@@ -93,10 +92,10 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public List<ParkingLotConfiguration> configurationList(@Nullable String parkingLotId) {
+    public List<ParkingLotConfiguration> configurationList(@Nullable Long parkingLotId) {
         List cfgList = new ArrayList();
 
-        if (!StrUtil.isBlank(parkingLotId)) {
+        if (ObjectUtil.isNotNull(parkingLotId)) {
             cfgList.add(parkingLot(parkingLotId).configuration());
         } else {
             load().forEach(item -> cfgList.add(item.configuration()));
@@ -110,9 +109,9 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public Map<String, Boolean> parkingLotHealthCheck(@Nullable String parkingLotId) {
-        Map healthCheckMap = new HashMap(100);
-        if (!StrUtil.isBlank(parkingLotId)) {
+    public Map<Long, Boolean> parkingLotHealthCheck(@Nullable Long parkingLotId) {
+        Map<Long, Boolean> healthCheckMap = new HashMap(100);
+        if (!ObjectUtil.isNotNull(parkingLotId)) {
             T parkingLot = parkingLot(parkingLotId);
             healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
         } else {

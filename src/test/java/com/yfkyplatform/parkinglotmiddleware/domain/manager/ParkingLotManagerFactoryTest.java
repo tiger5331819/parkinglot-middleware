@@ -29,11 +29,11 @@ class ParkingLotManagerFactoryTest {
     @ParameterizedTest
     @CsvSource({"Daoer,X24400000001", "Daoer,X52361700001", "Daoer,",
             ",X24400000001", ",X52361700001", ","})
-    void parkingManagerConfigurationTest(String parkingLotManagerName,String parkingLotId){
-        List cfgList=factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
+    void parkingManagerConfigurationTest(String parkingLotManagerName, Long parkingLotId) {
+        List cfgList = factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);
-        assertNotEquals(0,cfgList.size());
-        cfgList.forEach(item->{
+        assertNotEquals(0, cfgList.size());
+        cfgList.forEach(item -> {
             System.out.println(item);
         });
     }
@@ -51,13 +51,13 @@ class ParkingLotManagerFactoryTest {
     @ParameterizedTest
     @CsvSource({"Daoer,X24400000001", "Daoer,X52361700001", "Daoer,",
             ",X24400000001", ",X52361700001", ","})
-    void parkingManagerHealthCheckTest(String parkingLotManagerName,String parkingLotId){
-        Map<String,Map<String,Boolean>> cfgList=factory.healthCheck(parkingLotManagerName, parkingLotId);
+    void parkingManagerHealthCheckTest(String parkingLotManagerName, Long parkingLotId) {
+        Map<String, Map<Long, Boolean>> cfgList = factory.healthCheck(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);
-        assertNotEquals(0,cfgList.size());
-        cfgList.forEach((managerName,result)->{
-            result.forEach((name,data)->{
-                System.out.println(managerName+"\t"+name+"\t"+data);
+        assertNotEquals(0, cfgList.size());
+        cfgList.forEach((managerName, result) -> {
+            result.forEach((name, data) -> {
+                System.out.println(managerName + "\t" + name + "\t" + data);
             });
         });
     }

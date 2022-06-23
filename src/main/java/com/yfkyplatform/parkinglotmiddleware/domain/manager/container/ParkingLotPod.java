@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container;
 
+import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ParkingLotAbility;
 
@@ -13,14 +14,18 @@ public abstract class ParkingLotPod implements ParkingLotAbility {
 
     protected ParkingLotConfiguration cfg;
 
-    public ParkingLotPod(ParkingLotConfiguration parkingLotConfiguration){
-        this.cfg= parkingLotConfiguration;
+    protected RedisTool redis;
+
+    public ParkingLotPod(ParkingLotConfiguration parkingLotConfiguration, RedisTool redis) {
+        this.cfg = parkingLotConfiguration;
+        this.redis = redis;
     }
 
     /**
      * 获取驱动
-     * @return
+     *
      * @param <T>
+     * @return
      */
     public abstract <T> T client();
 
@@ -41,10 +46,11 @@ public abstract class ParkingLotPod implements ParkingLotAbility {
 
     /**
      * 获取停车场Id
-     * @return
+     *
      * @param
+     * @return
      */
-    public String Id(){
+    public Long Id() {
         return cfg.getId();
     }
 }
