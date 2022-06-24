@@ -42,7 +42,7 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
      * @return
      */
     @Override
-    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, Long parkingLotId) {
+    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, String parkingLotId) {
         return (ParkingLotConfiguration) redis.hash().get(redis.MakeKey(prefix + parkingType), parkingLotId);
     }
 

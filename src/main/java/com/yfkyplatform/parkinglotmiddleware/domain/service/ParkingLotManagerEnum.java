@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.service;
 
+import cn.hutool.core.util.ObjectUtil;
+
 /**
  * 停车场管理映射
  *
@@ -12,16 +14,19 @@ public enum ParkingLotManagerEnum {
      */
     Daoer(4, "Daoer");
 
-    private final int value;
+    private final int code;
 
-    private final String message;
+    private final String name;
 
     ParkingLotManagerEnum(int value, String message) {
-        this.value = value;
-        this.message = message;
+        this.code = value;
+        this.name = message;
     }
 
-    public static ParkingLotManagerEnum ValueOf(int parkingLotManagerCode) {
+    public static ParkingLotManagerEnum ValueOf(Integer parkingLotManagerCode) {
+        if (ObjectUtil.isNull(parkingLotManagerCode)) {
+            return null;
+        }
         switch (parkingLotManagerCode) {
             case 4:
                 return Daoer;
@@ -31,6 +36,9 @@ public enum ParkingLotManagerEnum {
     }
 
     public static ParkingLotManagerEnum ValueOf(String parkingLotManagerMessage) {
+        if (ObjectUtil.isNull(parkingLotManagerMessage)) {
+            return null;
+        }
         switch (parkingLotManagerMessage) {
             case "Daoer":
                 return Daoer;
@@ -39,11 +47,11 @@ public enum ParkingLotManagerEnum {
         }
     }
 
-    public int value() {
-        return this.value;
+    public int getCode() {
+        return this.code;
     }
 
-    public String message() {
-        return this.message;
+    public String getName() {
+        return this.name;
     }
 }

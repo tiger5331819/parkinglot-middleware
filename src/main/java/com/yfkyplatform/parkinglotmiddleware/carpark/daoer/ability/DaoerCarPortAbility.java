@@ -72,11 +72,22 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         if (!redis.check(key)) {
             return false;
         }
-
         Mono<DaoerBaseResp<CarFeeResult>> mono = api.getCarFeeInfo(payMessage.getCarNo());
-
         String channelId = redis.get(key);
 
+        int payType;
+        switch (payMessage.getPayType()) {
+            case 2000:
+            case 2001:
+                payType = 1;
+                break;
+            case 3000:
+            case 3001:
+                payType = 2;
+                break;
+            default:
+                payType = 0;
+        }
 
         CarFeeResult fee = mono.block().getBody();
 
@@ -85,8 +96,8 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 fee.getChargeDuration(),
                 fee.getPayCharge(),
                 fee.getDiscountAmount(),
-                payMessage.getPaymentType(),
-                payMessage.getPayType(),
+                0,
+                payType,
                 payMessage.getPaymentTransactionId(),
                 payMessage.getPayFee(),
                 channelId).block().getHead().getStatus();

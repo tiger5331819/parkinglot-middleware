@@ -49,8 +49,8 @@ class ParkingLotManagerFactoryTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"Daoer,X24400000001", "Daoer,X52361700001", "Daoer,",
-            ",X24400000001", ",X52361700001", ","})
+    @CsvSource({"Daoer,24400000001", "Daoer,52361700001", "Daoer,",
+            ",24400000001", ",52361700001", ","})
     void parkingManagerHealthCheckTest(String parkingLotManagerName, Long parkingLotId) {
         Map<String, Map<Long, Boolean>> cfgList = factory.healthCheck(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);

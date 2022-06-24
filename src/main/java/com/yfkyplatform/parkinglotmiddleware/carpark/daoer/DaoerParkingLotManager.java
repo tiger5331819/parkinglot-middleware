@@ -33,12 +33,12 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
      */
     @Override
     protected DaoerParkingLot load(Long parkingLotId) {
-        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId("Daoer", parkingLotId);
+        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId("Daoer", parkingLotId.toString());
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
         DaoerConfiguration daoerCfg = cfg.getConfig();
-        DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(cfg.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription());
+        DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(Long.valueOf(cfg.getParkingLotId()), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription());
         return new DaoerParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -54,7 +54,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
 
         for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
             DaoerConfiguration daoerCfg = item.getConfig();
-            DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(item.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription());
+            DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(Long.valueOf(item.getParkingLotId()), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription());
             dataList.add(new DaoerParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;

@@ -14,6 +14,7 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,17 +57,16 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public Boolean payAccess(Integer parkingLotManagerCode, OrderParkingRecordRpcResp orderParkingRecord, OrderPayDetailRpcResp payMessage) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message())
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName())
                 .parkingLot(orderParkingRecord.getParkinglotId()).carport();
 
         CarOrderPayMessage message = new CarOrderPayMessage();
-
+        BigDecimal payFee = new BigDecimal(payMessage.getPaidAmount());
         message.setCarNo(orderParkingRecord.getPlateNumber());
-/*        message.setPayFee(payMessage.getpay());
-        message.setPayTime(payMessage.getPayTime());
-        message.setPayType(payMessage.getPayType());
-        message.setPaymentTransactionId(payMessage.getPaymentTransactionId());
-        message.setPaymentType(payMessage.getPaymentType());*/
+        message.setPayFee(payFee.divide(BigDecimal.valueOf(100)));
+        message.setPayTime(payMessage.getPaidTime().toString());
+        message.setPayType(payMessage.getPaidModeId());
+        message.setPaymentTransactionId(payMessage.getPayOrderId().toString());
 
         return carPortService.payCarFeeAccess(message);
     }
@@ -81,7 +81,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp getCarFee(Integer parkingLotManagerCode, Long parkingLotId, String carNo) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
         return makeCarOrderResultRpcResp(carPortService.getCarFeeInfo(carNo));
     }
 
@@ -95,7 +95,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public String blankCarIn(Integer parkingLotManagerCode, Long parkingLotId, BlankCarRpcReq blankCar) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
         return carPortService.blankCarIn(blankCar.getOpenId(), blankCar.getScanType(), blankCar.getChannelId()).getCarNo();
     }
 
@@ -109,7 +109,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp blankCarOut(Integer parkingLotManagerCode, Long parkingLotId, BlankCarRpcReq blankCar) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
         String carNo = carPortService.blankCarOut(blankCar.getOpenId(), blankCar.getScanType(), blankCar.getChannelId()).getCarNo();
         return makeCarOrderResultRpcResp(carPortService.getCarFeeInfo(carNo));
     }
@@ -123,7 +123,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarPortSpaceRpcResp getCarPortSpace(Integer parkingLotManagerCode, Long parkingLotId) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
         CarPortSpaceResult carPortSpace = carPortService.getCarPortSpace();
 
         CarPortSpaceRpcResp result = new CarPortSpaceRpcResp();
@@ -145,7 +145,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp getChannelCarFee(Integer parkingLotManagerCode, Long parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
+        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
         return makeCarOrderResultRpcResp(carPortService.getChannelCarFee(channelId, carNo, openId));
     }
 
@@ -158,8 +158,8 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public List<ChannelInfoResultRpcResp> getChannelsInfo(Integer parkingLotManagerCode, Long parkingLotId) {
-        ICarPortAblitity carPortAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message()).parkingLot(parkingLotId).carport();
-        List<ChannelInfoResult> channelInfoResultList = carPortAblitity.getChannelsInfo();
+        ICarPortAblitity carPortAbility = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
+        List<ChannelInfoResult> channelInfoResultList = carPortAbility.getChannelsInfo();
         List<ChannelInfoResultRpcResp> resultList = new ArrayList<>();
 
         channelInfoResultList.forEach(item -> {

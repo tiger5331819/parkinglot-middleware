@@ -111,7 +111,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      */
     public Map<Long, Boolean> parkingLotHealthCheck(@Nullable Long parkingLotId) {
         Map<Long, Boolean> healthCheckMap = new HashMap(100);
-        if (!ObjectUtil.isNotNull(parkingLotId)) {
+        if (ObjectUtil.isNotNull(parkingLotId)) {
             T parkingLot = parkingLot(parkingLotId);
             healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
         } else {

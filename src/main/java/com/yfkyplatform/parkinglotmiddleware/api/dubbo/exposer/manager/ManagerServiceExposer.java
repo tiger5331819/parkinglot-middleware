@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager;
 
 
-import cn.hutool.core.bean.BeanUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.DaoerParkingLotCfgRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
@@ -40,7 +40,7 @@ public class ManagerServiceExposer implements IManagerService {
     @Override
     public Set<Integer> managerSupport() {
         Set<String> managerSet = factory.getManagerSupport();
-        return managerSet.stream().map(item -> ParkingLotManagerEnum.valueOf(item).value()).collect(Collectors.toSet());
+        return managerSet.stream().map(item -> ParkingLotManagerEnum.valueOf(item).getCode()).collect(Collectors.toSet());
     }
 
     /**
@@ -52,12 +52,25 @@ public class ManagerServiceExposer implements IManagerService {
      */
     @Override
     public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
-        List<ParkingLotConfiguration> cfgList = factory.getParkingLotConfiguration(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message(), parkingLotId);
+        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
+        List<ParkingLotConfiguration> cfgList;
+        if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {
+            cfgList = factory.getParkingLotConfiguration(parkingLotManagerEnum.getName(), parkingLotId);
+        } else {
+            cfgList = factory.getParkingLotConfiguration(null, parkingLotId);
+        }
+
 
         List<ParkingLotCfgRpcResp> result = new ArrayList<>();
         cfgList.forEach(item -> {
             if ((item instanceof DaoerParkingLotConfiguration)) {
-                result.add(BeanUtil.copyProperties(item, DaoerParkingLotCfgRpcResp.class));
+                DaoerParkingLotCfgRpcResp data = new DaoerParkingLotCfgRpcResp();
+                data.setAppName(((DaoerParkingLotConfiguration) item).getAppName());
+                data.setParkId(((DaoerParkingLotConfiguration) item).getParkId());
+                data.setBaseUrl(((DaoerParkingLotConfiguration) item).getBaseUrl());
+                data.setId(item.getId());
+                data.setDescription(item.getDescription());
+                data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
             }
         });
         return result;
@@ -72,10 +85,18 @@ public class ManagerServiceExposer implements IManagerService {
      */
     @Override
     public Map<Integer, Map<Long, Boolean>> parkingManagerHealthCheck(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
-        Map<String, Map<Long, Boolean>> health = factory.healthCheck(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).message(), parkingLotId);
+        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
+        Map<String, Map<Long, Boolean>> health;
+        if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {
+            health = factory.healthCheck(parkingLotManagerEnum.getName(), parkingLotId);
+        } else {
+            health = factory.healthCheck(null, parkingLotId);
+        }
+
+
         Map<Integer, Map<Long, Boolean>> result = new HashMap<>();
         health.forEach((key, value) -> {
-            result.put(ParkingLotManagerEnum.valueOf(key).value(), value);
+            result.put(ParkingLotManagerEnum.valueOf(key).getCode(), value);
         });
         return result;
     }
