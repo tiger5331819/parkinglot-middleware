@@ -21,7 +21,7 @@ import java.util.List;
 @Component
 public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, DaoerParkingLotConfiguration> {
 
-    public DaoerParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByRedis") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
+    public DaoerParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByConfiguration") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
         super(redisTool, cfgRepository);
     }
 

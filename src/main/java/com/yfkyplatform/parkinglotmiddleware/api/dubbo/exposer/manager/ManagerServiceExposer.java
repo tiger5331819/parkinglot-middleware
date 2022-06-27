@@ -71,6 +71,7 @@ public class ManagerServiceExposer implements IManagerService {
                 data.setId(item.getId());
                 data.setDescription(item.getDescription());
                 data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
+                result.add(data);
             }
         });
         return result;

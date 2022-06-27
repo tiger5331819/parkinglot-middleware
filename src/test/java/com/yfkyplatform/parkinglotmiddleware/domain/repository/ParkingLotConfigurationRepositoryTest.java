@@ -15,7 +15,7 @@ import java.util.List;
 @SpringBootTest
 class ParkingLotConfigurationRepositoryTest {
 
-    @Qualifier("parkingLotConfigurationRepositoryByRedis")
+    @Qualifier("parkingLotConfigurationRepositoryByConfiguration")
     @Autowired
     private IParkingLotConfigurationRepository repository;
 

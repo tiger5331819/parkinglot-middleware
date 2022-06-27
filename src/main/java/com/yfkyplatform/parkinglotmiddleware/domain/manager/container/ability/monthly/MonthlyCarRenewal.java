@@ -5,7 +5,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 /**
- * 月租车基本信息
+ * 月租车续期信息
  *
  * @author Suhuyuan
  */

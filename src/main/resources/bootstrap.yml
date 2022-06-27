@@ -14,6 +14,7 @@ spring:
           - data-id: share-nacos-discovery.yml
           - data-id: share-redis.yml
           #- data-id: share-rocketmq.yml
+          - data-id: parkinglot-middleware.yml
             refresh: true
 
 logging:
