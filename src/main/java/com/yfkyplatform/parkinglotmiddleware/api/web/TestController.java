@@ -76,4 +76,10 @@ public class TestController {
 
         return result;
     }
+
+    @ApiOperation(value = "获取版本信息")
+    @GetMapping("/version")
+    public String getVersion() {
+        return "0.0.1";
+    }
 }
