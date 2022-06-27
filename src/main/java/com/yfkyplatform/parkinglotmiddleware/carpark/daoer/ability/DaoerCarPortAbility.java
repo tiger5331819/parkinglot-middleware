@@ -55,8 +55,10 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarOrderResult getCarFeeInfo(String carNo) {
-        CarFeeResult result=api.getCarFeeInfo(carNo).block().getBody();
-
+        CarFeeResult result = api.getCarFeeInfo(carNo).block().getBody();
+        if (ObjectUtil.isNull(result)) {
+            result = new CarFeeResult();
+        }
         return CarFeeToCarOrder(result);
     }
 
@@ -114,8 +116,12 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
-        CarFeeResult result=api.getChannelCarFee(channelId, carNo, openId).block().getBody();
+        CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
         redis.set("order:daoer:" + result.getCarNo(), channelId);
+
+        if (ObjectUtil.isNull(result)) {
+            result = new CarFeeResult();
+        }
         return CarFeeToCarOrder(result);
     }
 
