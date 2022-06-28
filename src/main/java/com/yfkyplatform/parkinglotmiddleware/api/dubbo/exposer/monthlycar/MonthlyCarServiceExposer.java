@@ -118,7 +118,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public boolean renewalMonthlyCar(Integer parkingLotManagerCode, Long parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
-
+        MonthlyCarAssert.newStartTimeLessThanEndTime(monthlyCarRenewal);
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
         MonthlyCarRenewal renewal = new MonthlyCarRenewal();
