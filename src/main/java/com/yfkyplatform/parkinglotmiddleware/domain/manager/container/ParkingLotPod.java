@@ -50,7 +50,7 @@ public abstract class ParkingLotPod implements ParkingLotAbility {
      * @param
      * @return
      */
-    public Long Id() {
+    public String Id() {
         return cfg.getId();
     }
 }

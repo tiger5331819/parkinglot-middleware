@@ -12,9 +12,11 @@ import java.math.BigDecimal;
  */
 @Data
 public class CarFeePayRequest {
-    @ApiModelProperty(value = "车牌",required = true)
+    @ApiModelProperty(value = "车牌", required = true)
     private String carNo;
-    @ApiModelProperty(value = "支付时间 yyyy-MM-dd HH:mm:ss",required = true)
+    @ApiModelProperty(value = "入场时间 yyyy-MM-dd HH:mm:ss", required = true)
+    private String entryTime;
+    @ApiModelProperty(value = "支付时间 yyyy-MM-dd HH:mm:ss", required = true)
     private String payTime;
     @ApiModelProperty(value = "停车时长 单位：分钟", required = true)
     private int duration;

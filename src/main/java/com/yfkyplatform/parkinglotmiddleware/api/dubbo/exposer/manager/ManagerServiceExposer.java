@@ -51,7 +51,8 @@ public class ManagerServiceExposer implements IManagerService {
      * @return
      */
     @Override
-    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
+    public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable Integer parkingLotManagerCode, @Nullable String parkingLotId) {
+
         ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
         List<ParkingLotConfiguration> cfgList;
         if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {
@@ -85,7 +86,7 @@ public class ManagerServiceExposer implements IManagerService {
      * @return
      */
     @Override
-    public Map<Integer, Map<Long, Boolean>> parkingManagerHealthCheck(@Nullable Integer parkingLotManagerCode, @Nullable Long parkingLotId) {
+    public Map<Integer, Map<Long, Boolean>> parkingManagerHealthCheck(@Nullable Integer parkingLotManagerCode, @Nullable String parkingLotId) {
         ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
         Map<String, Map<Long, Boolean>> health;
         if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {

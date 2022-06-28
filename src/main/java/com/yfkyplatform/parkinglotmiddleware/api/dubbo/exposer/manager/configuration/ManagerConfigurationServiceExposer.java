@@ -35,7 +35,7 @@ public class ManagerConfigurationServiceExposer implements IManagerConfiguration
      * @return
      */
     @Override
-    public Boolean addDaoerCongfiguration(Long id, String appName, String parkId, String baseUrl, String description) {
+    public Boolean addDaoerCongfiguration(String id, String appName, String parkId, String baseUrl, String description) {
         ParkingLotManager daoerManager = factory.manager("Daoer");
         DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description);
 

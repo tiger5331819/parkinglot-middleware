@@ -68,10 +68,11 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
+    public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
                                                int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId) {
         CarFeePay model = new CarFeePay("api/index/tempFee/paysuccess");
 
+        model.setEntryTime(entryTime);
         model.setCarNo(carNo);
         model.setPayTime(payTime);
         model.setDuration(duration);

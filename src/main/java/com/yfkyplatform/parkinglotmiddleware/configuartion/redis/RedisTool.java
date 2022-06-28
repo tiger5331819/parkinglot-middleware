@@ -14,7 +14,7 @@ import java.time.Duration;
  */
 @Component
 public class RedisTool {
-    private RedisTemplate redisTemplate;
+    private final RedisTemplate redisTemplate;
     @Value("${spring.application.name}")
     private String prefix;
 
@@ -29,20 +29,28 @@ public class RedisTool {
     }
 
     public<K ,V> void set(K key,V value){
-        redisTemplate.opsForValue().set(MakeKey(key),value);
+        redisTemplate.opsForValue().set(MakeKey(key), value);
     }
 
-    public<K ,V> void set(K key, V value, Duration time){
-        redisTemplate.opsForValue().set(MakeKey(key),value,time);
+    public <K, V> void set(K key, V value, Duration time) {
+        redisTemplate.opsForValue().set(MakeKey(key), value, time);
     }
 
-    public<K,V> V get(K key){
-        return (V)redisTemplate.opsForValue().get(MakeKey(key));
+    public <K, V> V get(K key) {
+        return (V) redisTemplate.opsForValue().get(MakeKey(key));
     }
 
-    public<K> boolean check(K key){
+    public <K, V> V getWithDelete(K key) {
+        V data = (V) redisTemplate.opsForValue().get(MakeKey(key));
+        redisTemplate.delete(key);
+        return data;
+    }
+
+    public <K> boolean check(K key) {
         return redisTemplate.hasKey(MakeKey(key));
     }
 
-    public <HK, HV> HashOperations hash(){return redisTemplate.opsForHash();}
+    public <HK, HV> HashOperations hash() {
+        return redisTemplate.opsForHash();
+    }
 }

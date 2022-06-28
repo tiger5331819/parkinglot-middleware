@@ -37,7 +37,7 @@ public class DaoerToolsController {
     private final ObjectMapper mapper;
     private final ParkingLotManager manager;
 
-    private IDaoerTool api(Long parkingLotId) {
+    private IDaoerTool api(String parkingLotId) {
         return manager.parkingLot(parkingLotId).client();
     }
 
@@ -49,13 +49,13 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "图片")
     @GetMapping(value = "/img", produces = MediaType.IMAGE_JPEG_VALUE)
-    public byte[] getImg(@PathVariable Long parkingLotId, String imgPath) {
+    public byte[] getImg(@PathVariable String parkingLotId, String imgPath) {
         return api(parkingLotId).getImage(imgPath).block();
     }
 
     @ApiOperation(value = "Access_Token")
     @GetMapping(value = "/token")
-    public DaoerBaseResp<String> getToken(@PathVariable Long parkingLotId) {
+    public DaoerBaseResp<String> getToken(@PathVariable String parkingLotId) {
         DaoerBaseResp<String> result = new DaoerBaseResp<String>();
         result.setBody(api(parkingLotId).getToken());
         return result;

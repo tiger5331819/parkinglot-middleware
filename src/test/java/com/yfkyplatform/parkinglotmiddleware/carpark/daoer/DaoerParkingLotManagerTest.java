@@ -27,7 +27,7 @@ class DaoerParkingLotManagerTest {
     @ParameterizedTest
     @CsvSource({"52361700001,d813cfb7959548f9a5f311286d713150,X52361700001,https://parklot.q-parking.com,科盈测试",
             "24400000001,a909fb0eb10240979b2b374273bf6342,X24400000001,https://parklot.q-parking.com,铜陵"})
-    void addCongfiguration(Long id, String appName, String parkId, String baseUrl, String description) throws JsonProcessingException {
+    void addCongfiguration(String id, String appName, String parkId, String baseUrl, String description) throws JsonProcessingException {
         DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description);
 
         assertTrue(daoerManager.addParkingLot(cfg));
@@ -35,7 +35,7 @@ class DaoerParkingLotManagerTest {
 
     @ParameterizedTest
     @CsvSource({"24400000001", "52361700001"})
-    void clientTest(Long parkingLotId) {
+    void clientTest(String parkingLotId) {
         /*ParkingLotPod parkingLotPod= daoerManager.parkingLot(parkingLotId);
         DaoerClient client=parkingLotPod.client();*/
 
@@ -45,14 +45,14 @@ class DaoerParkingLotManagerTest {
 
     @ParameterizedTest
     @CsvSource({"铜陵", "科盈测试"})
-    void healthCheckTest(Long parkingLotId) {
+    void healthCheckTest(String parkingLotId) {
         Boolean check = daoerManager.parkingLot(parkingLotId).healthCheck();
         assertTrue(check);
     }
 
     @ParameterizedTest
     @CsvSource({"铜陵", "科盈测试"})
-    void carPortTest(Long parkingLotId) {
+    void carPortTest(String parkingLotId) {
         assertThrows(RuntimeException.class, () -> daoerManager.parkingLot(parkingLotId).carport().getCarPortSpace());
     }
 }

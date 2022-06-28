@@ -32,7 +32,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    protected abstract T load(Long parkingLotId);
+    protected abstract T load(String parkingLotId);
 
     /**
      * 根据配置数据加载所有实例
@@ -73,7 +73,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public <T extends ParkingLotPod> T parkingLot(Long parkingLotId) {
+    public <T extends ParkingLotPod> T parkingLot(String parkingLotId) {
         if (ObjectUtil.isNull(parkingLotId)) {
             throw new IllegalArgumentException("parkingLotId 不能为空");
         }
@@ -92,7 +92,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public List<ParkingLotConfiguration> configurationList(@Nullable Long parkingLotId) {
+    public List<ParkingLotConfiguration> configurationList(@Nullable String parkingLotId) {
         List cfgList = new ArrayList();
 
         if (ObjectUtil.isNotNull(parkingLotId)) {
@@ -109,8 +109,8 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
      * @param parkingLotId
      * @return
      */
-    public Map<Long, Boolean> parkingLotHealthCheck(@Nullable Long parkingLotId) {
-        Map<Long, Boolean> healthCheckMap = new HashMap(100);
+    public Map<String, Boolean> parkingLotHealthCheck(@Nullable String parkingLotId) {
+        Map<String, Boolean> healthCheckMap = new HashMap(100);
         if (ObjectUtil.isNotNull(parkingLotId)) {
             T parkingLot = parkingLot(parkingLotId);
             healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());

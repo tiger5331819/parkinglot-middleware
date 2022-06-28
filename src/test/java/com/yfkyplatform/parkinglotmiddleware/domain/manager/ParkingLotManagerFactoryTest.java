@@ -29,7 +29,7 @@ class ParkingLotManagerFactoryTest {
     @ParameterizedTest
     @CsvSource({"Daoer,X24400000001", "Daoer,X52361700001", "Daoer,",
             ",X24400000001", ",X52361700001", ","})
-    void parkingManagerConfigurationTest(String parkingLotManagerName, Long parkingLotId) {
+    void parkingManagerConfigurationTest(String parkingLotManagerName, String parkingLotId) {
         List cfgList = factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);
         assertNotEquals(0, cfgList.size());
@@ -51,7 +51,7 @@ class ParkingLotManagerFactoryTest {
     @ParameterizedTest
     @CsvSource({"Daoer,24400000001", "Daoer,52361700001", "Daoer,",
             ",24400000001", ",52361700001", ","})
-    void parkingManagerHealthCheckTest(String parkingLotManagerName, Long parkingLotId) {
+    void parkingManagerHealthCheckTest(String parkingLotManagerName, String parkingLotId) {
         Map<String, Map<Long, Boolean>> cfgList = factory.healthCheck(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);
         assertNotEquals(0, cfgList.size());

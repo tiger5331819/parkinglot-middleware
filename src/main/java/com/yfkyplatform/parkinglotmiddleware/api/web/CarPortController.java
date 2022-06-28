@@ -35,25 +35,25 @@ public class CarPortController {
     @ApiOperation(value = "车场余位")
     @GetMapping("/space")
     public CarPortSpaceRpcResp getCarPortSpace(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
-        return carPortService.getCarPortSpace(parkingLotManager, parkingLotId);
+        return carPortService.getCarPortSpace(100100101, parkingLotManager, parkingLotId);
     }
 
     @ApiOperation(value = "无牌车出场")
     @PostMapping("/blankCarOut")
     public CarOrderResultRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarOut(parkingLotManager, parkingLotId, blankCar);
+        return carPortService.blankCarOut(100100101, parkingLotManager, parkingLotId, blankCar);
     }
 
     @ApiOperation(value = "无牌车入场")
     @PostMapping("/blankCarIn")
     public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarIn(parkingLotManager, parkingLotId, blankCar);
+        return carPortService.blankCarIn(100100101, parkingLotManager, parkingLotId, blankCar);
     }
 
     @ApiOperation(value = "临时车出场（获取车辆费用）")
     @GetMapping("/{carNo}/Fee")
     public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
-        return carPortService.getCarFee(parkingLotManager, parkingLotId, carNo);
+        return carPortService.getCarFee(100100101, parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "车辆缴费")
@@ -64,18 +64,18 @@ public class CarPortController {
         orderParkingRecord.setParkinglotId(parkingLotId);
         OrderPayDetailRpcResp payMessage = new OrderPayDetailRpcResp();
 
-        return carPortService.payAccess(parkingLotManager, orderParkingRecord, payMessage);
+        return carPortService.payAccess(100100101, parkingLotManager, orderParkingRecord, payMessage);
     }
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
     public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, carNo, openId);
+        return carPortService.getChannelCarFee(100100101, parkingLotManager, parkingLotId, channelId, carNo, openId);
     }
 
     @ApiOperation(value = "获取通道列表")
     @GetMapping("/channel")
     public List<ChannelInfoResultRpcResp> getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
-        return carPortService.getChannelsInfo(parkingLotManager, parkingLotId);
+        return carPortService.getChannelsInfo(100100101, parkingLotManager, parkingLotId);
     }
 }

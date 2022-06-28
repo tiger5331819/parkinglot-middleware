@@ -20,8 +20,8 @@ public class ParkingLotConfiguration<T> {
 
     private String description;
 
-    public ParkingLotConfiguration(Long parkingLotId, String parkingType, String description) {
-        this.parkingLotId = parkingLotId.toString();
+    public ParkingLotConfiguration(String parkingLotId, String parkingType, String description) {
+        this.parkingLotId = parkingLotId;
         this.parkingType = parkingType;
         this.description = description;
     }

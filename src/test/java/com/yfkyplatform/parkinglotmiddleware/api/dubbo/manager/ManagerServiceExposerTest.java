@@ -22,7 +22,7 @@ public class ManagerServiceExposerTest {
     @ParameterizedTest
     @CsvSource({"Daoer,科盈测试", "Daoer,铜陵", "Daoer,",
             ",科盈测试", ",铜陵", ","})
-    void parkingMangerConfigurationTest(Integer parkingLotManagerName, Long parkingLotId) {
+    void parkingMangerConfigurationTest(Integer parkingLotManagerName, String parkingLotId) {
         List<ParkingLotCfgRpcResp> data = managerService.parkingMangerConfiguration(parkingLotManagerName, parkingLotId);
         assertNotNull(data);
         assertNotEquals(0, data.size());

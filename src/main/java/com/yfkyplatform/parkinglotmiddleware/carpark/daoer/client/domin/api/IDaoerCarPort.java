@@ -33,7 +33,7 @@ public interface IDaoerCarPort {
      * @param carNo 车牌号码
      * @return
      */
-    Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
+    Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
                                         int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId);
 
     /**

@@ -63,7 +63,7 @@ public class ParkingLotManagerFactory {
      * @param parkingLotManagerName
      * @return
      */
-    public List<ParkingLotConfiguration> getParkingLotConfiguration(@Nullable String parkingLotManagerName, @Nullable Long parkingLotId) {
+    public List<ParkingLotConfiguration> getParkingLotConfiguration(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
         if (!StrUtil.isBlank(parkingLotManagerName)) {
             return parkingLotManagerMap.get(parkingLotManagerName).configurationList(parkingLotId);
         } else {
@@ -82,7 +82,7 @@ public class ParkingLotManagerFactory {
      * @param parkingLotId
      * @return
      */
-    public Map<String, Map<Long, Boolean>> healthCheck(@Nullable String parkingLotManagerName, @Nullable Long parkingLotId) {
+    public Map<String, Map<Long, Boolean>> healthCheck(@Nullable String parkingLotManagerName, @Nullable String parkingLotId) {
         Map<String, Map<Long, Boolean>> dataMap = new HashMap<>(100);
         if (!StrUtil.isBlank(parkingLotManagerName)) {
             ParkingLotManager manager = parkingLotManagerMap.get(parkingLotManagerName);

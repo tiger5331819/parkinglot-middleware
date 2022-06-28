@@ -20,6 +20,10 @@ public class CarFeePay extends DaoerBase {
     /**
      * 支付时间 yyyy-MM-dd HH:mm:ss
      */
+    private String entryTime;
+    /**
+     * 支付时间 yyyy-MM-dd HH:mm:ss
+     */
     private String payTime;
     /**
      * 停车时长 单位：分钟
