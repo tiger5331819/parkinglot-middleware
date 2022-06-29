@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
+import cn.hutool.core.date.DateTime;
 import com.yfkyplatform.ordercenter.api.resp.OrderParkingRecordRpcResp;
 import com.yfkyplatform.ordercenter.api.resp.OrderPayDetailRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
@@ -71,7 +72,7 @@ public class CarportServiceExposer implements ICarPortService {
         BigDecimal payFee = new BigDecimal(payMessage.getPaidAmount());
         message.setCarNo(orderParkingRecord.getPlateNumber());
         message.setPayFee(payFee.divide(BigDecimal.valueOf(100)));
-        message.setPayTime(payMessage.getPaidTime().toString());
+        message.setPayTime(new DateTime(payMessage.getPaidTime()).toString());
         message.setPayType(payMessage.getPaidModeId());
         message.setPaymentTransactionId(payMessage.getPayOrderId().toString());
 

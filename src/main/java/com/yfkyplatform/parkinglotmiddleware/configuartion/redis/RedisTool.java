@@ -42,7 +42,7 @@ public class RedisTool {
 
     public <K, V> V getWithDelete(K key) {
         V data = (V) redisTemplate.opsForValue().get(MakeKey(key));
-        redisTemplate.delete(key);
+        redisTemplate.delete(MakeKey(key));
         return data;
     }
 

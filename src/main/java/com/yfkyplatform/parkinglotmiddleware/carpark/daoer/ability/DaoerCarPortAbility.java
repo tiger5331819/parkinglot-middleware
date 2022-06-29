@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
+import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
@@ -97,7 +98,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         CarFeeResult fee = mono.block().getBody();
 
         int payState = api.payCarFeeAccess(payMessage.getCarNo(),
-                fee.getInTime().toString(),
+                new DateTime(fee.getInTime()).toString(),
                 payMessage.getPayTime(),
                 fee.getChargeDuration(),
                 fee.getPayCharge(),
