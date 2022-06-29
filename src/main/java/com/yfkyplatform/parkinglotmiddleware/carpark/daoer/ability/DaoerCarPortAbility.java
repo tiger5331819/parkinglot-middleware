@@ -116,9 +116,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     /**
      * 根据通道号获取车辆费用信息
      *
-     * @param channelId
+     * @param channelId 通道Id
      * @param carNo     车牌号码
-     * @param openId
+     * @param openId    openId
      * @return
      */
     @Override
