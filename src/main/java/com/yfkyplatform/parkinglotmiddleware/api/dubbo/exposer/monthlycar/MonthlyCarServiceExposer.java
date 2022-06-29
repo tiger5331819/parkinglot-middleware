@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.monthlycar;
 
+import com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.ThirdIdProxy;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarHistoryMessageResultRpcResp;
@@ -10,8 +11,6 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.mo
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarRenewal;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import com.yfkyplatform.passthrough.api.mgnt.PtParkingLotServiceApi;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -29,11 +28,11 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
 
     private final ParkingLotManagerFactory factory;
 
-    @DubboReference
-    private PtParkingLotServiceApi passThroughParkingLotService;
+    private final ThirdIdProxy thirdIdProxy;
 
-    public MonthlyCarServiceExposer(ParkingLotManagerFactory factory) {
+    public MonthlyCarServiceExposer(ParkingLotManagerFactory factory, ThirdIdProxy thirdIdProxy) {
         this.factory = factory;
+        this.thirdIdProxy = thirdIdProxy;
     }
 
 
@@ -47,7 +46,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId);
         List<MonthlyCarRateResultRpcResp> result = new ArrayList<>();
@@ -74,7 +73,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public MonthlyCarMessageResultRpcResp monthlyCarInfo(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, String carNo) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId);
         MonthlyCarMessageResult monthlyCar = monthlyAblitity.getMonthlyCarInfo(carNo);
@@ -103,7 +102,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, String carNo) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId);
         List<MonthlyCarHistoryMessageResultRpcResp> result = new ArrayList<>();
@@ -133,7 +132,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public boolean renewalMonthlyCar(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
 
         MonthlyCarAssert.newStartTimeLessThanEndTime(monthlyCarRenewal);
 

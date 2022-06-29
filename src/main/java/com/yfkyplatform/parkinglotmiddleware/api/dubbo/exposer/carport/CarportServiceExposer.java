@@ -7,11 +7,10 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.ThirdIdProxy;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import com.yfkyplatform.passthrough.api.mgnt.PtParkingLotServiceApi;
-import org.apache.dubbo.config.annotation.DubboReference;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -31,11 +30,11 @@ public class CarportServiceExposer implements ICarPortService {
 
     private final ParkingLotManagerFactory factory;
 
-    @DubboReference
-    private PtParkingLotServiceApi passThroughParkingLotService;
+    private final ThirdIdProxy thirdIdProxy;
 
-    public CarportServiceExposer(ParkingLotManagerFactory factory) {
+    public CarportServiceExposer(ParkingLotManagerFactory factory, ThirdIdProxy thirdIdProxy) {
         this.factory = factory;
+        this.thirdIdProxy = thirdIdProxy;
     }
 
     private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
@@ -63,7 +62,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public Boolean payAccess(Integer operatorId, Integer parkingLotManagerCode, OrderParkingRecordRpcResp orderParkingRecord, OrderPayDetailRpcResp payMessage) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(orderParkingRecord.getParkinglotId(), operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(orderParkingRecord.getParkinglotId(), operatorId);
 
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName())
                 .parkingLot(thirdId).carport();
@@ -90,7 +89,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp getCarFee(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, String carNo) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         return makeCarOrderResultRpcResp(carPortService.getCarFeeInfo(carNo));
@@ -107,7 +106,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public String blankCarIn(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, BlankCarRpcReq blankCar) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         return carPortService.blankCarIn(blankCar.getOpenId(), blankCar.getScanType(), blankCar.getChannelId()).getCarNo();
@@ -124,7 +123,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp blankCarOut(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, BlankCarRpcReq blankCar) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         String carNo = carPortService.blankCarOut(blankCar.getOpenId(), blankCar.getScanType(), blankCar.getChannelId()).getCarNo();
@@ -141,7 +140,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarPortSpaceRpcResp getCarPortSpace(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         CarPortSpaceResult carPortSpace = carPortService.getCarPortSpace();
@@ -166,7 +165,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultRpcResp getChannelCarFee(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         return makeCarOrderResultRpcResp(carPortService.getChannelCarFee(channelId, carNo, openId));
@@ -182,7 +181,7 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public List<ChannelInfoResultRpcResp> getChannelsInfo(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId) {
-        String thirdId = passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).carport();
 
         List<ChannelInfoResult> channelInfoResultList = carPortService.getChannelsInfo();
