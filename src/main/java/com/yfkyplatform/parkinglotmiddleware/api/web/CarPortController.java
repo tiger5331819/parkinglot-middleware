@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
+import cn.hutool.core.date.DateTime;
 import com.yfkyplatform.ordercenter.api.resp.OrderParkingRecordRpcResp;
 import com.yfkyplatform.ordercenter.api.resp.OrderPayDetailRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
@@ -62,7 +63,11 @@ public class CarPortController {
         OrderParkingRecordRpcResp orderParkingRecord = new OrderParkingRecordRpcResp();
         orderParkingRecord.setPlateNumber(carNo);
         orderParkingRecord.setParkinglotId(parkingLotId);
+
         OrderPayDetailRpcResp payMessage = new OrderPayDetailRpcResp();
+        payMessage.setPaidTime(new DateTime(payData.getPayTime()).toTimestamp().toLocalDateTime());
+        payMessage.setPaidModeId(payData.getPayType());
+        payMessage.setPayOrderId(Long.valueOf(payData.getPaymentTransactionId()));
 
         return carPortService.payAccess(100100101, parkingLotManager, orderParkingRecord, payMessage);
     }
