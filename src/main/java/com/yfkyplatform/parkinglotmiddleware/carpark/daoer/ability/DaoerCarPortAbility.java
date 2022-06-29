@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
@@ -55,9 +56,13 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarOrderResult getCarFeeInfo(String carNo) {
-        CarFeeResult result = api.getCarFeeInfo(carNo).block().getBody();
+        DaoerBaseResp<CarFeeResult> resp = api.getCarFeeInfo(carNo).block();
+        CarFeeResult result = resp.getBody();
         if (ObjectUtil.isNull(result)) {
             result = new CarFeeResult();
+        }
+        if (StrUtil.isBlank(result.getCarNo())) {
+            result.setCarNo(resp.getHead().getMessage());
         }
         return CarFeeToCarOrder(result);
     }
