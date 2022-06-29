@@ -20,6 +20,7 @@ public class ManagerConfigurationServiceExposer implements IManagerConfiguration
 
     private final ParkingLotManagerFactory factory;
 
+
     public ManagerConfigurationServiceExposer(ParkingLotManagerFactory factory) {
         this.factory = factory;
     }
