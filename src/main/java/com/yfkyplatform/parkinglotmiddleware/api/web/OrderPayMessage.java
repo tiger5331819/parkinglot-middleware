@@ -4,8 +4,6 @@ import com.yfkyframework.common.core.domain.BaseRpcReq;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
-import java.math.BigDecimal;
-
 /**
  * 车辆订单缴费信息
  *
@@ -37,5 +35,5 @@ public class OrderPayMessage extends BaseRpcReq {
      * 支付金额
      */
     @ApiModelProperty(value = "支付金额")
-    BigDecimal payFee;
+    Integer payFee;
 }

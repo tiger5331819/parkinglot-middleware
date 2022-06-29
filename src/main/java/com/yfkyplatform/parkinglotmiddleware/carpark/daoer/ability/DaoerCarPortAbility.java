@@ -116,10 +116,12 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     @Override
     public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
         CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
-        redis.set("order:daoer:" + result.getCarNo(), channelId);
+
 
         if (ObjectUtil.isNull(result)) {
             result = new CarFeeResult();
+        } else {
+            redis.set("order:daoer:" + result.getCarNo(), channelId);
         }
         return CarFeeToCarOrder(result);
     }

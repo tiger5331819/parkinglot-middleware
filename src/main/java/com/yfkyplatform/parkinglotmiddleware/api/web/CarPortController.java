@@ -65,6 +65,7 @@ public class CarPortController {
         orderParkingRecord.setParkinglotId(parkingLotId);
 
         OrderPayDetailRpcResp payMessage = new OrderPayDetailRpcResp();
+        payMessage.setPaidAmount(payData.getPayFee());
         payMessage.setPaidTime(new DateTime(payData.getPayTime()).toTimestamp().toLocalDateTime());
         payMessage.setPaidModeId(payData.getPayType());
         payMessage.setPayOrderId(Long.valueOf(payData.getPaymentTransactionId()));
