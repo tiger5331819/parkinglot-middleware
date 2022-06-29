@@ -84,7 +84,6 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setCouponAmount(couponAmount);
         model.setDsn(channelId);
 
-
         log.info(model.toString());
         return post(model, DaoerBaseResp.class);
     }

@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
  */
 @Getter
 @Setter
+@ToString
 public class CarFeePay extends DaoerBase {
 
     /**
