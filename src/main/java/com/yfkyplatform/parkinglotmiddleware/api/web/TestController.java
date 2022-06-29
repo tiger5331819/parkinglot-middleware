@@ -1,15 +1,15 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.ChannelResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.ChannelStateResult;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,7 +26,10 @@ import java.util.List;
 @RestController
 public class TestController {
 
-    public TestController(){
+    private final ICarPortService carPortService;
+
+    public TestController(ICarPortService carPortService) {
+        this.carPortService = carPortService;
     }
 
     @ApiOperation(value = "路径参数测试")
@@ -77,9 +80,32 @@ public class TestController {
         return result;
     }
 
+    @ApiOperation(value = "无牌车出场")
+    @PostMapping("/blankCarOut")
+    public CarOrderResultRpcResp blankCarOut() {
+        BlankCarRpcReq blankCar = new BlankCarRpcReq();
+        blankCar.setOpenId("123456");
+        blankCar.setScanType(1);
+        blankCar.setChannelId("21061792051006460326001497368494ae4b2f687bbe15ff70098babdb333c6a");
+
+
+        return carPortService.blankCarOut(100100101, 4, 100100101120060000L, blankCar);
+    }
+
+    @ApiOperation(value = "无牌车入场")
+    @PostMapping("/blankCarIn")
+    public String blankCarIn() {
+        BlankCarRpcReq blankCar = new BlankCarRpcReq();
+        blankCar.setOpenId("123456");
+        blankCar.setScanType(1);
+        blankCar.setChannelId("21061792051006460326001497368494ae4b2f687bbe15ff70098babdb333c6a");
+
+        return carPortService.blankCarIn(100100101, 4, 100100101120060000L, blankCar);
+    }
+
     @ApiOperation(value = "获取版本信息")
     @GetMapping("/version")
     public String getVersion() {
-        return "0.0.2";
+        return "0.0.3";
     }
 }
