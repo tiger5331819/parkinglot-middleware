@@ -12,6 +12,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -127,13 +129,15 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         if (ObjectUtil.isNull(result)) {
             result = new CarFeeResult();
         } else {
-            redis.set("order:daoer:" + result.getCarNo(), channelId);
+            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofHours(1));
         }
         return CarFeeToCarOrder(result);
     }
 
     /**
      * 无牌车入场
+     * 道尔无牌车接口没有响应——504 GateWay TimeOut 无法获取无牌车车牌
+     * 无牌车车牌获取途径：出入场通知、通道
      *
      * @param openId
      * @param scanType
@@ -142,11 +146,11 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public BlankCarScanInResult blankCarIn(String openId, int scanType, String channelId) {
-        BlankCarInResult result= api.blankCarIn(openId, scanType, channelId).block().getBody();
+        api.blankCarIn(openId, scanType, channelId).block();
 
-        BlankCarScanInResult scanInResult=new BlankCarScanInResult();
-        scanInResult.setCarNo(result.getCarNo());
-        scanInResult.setStartTime(result.getInTime());
+        BlankCarScanInResult scanInResult = new BlankCarScanInResult();
+        scanInResult.setCarNo("");
+        scanInResult.setStartTime(LocalDateTime.now());
 
         return scanInResult;
     }

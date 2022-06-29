@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
+
 /**
  * 测试控制器
  *
@@ -33,7 +35,7 @@ public class CarInController {
     @PostMapping("/daoer")
     public DaoerParkingLotPostResp daoerCarInMessage(@RequestBody Object message) {
         log.debug("message test");
-        redis.set("carIn:" + message.hashCode(), message);
+        redis.set("carIn:" + message.hashCode(), message, Duration.ofHours(12));
         return new DaoerParkingLotPostResp();
     }
 
