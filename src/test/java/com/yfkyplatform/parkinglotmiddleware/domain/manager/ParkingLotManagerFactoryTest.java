@@ -5,14 +5,19 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.BDDMockito.when;
 
+//@AutoConfigureMockMvc
 @SpringBootTest
 class ParkingLotManagerFactoryTest {
 
@@ -21,8 +26,11 @@ class ParkingLotManagerFactoryTest {
     @Autowired
     List<ParkingLotManager> parkingLotManagerList;
 
+    @MockBean
+    ParkingLotManagerFactory mockFactory;
+
     @Test
-    void loadParkingLotManagerTest(){
+    void loadParkingLotManagerTest() {
         factory.loadParkingLotManager(parkingLotManagerList);
     }
 
@@ -59,6 +67,27 @@ class ParkingLotManagerFactoryTest {
             result.forEach((name, data) -> {
                 System.out.println(managerName + "\t" + name + "\t" + data);
             });
+        });
+    }
+
+    @Test
+    void getManagerSupportMockTest() {
+
+        when(mockFactory.getManagerSupport()).then(invocation -> {
+            System.out.println("BDDTest");
+            HashSet<String> result = new HashSet<>();
+            result.add("Test");
+            return result;
+        });
+
+        Set cfgList = mockFactory.getManagerSupport();
+
+        then(mockFactory).should().getManagerSupport();
+
+        assertNotNull(cfgList);
+        assertNotEquals(0, cfgList.size());
+        cfgList.forEach(item -> {
+            System.out.println(item);
         });
     }
 }

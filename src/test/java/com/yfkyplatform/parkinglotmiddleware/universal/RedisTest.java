@@ -1,14 +1,12 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.HashMap;
-import static org.junit.jupiter.api.Assertions.*;
 import java.util.LinkedHashMap;
 
 /**
@@ -50,15 +48,5 @@ public class RedisTest {
     })
     void redisTest(String carNo){
         redis.set("粤B"+carNo.hashCode(),carNo);
-    }
-
-    @Test
-    void TTTT(){
-        System.out.println("123".hashCode());
-        System.out.println("1234".hashCode());
-        System.out.println("1234东莞".hashCode());
-        System.out.println("1234南城".hashCode());
-        System.out.println("123456789东莞".hashCode());
-        System.out.println("123456789东莞".hashCode());
     }
 }

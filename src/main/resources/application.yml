@@ -23,7 +23,6 @@ spring:
     password: 850aa64cedcfb8cb78f4a2b1f2bf4fa3f4e09df7e02c7501fc18ec725f765bc9
     cluster:
       nodes: 192.168.0.119:7001
-
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss

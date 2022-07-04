@@ -67,6 +67,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
         </dependency>
 
+        <!-- Mock -->
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+            <version>1.10.19</version>
+        </dependency>
+
         <!-- knife4j-spring-boot-starter，自动生成接口文档 -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
