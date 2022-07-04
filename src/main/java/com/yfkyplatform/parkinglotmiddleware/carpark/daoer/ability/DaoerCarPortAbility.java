@@ -219,16 +219,16 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public ChannelDoorStateResult controlChannel(String channelId, boolean channelStatus) {
+    public ChannelDoorStateResult controlChannel(String channelId, Boolean channelStatus) {
         Mono<DaoerBaseResp<List<ChannelStatusResult>>> request;
-        if(channelStatus){
-            request=api.controlChannel(channelId,1);
-        } else{
-            request=api.controlChannel(channelId, 2);
+        if (channelStatus) {
+            request = api.controlChannel(channelId, 1);
+        } else {
+            request = api.controlChannel(channelId, 2);
         }
 
-        ChannelStatusResult data=request.block().getBody().get(0);
-        ChannelDoorStateResult result=new ChannelDoorStateResult();
+        ChannelStatusResult data = request.block().getBody().get(0);
+        ChannelDoorStateResult result = new ChannelDoorStateResult();
         result.setChannelId(data.getChannelId());
         result.setChannelStatus(data.getChannelStatus()==1);
 

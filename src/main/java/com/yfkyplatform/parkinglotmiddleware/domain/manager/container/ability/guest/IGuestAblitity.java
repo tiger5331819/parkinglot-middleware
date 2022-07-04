@@ -14,13 +14,15 @@ public interface IGuestAblitity {
 
     /**
      * 修改访客
+     *
      * @return
      */
-    boolean changeGuestMessage(String guestUserId,GuestMessage guestMessage);
+    Boolean changeGuestMessage(String guestUserId, GuestMessage guestMessage);
 
     /**
      * 删除访客
+     *
      * @return
      */
-    boolean removeGuestMessage(String guestUserId);
+    Boolean removeGuestMessage(String guestUserId);
 }

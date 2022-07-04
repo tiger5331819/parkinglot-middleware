@@ -131,7 +131,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      * @return
      */
     @Override
-    public boolean renewalMonthlyCar(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
+    public Boolean renewalMonthlyCar(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
         String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
 
         MonthlyCarAssert.newStartTimeLessThanEndTime(monthlyCarRenewal);

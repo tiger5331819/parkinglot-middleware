@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
 
-    private IDaoerMonthlyCar api;
+    private final IDaoerMonthlyCar api;
 
     public DaoerMonthlyCarAbility(IDaoerMonthlyCar daoerClient){
         api=daoerClient;
@@ -105,9 +105,9 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
      * @return
      */
     @Override
-    public boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
-         return api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), monthlyCarRenewal.getNewStartTime().toString(),monthlyCarRenewal.getNewEndTime().toString(),monthlyCarRenewal.getMoney(), monthlyCarRenewal.getPayType())
-                .block().getHead().getStatus()==1;
+    public Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
+        return api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), monthlyCarRenewal.getNewStartTime().toString(), monthlyCarRenewal.getNewEndTime().toString(), monthlyCarRenewal.getMoney(), monthlyCarRenewal.getPayType())
+                .block().getHead().getStatus() == 1;
     }
 
     /**
@@ -117,7 +117,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
      * @return
      */
     @Override
-    public boolean removeMonthlyCar(String carNo) {
-        return api.removeMonthlyCar(carNo).block().getHead().getStatus()==1;
+    public Boolean removeMonthlyCar(String carNo) {
+        return api.removeMonthlyCar(carNo).block().getHead().getStatus() == 1;
     }
 }

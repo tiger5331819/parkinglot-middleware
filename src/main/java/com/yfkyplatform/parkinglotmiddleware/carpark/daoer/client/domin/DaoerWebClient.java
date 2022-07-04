@@ -68,11 +68,11 @@ public abstract class DaoerWebClient {
         });
     }
 
-    private <T extends DaoerBase> WebClient.ResponseSpec postBase(T data,boolean isNeedToken){
+    private <T extends DaoerBase> WebClient.ResponseSpec postBase(T data, Boolean isNeedToken) {
         data.setParkId(parkId);
-        WebClient.RequestBodySpec t= client.post()
+        WebClient.RequestBodySpec t = client.post()
                 .uri(data.getUri());
-        if(isNeedToken) {
+        if (isNeedToken) {
             t.headers(httpHeadersFunction());
         }
 
@@ -129,11 +129,11 @@ public abstract class DaoerWebClient {
         }
     }
 
-    public boolean healthCheck(){
-        try{
-            String token=token();
-            return !StrUtil.isEmpty(token)&&!StrUtil.isBlank(token);
-        }catch (Throwable ex){
+    public Boolean healthCheck() {
+        try {
+            String token = token();
+            return !StrUtil.isEmpty(token) && !StrUtil.isBlank(token);
+        } catch (Throwable ex) {
             return false;
         }
     }

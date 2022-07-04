@@ -14,7 +14,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.gu
 
 public class DaoerGuestAbility implements IGuestAblitity {
 
-    private IDaoerGuest api;
+    private final IDaoerGuest api;
 
     public DaoerGuestAbility(IDaoerGuest daoerClient){
         api=daoerClient;
@@ -45,9 +45,9 @@ public class DaoerGuestAbility implements IGuestAblitity {
      * @return
      */
     @Override
-    public boolean changeGuestMessage(String guestUserId, GuestMessage guestMessage) {
-        return api.changeGuestMessage(guestUserId,guestMessage.getGuestName(),guestMessage.getVisitTime(),guestMessage.getPhone(),guestMessage.getDescription())
-                .block().getHead().getStatus()==1;
+    public Boolean changeGuestMessage(String guestUserId, GuestMessage guestMessage) {
+        return api.changeGuestMessage(guestUserId, guestMessage.getGuestName(), guestMessage.getVisitTime(), guestMessage.getPhone(), guestMessage.getDescription())
+                .block().getHead().getStatus() == 1;
     }
 
     /**
@@ -57,7 +57,7 @@ public class DaoerGuestAbility implements IGuestAblitity {
      * @return
      */
     @Override
-    public boolean removeGuestMessage(String guestUserId) {
-        return api.removeGuestMessage(guestUserId).block().getHead().getStatus()==1;
+    public Boolean removeGuestMessage(String guestUserId) {
+        return api.removeGuestMessage(guestUserId).block().getHead().getStatus() == 1;
     }
 }

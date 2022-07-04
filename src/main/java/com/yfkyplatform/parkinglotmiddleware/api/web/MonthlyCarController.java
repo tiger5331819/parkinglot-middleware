@@ -49,7 +49,7 @@ public class MonthlyCarController {
 
     @ApiOperation(value = "月租车续期")
     @GetMapping("/{carNo}/renewal")
-    public boolean renewalMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody MonthlyCarRenewalRpcReq monthlyCarRenewal) {
+    public Boolean renewalMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody MonthlyCarRenewalRpcReq monthlyCarRenewal) {
         return monthlyCarService.renewalMonthlyCar(100100101, parkingLotManager, parkingLotId, monthlyCarRenewal);
     }
 }

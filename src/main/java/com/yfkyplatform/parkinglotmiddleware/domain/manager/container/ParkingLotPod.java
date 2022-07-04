@@ -40,9 +40,10 @@ public abstract class ParkingLotPod implements ParkingLotAbility {
 
     /**
      * 健康检查
+     *
      * @return
      */
-    public abstract boolean healthCheck();
+    public abstract Boolean healthCheck();
 
     /**
      * 获取停车场Id

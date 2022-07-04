@@ -27,16 +27,18 @@ public interface IMonthlyAblitity {
      * @return
      */
     List<MonthlyCarHistoryMessageResult> getMonthlyCarHistory(String carNo);
+
     /**
      * 月租车续期
      *
      * @return
      */
-    boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal);
+    Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal);
+
     /**
      * 月租车销户
      *
      * @return
      */
-    boolean removeMonthlyCar(String carNo);
+    Boolean removeMonthlyCar(String carNo);
 }

@@ -46,7 +46,7 @@ public class RedisTool {
         return data;
     }
 
-    public <K> boolean check(K key) {
+    public <K> Boolean check(K key) {
         return redisTemplate.hasKey(MakeKey(key));
     }
 

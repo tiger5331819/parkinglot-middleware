@@ -61,7 +61,7 @@ public interface ICarPortAblitity {
      *
      * @return
      */
-    ChannelDoorStateResult controlChannel(String channelId, boolean channelIdStatus);
+    ChannelDoorStateResult controlChannel(String channelId, Boolean channelIdStatus);
 
     /**
      * 获取入场记录

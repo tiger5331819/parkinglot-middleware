@@ -16,6 +16,6 @@ public class CouponUseResult {
     /**
      * true 使用成功 false使用失败
      */
-    private boolean success;
+    private Boolean success;
 
 }

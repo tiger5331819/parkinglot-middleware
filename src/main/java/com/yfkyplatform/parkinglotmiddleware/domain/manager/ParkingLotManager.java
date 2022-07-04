@@ -51,18 +51,20 @@ public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends Par
 
     /**
      * 保存配置数据
+     *
      * @param data
      * @return
      */
-    protected  abstract boolean SaveData(Data data) throws JsonProcessingException;
+    protected abstract Boolean SaveData(Data data) throws JsonProcessingException;
 
     /**
      * 添加停车场
+     *
      * @param data 停车场配置数据
      * @return
      * @throws JsonProcessingException
      */
-    public boolean addParkingLot(Data data) throws JsonProcessingException {
+    public Boolean addParkingLot(Data data) throws JsonProcessingException {
         dataCheck(data);
         return SaveData(data);
     }

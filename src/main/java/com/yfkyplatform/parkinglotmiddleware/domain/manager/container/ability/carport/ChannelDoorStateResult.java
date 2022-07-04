@@ -17,5 +17,5 @@ public class ChannelDoorStateResult {
      * 通道开关状态
      * 1开启 0 关闭
      */
-    private boolean channelStatus;
+    private Boolean channelStatus;
 }

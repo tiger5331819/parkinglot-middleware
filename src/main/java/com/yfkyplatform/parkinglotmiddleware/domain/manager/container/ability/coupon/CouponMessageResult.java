@@ -24,5 +24,5 @@ public class CouponMessageResult {
     /**
      * true正常可用 false不可用
      */
-    private boolean status;
+    private Boolean status;
 }

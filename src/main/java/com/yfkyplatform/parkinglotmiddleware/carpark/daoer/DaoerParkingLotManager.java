@@ -82,10 +82,10 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
      * @return
      */
     @Override
-    protected boolean SaveData(DaoerParkingLotConfiguration daoerParkingLotConfiguration){
+    protected Boolean SaveData(DaoerParkingLotConfiguration daoerParkingLotConfiguration) {
         ParkingLotConfiguration data = new ParkingLotConfiguration(daoerParkingLotConfiguration.getId(), "Daoer", daoerParkingLotConfiguration.getDescription());
         data.setConfig(new DaoerConfiguration(daoerParkingLotConfiguration.getAppName(), daoerParkingLotConfiguration.getParkId(), daoerParkingLotConfiguration.getBaseUrl()));
-        ParkingLotConfiguration<DaoerConfiguration> result= cfgRepository.save(data);
+        ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository.save(data);
         return ObjectUtil.isNotNull(result);
     }
 }
