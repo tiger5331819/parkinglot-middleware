@@ -71,7 +71,7 @@ public class CarportServiceExposer implements ICarPortService {
         CarOrderPayMessage message = new CarOrderPayMessage();
         BigDecimal payFee = new BigDecimal(payMessage.getPaidAmount());
         message.setCarNo(orderParkingRecord.getPlateNumber());
-        message.setPayFee(payFee.movePointRight(2));
+        message.setPayFee(payFee.movePointLeft(2));
         message.setPayTime(new DateTime(payMessage.getPaidTime()).toString());
         message.setPayType(payMessage.getPaidModeId());
         message.setPaymentTransactionId(payMessage.getPayOrderId().toString());
