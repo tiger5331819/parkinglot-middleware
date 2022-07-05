@@ -25,7 +25,7 @@ import java.util.List;
  *
  * @author Suhuyuan
  */
-@DubboService
+@DubboService(timeout = 3000)
 @Component
 public class CarportServiceExposer implements ICarPortService {
 
