@@ -5,13 +5,18 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.Da
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.DaoerToken;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.TokenResult;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
+import reactor.netty.tcp.TcpClient;
 
 import java.time.Duration;
 import java.util.function.Consumer;
@@ -39,15 +44,21 @@ public abstract class DaoerWebClient {
 
     protected RedisTool redis;
 
-    public DaoerWebClient(String id,String appName, String parkId, String baseUrl, RedisTool redisTool){
-        client= WebClient
+    public DaoerWebClient(String id,String appName, String parkId, String baseUrl, RedisTool redisTool) {
+        TcpClient tcpClient = TcpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
+                .doOnConnected(connection ->
+                        connection.addHandlerLast(new ReadTimeoutHandler(3)));
+
+        client = WebClient
                 .builder()
                 .baseUrl(baseUrl)
                 .defaultHeaders(httpHeaders -> httpHeaders.setContentType(MediaType.APPLICATION_JSON))
+                .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
-        redis= redisTool;
-        this.appName=appName;
-        this.parkId=parkId;
+        redis = redisTool;
+        this.appName = appName;
+        this.parkId = parkId;
         tokenName="token:"+id;
     }
 
