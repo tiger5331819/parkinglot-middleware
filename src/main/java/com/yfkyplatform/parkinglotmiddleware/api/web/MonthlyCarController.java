@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarFeeResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarHistoryMessageResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarMessageResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarRateResultRpcResp;
@@ -33,6 +34,12 @@ public class MonthlyCarController {
     @GetMapping("/rentalRate")
     public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
         return monthlyCarService.monthlyCarLongRentalRate(100100101, parkingLotManager, parkingLotId);
+    }
+
+    @ApiOperation(value = "获取月租车基本信息")
+    @GetMapping("/{carNo}/fee")
+    public MonthlyCarFeeResultRpcResp monthlyCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
+        return monthlyCarService.monthlyCarFee(100100101, parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "获取月租车基本信息")
