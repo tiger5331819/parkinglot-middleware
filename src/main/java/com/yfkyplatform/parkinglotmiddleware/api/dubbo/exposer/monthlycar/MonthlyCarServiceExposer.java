@@ -3,19 +3,19 @@ package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.monthlycar;
 import com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.ThirdIdProxy;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarHistoryMessageResultRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarMessageResultRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarRateResultRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.IMonthlyAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarRenewal;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import lombok.val;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 月卡车辆服务
@@ -59,6 +59,44 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
             data.setRemark(item.getRemark());
             result.add(data);
         });
+        return result;
+    }
+
+    /**
+     * 获取月租车基本信息
+     *
+     * @param operatorId            租户ID
+     * @param parkingLotManagerCode 停车场管理名称
+     * @param parkingLotId          停车场Id
+     * @param carNo                 车牌号
+     * @return
+     */
+    @Override
+    public MonthlyCarFeeResultRpcResp monthlyCarFee(Integer operatorId, Integer parkingLotManagerCode, Long parkingLotId, String carNo) {
+        String thirdId = thirdIdProxy.getThirdId(parkingLotId, operatorId);
+
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).monthly();
+        MonthlyCarMessageResult carInfo = monthlyAblitity.getMonthlyCarInfo(carNo);
+        val monthlyCarRateList = monthlyAblitity.getMonthlyCarLongRentalRate()
+                .stream().filter(item -> item.getPackageType() == carInfo.getCardTypeId()).map(item -> {
+                    MonthlyCarRateMessage data = new MonthlyCarRateMessage();
+                    data.setDuration(item.getPackageDuration());
+                    data.setRemark(item.getRemark());
+                    data.setPackageCharge(item.getPackageCharge());
+                    return data;
+                }).collect(Collectors.toList());
+
+        MonthlyCarFeeResultRpcResp result = new MonthlyCarFeeResultRpcResp();
+        result.setCarNo(carInfo.getCarNo());
+        result.setCardTypeId(carInfo.getCardTypeId());
+        result.setStartTime(carInfo.getStartTime());
+        result.setEndTime(carInfo.getEndTime());
+        result.setContactName(carInfo.getContactName());
+        result.setContactPhone(carInfo.getContactPhone());
+        result.setStatus(carInfo.getStatus());
+        result.setLastUpdateTime(carInfo.getLastUpdateTime());
+        result.setRateMessageList(monthlyCarRateList);
+
         return result;
     }
 

@@ -1,6 +1,5 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -17,18 +16,16 @@ public class MonthlyCarMessageResult {
      */
     private String carNo;
     /**
-     * 卡类型编号：11，月租卡A；12，月租卡B；13，月租卡C；14，月租卡D
+     * 卡类型编号
      */
     private int cardTypeId;
     /**
      * 月租开始时间 yyyy-MM-dd HH:mm:ss
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime startTime;
     /**
      * 月租结束时间 yyyy-MM-dd HH:mm:ss
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
     /**
      * 车主姓名
@@ -45,6 +42,5 @@ public class MonthlyCarMessageResult {
     /**
      * 最后操作时间 yyyy-MM-dd HH:mm:ss
      */
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime lastUpdateTime;
 }
