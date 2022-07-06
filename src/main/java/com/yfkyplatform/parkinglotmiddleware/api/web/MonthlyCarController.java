@@ -36,7 +36,7 @@ public class MonthlyCarController {
         return monthlyCarService.monthlyCarLongRentalRate(100100101, parkingLotManager, parkingLotId);
     }
 
-    @ApiOperation(value = "获取月租车基本信息")
+    @ApiOperation(value = "获取月租车续费信息")
     @GetMapping("/{carNo}/fee")
     public MonthlyCarFeeResultRpcResp monthlyCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
         return monthlyCarService.monthlyCarFee(100100101, parkingLotManager, parkingLotId, carNo);
