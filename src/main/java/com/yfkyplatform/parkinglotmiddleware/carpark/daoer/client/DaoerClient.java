@@ -281,7 +281,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     @Override
     public Mono<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>> getMonthlyCarLongRentalRate(){
         DaoerBase model=new DaoerBase("api/index/monthlycar/long-rental-rate");
-        model.appendUri("/"+model.getCarNo());
+        model.appendUri("/" + model.getParkId());
 
         return get(model,new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>>() {});
     }
