@@ -8,7 +8,7 @@ dubbo:
   consumer:
     check: false
   cloud:
-    subscribed-services: ordercenter-service,parkinglot-middleware,passthrough-service
+    subscribed-services: ordercenter-service,parkinglot-middleware,passthrough-service,core-service
 
 spring:
   main:
