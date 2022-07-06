@@ -40,7 +40,7 @@ public abstract class DaoerWebClient {
     /**
      * 车场ID
      */
-    private final String parkId;
+    protected final String parkId;
 
     protected RedisTool redis;
 

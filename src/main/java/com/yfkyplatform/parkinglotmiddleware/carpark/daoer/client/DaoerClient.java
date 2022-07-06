@@ -84,7 +84,6 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setCouponAmount(couponAmount);
         model.setDsn(channelId);
 
-        log.info(model.toString());
         return post(model, DaoerBaseResp.class);
     }
 
@@ -281,7 +280,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     @Override
     public Mono<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>> getMonthlyCarLongRentalRate(){
         DaoerBase model=new DaoerBase("api/index/monthlycar/long-rental-rate");
-        model.appendUri("/" + model.getParkId());
+        model.appendUri("/" + parkId);
 
         return get(model,new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>>() {});
     }
