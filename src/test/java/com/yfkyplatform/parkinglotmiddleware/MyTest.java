@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware;
 
+import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import org.junit.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,5 +20,18 @@ public class MyTest {
     })
     void parameterTest(String carNo) {
         System.out.println("粤B" + carNo);
+    }
+
+    @Test
+    public void Test1() {
+        ParkingLotManagerEnum data = ParkingLotManagerEnum.ValueOf((Integer) null);
+        switch (data) {
+
+            case Daoer:
+                break;
+            default:
+                System.out.println("123");
+                break;
+        }
     }
 }
