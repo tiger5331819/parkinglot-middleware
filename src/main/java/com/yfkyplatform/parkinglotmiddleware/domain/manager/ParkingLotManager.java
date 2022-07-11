@@ -15,15 +15,18 @@ import java.util.*;
  * @author Suhuyuan
  */
 
-public abstract class ParkingLotManager<T extends ParkingLotPod,Data extends ParkingLotConfiguration> {
+public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends ParkingLotConfiguration> {
 
     protected IParkingLotConfigurationRepository cfgRepository;
 
     protected RedisTool redis;
 
-    public ParkingLotManager(RedisTool redisTool, IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
+    protected String managerType;
+
+    public ParkingLotManager(RedisTool redisTool, IParkingLotConfigurationRepository cfgRepository, String managerType) throws JsonProcessingException {
         redis = redisTool;
         this.cfgRepository = cfgRepository;
+        this.managerType = managerType;
     }
 
     /**

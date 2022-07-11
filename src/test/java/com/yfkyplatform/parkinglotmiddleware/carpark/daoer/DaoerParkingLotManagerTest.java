@@ -16,7 +16,6 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class DaoerParkingLotManagerTest {
 
-    @Autowired
     ParkingLotManager daoerManager;
 
     @Autowired

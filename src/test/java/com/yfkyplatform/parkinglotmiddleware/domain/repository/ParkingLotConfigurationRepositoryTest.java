@@ -21,8 +21,18 @@ class ParkingLotConfigurationRepositoryTest {
 
     @Test
     void addTest() throws JsonProcessingException {
-        ParkingLotConfiguration<DaoerConfiguration> data = new ParkingLotConfiguration("24400000001", "Daoer", "道尔测试");
-        data.setConfig(new DaoerConfiguration("a909fb0eb10240979b2b374273bf6342","X24400000001","https://parklot.q-parking.com"));
+        DaoerConfiguration cfg = new DaoerConfiguration();
+        cfg.setAppName("a909fb0eb10240979b2b374273bf6342");
+        cfg.setParkId("X24400000001");
+        cfg.setBaseUrl("https://parklot.q-parking.com");
+
+
+        ParkingLotConfiguration<DaoerConfiguration> data = new ParkingLotConfiguration();
+        data.setParkingLotId("24400000001");
+        data.setParkingType("Daoer");
+        data.setDescription("道尔测试");
+        data.setConfig(cfg);
+
         repository.save(data);
     }
 

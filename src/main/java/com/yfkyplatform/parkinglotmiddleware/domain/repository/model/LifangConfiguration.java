@@ -9,9 +9,7 @@ import java.io.Serializable;
  * @author Suhuyuan
  */
 @Data
-public class DaoerConfiguration implements Serializable {
-    private String appName;
-    private String parkId;
+public class LifangConfiguration implements Serializable {
+    private String secret;
     private String baseUrl;
-
 }

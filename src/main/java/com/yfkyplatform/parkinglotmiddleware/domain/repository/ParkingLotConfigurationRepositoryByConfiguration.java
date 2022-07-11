@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.LifangConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -41,6 +42,13 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
                     daoerCfg.setParkId(env.getProperty(prefix2 + "config." + "parkId"));
                     daoerCfg.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
                     cfg.setConfig(daoerCfg);
+                }
+                break;
+                case "Lifang": {
+                    LifangConfiguration lifangCfg = new LifangConfiguration();
+                    lifangCfg.setSecret(prefix2 + "config." + "secret");
+                    lifangCfg.setBaseUrl(prefix2 + "config." + "baseUrl");
+                    cfg.setConfig(lifangCfg);
                 }
                 break;
                 default:

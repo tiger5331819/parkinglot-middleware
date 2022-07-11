@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
@@ -34,8 +35,8 @@ public class DaoerMonthlyCarController {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    public DaoerMonthlyCarController(ParkingLotManager manager){
-        this.manager=manager;
+    public DaoerMonthlyCarController(DaoerParkingLotManager manager) {
+        this.manager = manager;
     }
 
     @ApiOperation(value = "获取停车场下的月卡费率")

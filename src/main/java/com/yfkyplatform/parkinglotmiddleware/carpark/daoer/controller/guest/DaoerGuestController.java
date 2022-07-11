@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.guest;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerGuest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.guest.GuestResult;
@@ -32,8 +33,8 @@ public class DaoerGuestController {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    public DaoerGuestController(ParkingLotManager manager){
-        this.manager=manager;
+    public DaoerGuestController(DaoerParkingLotManager manager) {
+        this.manager = manager;
     }
 
     @ApiOperation(value = "创建访客")

@@ -22,7 +22,7 @@ import java.util.List;
 public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, DaoerParkingLotConfiguration> {
 
     public DaoerParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByConfiguration") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
-        super(redisTool, cfgRepository);
+        super(redisTool, cfgRepository, "Daoer");
     }
 
     /**
@@ -33,7 +33,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
      */
     @Override
     protected DaoerParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId("Daoer", parkingLotId);
+        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
@@ -50,7 +50,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
     @Override
     protected List<DaoerParkingLot> load() {
         List<DaoerParkingLot> dataList = new ArrayList<>();
-        List<ParkingLotConfiguration> cfgList = cfgRepository.findParkingLotConfigurationByParkingType("Daoer");
+        List<ParkingLotConfiguration> cfgList = cfgRepository.findParkingLotConfigurationByParkingType(managerType);
 
         for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
             DaoerConfiguration daoerCfg = item.getConfig();
@@ -83,8 +83,17 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
      */
     @Override
     protected Boolean SaveData(DaoerParkingLotConfiguration daoerParkingLotConfiguration) {
-        ParkingLotConfiguration data = new ParkingLotConfiguration(daoerParkingLotConfiguration.getId(), "Daoer", daoerParkingLotConfiguration.getDescription());
-        data.setConfig(new DaoerConfiguration(daoerParkingLotConfiguration.getAppName(), daoerParkingLotConfiguration.getParkId(), daoerParkingLotConfiguration.getBaseUrl()));
+        DaoerConfiguration cfg = new DaoerConfiguration();
+        cfg.setAppName(daoerParkingLotConfiguration.getAppName());
+        cfg.setParkId(daoerParkingLotConfiguration.getParkId());
+        cfg.setBaseUrl(daoerParkingLotConfiguration.getBaseUrl());
+
+        ParkingLotConfiguration data = new ParkingLotConfiguration();
+        data.setParkingLotId(daoerParkingLotConfiguration.getId());
+        data.setParkingType("Daoer");
+        data.setDescription(daoerParkingLotConfiguration.getDescription());
+        data.setConfig(cfg);
+
         ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository.save(data);
         return ObjectUtil.isNotNull(result);
     }

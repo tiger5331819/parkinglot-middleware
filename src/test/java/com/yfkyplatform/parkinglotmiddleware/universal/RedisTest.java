@@ -23,10 +23,10 @@ public class RedisTest {
             "KR149",
             "KR159"
     })
-    void hSetTest(String carNo){
-        HashMap<String,String> carNoMap=new LinkedHashMap<>();
-        carNoMap.put(String.valueOf(carNo.hashCode()),carNo);
-        redis.hash().putAll("粤B",carNoMap);
+    public void hSetTest(String carNo) {
+        HashMap<String, String> carNoMap = new LinkedHashMap<>();
+        carNoMap.put(String.valueOf(carNo.hashCode()), carNo);
+        redis.hash().putAll("粤B", carNoMap);
     }
 
     @ParameterizedTest
@@ -35,9 +35,9 @@ public class RedisTest {
             "KR149",
             "KR159"
     })
-    void hGetTest(String carNo){
-        System.out.println(redis.hash().hasKey("粤B",String.valueOf(carNo.hashCode())));
-        System.out.println(redis.hash().get("粤B",String.valueOf(carNo.hashCode())));
+    public void hGetTest(String carNo) {
+        System.out.println(redis.hash().hasKey("粤B", String.valueOf(carNo.hashCode())));
+        System.out.println(redis.hash().get("粤B", String.valueOf(carNo.hashCode())));
     }
 
     @ParameterizedTest
@@ -46,7 +46,7 @@ public class RedisTest {
             "KR149",
             "KR159"
     })
-    void redisTest(String carNo){
-        redis.set("粤B"+carNo.hashCode(),carNo);
+    public void redisTest(String carNo) {
+        redis.set("粤B" + carNo.hashCode(), carNo);
     }
 }

@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.coupon;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCoupon;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponUseResult;
@@ -33,7 +34,7 @@ public class DaoerCouponController {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    public DaoerCouponController(ParkingLotManager manager) {
+    public DaoerCouponController(DaoerParkingLotManager manager) {
         this.manager = manager;
     }
 

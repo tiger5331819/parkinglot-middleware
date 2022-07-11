@@ -16,7 +16,7 @@ public class EnvironmentTest {
     private Environment env;
 
     @Test
-    void eeeTest() {
+    void environmentTest() {
         String parkingType = "Daoer";
         String prefix = "parkingLotConfig." + parkingType + ".";
         String list = env.getProperty(prefix + "all");
