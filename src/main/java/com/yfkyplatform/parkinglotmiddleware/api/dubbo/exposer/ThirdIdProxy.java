@@ -27,6 +27,7 @@ public class ThirdIdProxy {
             return passThroughParkingLotService.getByParkingLotIdAndOperatorId(parkingLotId, operatorId).getThirdId();
         } catch (RpcException ex) {
             log.error("通行服务异常", ex);
+            //return "hongjiang";
             return "X52361700001";
         }
     }

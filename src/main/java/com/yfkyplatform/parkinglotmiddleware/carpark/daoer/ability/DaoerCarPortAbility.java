@@ -108,7 +108,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 0,
                 payType,
                 payMessage.getPaymentTransactionId(),
-                payMessage.getPayFee(),
+                payMessage.getPayFee().movePointLeft(2),
                 channelId).block().getHead().getStatus();
         return payState == 1;
     }

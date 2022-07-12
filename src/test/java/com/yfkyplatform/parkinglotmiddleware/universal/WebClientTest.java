@@ -4,11 +4,13 @@ import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.ChannelResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.ChannelStateResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
+import lombok.val;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -20,6 +22,18 @@ import java.util.stream.Collectors;
  */
 @SpringBootTest
 public class WebClientTest {
+
+    @Test
+    void uriTest() {
+        val tt = WebClient.builder().baseUrl("http://122.224.250.35:7013/Parking/Handheld").build();
+        Object result = tt.method(HttpMethod.GET).uri("/Login").retrieve().bodyToMono(Object.class).doOnError(WebClientResponseException.class, err -> {
+                    String errResult = err.getResponseBodyAsString();
+                    System.out.println(errResult);
+                    //throw new RuntimeException(errResult);
+                })
+                .block();
+
+    }
 
     @Test
     void asyncSendTest() {

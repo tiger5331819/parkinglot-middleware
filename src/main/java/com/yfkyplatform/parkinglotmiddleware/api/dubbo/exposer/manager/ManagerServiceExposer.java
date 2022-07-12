@@ -4,8 +4,10 @@ package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager;
 import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.DaoerParkingLotCfgRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.manager.response.LifangParkingLotCfgRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.LifangParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
@@ -69,9 +71,20 @@ public class ManagerServiceExposer implements IManagerService {
                 data.setAppName(((DaoerParkingLotConfiguration) item).getAppName());
                 data.setParkId(((DaoerParkingLotConfiguration) item).getParkId());
                 data.setBaseUrl(((DaoerParkingLotConfiguration) item).getBaseUrl());
+
                 data.setId(item.getId());
                 data.setDescription(item.getDescription());
                 data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
+                result.add(data);
+            }
+            if ((item instanceof LifangParkingLotConfiguration)) {
+                LifangParkingLotCfgRpcResp data = new LifangParkingLotCfgRpcResp();
+                data.setId(item.getId());
+                data.setSecret(((LifangParkingLotConfiguration) item).getSecret());
+                data.setBaseUrl(((LifangParkingLotConfiguration) item).getBaseUrl());
+
+                data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
+                data.setDescription(item.getDescription());
                 result.add(data);
             }
         });

@@ -1,6 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability;
 
+import cn.hutool.core.date.LocalDateTimeUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangCarPort;
+import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarportResult;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
@@ -33,7 +36,12 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarPortSpaceResult getCarPortSpace() {
-        throw new UnsupportedOperationException();
+        CarportResult carport = api.getCarPortInfo().block();
+        CarPortSpaceResult result = new CarPortSpaceResult();
+        result.setTotal(carport.getTotalNum());
+        result.setRest(carport.getTotalRemainNum());
+
+        return result;
     }
 
     /**
@@ -44,7 +52,18 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarOrderResult getCarFeeInfo(String carNo) {
-        throw new UnsupportedOperationException();
+        CarFeeResult carFee = api.getCarFeeInfo(carNo).block();
+
+        CarOrderResult result = new CarOrderResult();
+        result.setCarNo(carNo);
+        result.setStartTime(carFee.getInTime());
+        result.setCreateTime(carFee.getPayTime());
+        result.setServiceTime(Math.toIntExact(LocalDateTimeUtil.between(carFee.getInTime(), carFee.getPayTime()).toMinutes()));
+        result.setTotalFee(carFee.getChargeMoney());
+        result.setPayFee(carFee.getPaidMoney());
+        result.setDiscountFee(carFee.getJMMoney());
+
+        return result;
     }
 
     /**
@@ -55,7 +74,11 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
-        throw new UnsupportedOperationException();
+        CarFeeResult carFee = api.getCarFeeInfo(payMessage.getCarNo()).block();
+
+        int payState = api.payCarFeeAccess(payMessage.getCarNo(), payMessage.getPayTime(), carFee.getChargeMoney(), payMessage.getPayFee(), "协商收费", 11, carFee.getJMMoney())
+                .block().getResCode();
+        return payState == 0;
     }
 
     /**

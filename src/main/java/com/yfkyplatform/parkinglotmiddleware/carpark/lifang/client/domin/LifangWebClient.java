@@ -27,6 +27,8 @@ public abstract class LifangWebClient {
 
     protected RedisTool redis;
 
+    protected String secret;
+
     public LifangWebClient(String secret, String baseUrl, RedisTool redisTool) {
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
@@ -40,7 +42,7 @@ public abstract class LifangWebClient {
                 .clientConnector(new ReactorClientHttpConnector(HttpClient.from(tcpClient)))
                 .build();
         redis = redisTool;
-
+        this.secret = secret;
     }
 
     protected Consumer<? super Throwable> errFunction() {

@@ -3,15 +3,13 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.c
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.LifangBaseResp;
 import lombok.Data;
 
-import java.util.List;
-
 /**
  * 车位使用情况结果
  *
  * @author Suhuyuan
  */
 @Data
-public class CarportResult extends LifangBaseResp {
+public class CarportInfo extends LifangBaseResp {
     /**
      * 总车位
      */
@@ -27,17 +25,10 @@ public class CarportResult extends LifangBaseResp {
     /**
      * 车场ID
      */
-    private String parkID;
+    private int parkingLotId;
     /**
      * 车场名称
      */
-    private String parkName;
-    /**
-     * 车场收费标准
-     */
-    private String chargeRuleDesc;
-    /**
-     * 区域余位信息
-     */
-    private List<CarportInfo> parkingLotInfo;
+    private String parkingLotName;
+
 }

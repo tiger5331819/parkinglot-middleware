@@ -45,8 +45,30 @@ public class Knife4jConfiguration {
                 .build();
     }
 
-    @Bean(value = "defaultApiV2")
-    public Docket defaultApiV2() {
+    @Bean(value = "lifangProxyAPI")
+    public Docket lifangProxyAPI() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                // Api文档基础信息
+                .apiInfo(new ApiInfoBuilder()
+                        .title("立方API")
+                        .description("立方代理API列表")
+                        .build())
+                // 全局参数
+                .globalOperationParameters(globalOperationParameters())
+                // 该Api文档分组名称
+                .groupName("立方API代理")
+                .enable(true)
+                // 切换到select构建器
+                .select()
+                // 需要扫描的Controller包路径
+                .apis(RequestHandlerSelectors.basePackage("com.yfkyplatform.parkinglotmiddleware.carpark.lifang"))
+                // 需要生效的uri路径
+                .paths(PathSelectors.any())
+                .build();
+    }
+
+    @Bean(value = "middlewareApi")
+    public Docket middlewareApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
                 .apiInfo(new ApiInfoBuilder()

@@ -12,7 +12,11 @@ public enum ParkingLotManagerEnum {
     /**
      * 道尔 code:4
      */
-    Daoer(4, "Daoer");
+    Daoer(4, "Daoer"),
+    /**
+     * 立方 code:3
+     */
+    Lifang(3, "Lifang");
 
     private final int code;
 
@@ -30,6 +34,8 @@ public enum ParkingLotManagerEnum {
         switch (parkingLotManagerCode) {
             case 4:
                 return Daoer;
+            case 3:
+                return Lifang;
             default:
                 return null;
         }
@@ -42,6 +48,8 @@ public enum ParkingLotManagerEnum {
         switch (parkingLotManagerMessage) {
             case "Daoer":
                 return Daoer;
+            case "Lifang":
+                return Lifang;
             default:
                 return null;
         }

@@ -58,7 +58,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
             LifangParkingLotConfiguration parkingLotConfiguration = new LifangParkingLotConfiguration(item.getParkingLotId(), lifangCfg.getSecret(), lifangCfg.getBaseUrl(), item.getDescription());
             dataList.add(new LifangParkingLot(parkingLotConfiguration, redis));
         }
-        return null;
+        return dataList;
     }
 
     /**
@@ -72,7 +72,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
         if (lifangParkingLotConfiguration instanceof LifangParkingLotConfiguration) {
             return;
         } else {
-            throw new IllegalArgumentException("不是道尔停车场配置文件");
+            throw new IllegalArgumentException("不是立方停车场配置文件");
         }
     }
 
