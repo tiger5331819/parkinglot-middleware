@@ -9,7 +9,6 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.mo
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarRenewal;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import lombok.val;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -77,7 +76,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(thirdId).monthly();
         MonthlyCarMessageResult carInfo = monthlyAblitity.getMonthlyCarInfo(carNo);
-        val monthlyCarRateList = monthlyAblitity.getMonthlyCarLongRentalRate()
+        List<MonthlyCarRateMessage> monthlyCarRateList = monthlyAblitity.getMonthlyCarLongRentalRate()
                 .stream().filter(item -> item.getPackageType() == carInfo.getCardTypeId()).map(item -> {
                     MonthlyCarRateMessage data = new MonthlyCarRateMessage();
                     data.setDuration(item.getPackageDuration());

@@ -34,11 +34,27 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
         List<MonthlyCarLongRentalRateResult> data=api.getMonthlyCarLongRentalRate().block().getBody();
         List<MonthlyCarRateResult> results=new ArrayList<>();
         data.forEach(item->{
-            MonthlyCarRateResult result=new MonthlyCarRateResult();
+            MonthlyCarRateResult result = new MonthlyCarRateResult();
             result.setPackageType(item.getPackageType());
             result.setPackageName(item.getPackageName());
             result.setPackageCharge(item.getPackageCharge());
-            result.setPackageDuration(item.getPackageDuration());
+
+            switch (item.getPackageDuration()) {
+                case "1":
+                    result.setPackageDuration("月租");
+                    break;
+                case "2":
+                    result.setPackageDuration("季租");
+                    break;
+                case "3":
+                    result.setPackageDuration("半年租");
+                    break;
+                case "4":
+                    result.setPackageDuration("年租");
+                    break;
+            }
+
+
             result.setRemark(item.getRemark());
 
             results.add(result);
@@ -82,6 +98,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
     @Override
     public List<MonthlyCarHistoryMessageResult> getMonthlyCarHistory(String carNo) {
         List<MonthlyCarHistoryResult> historyResults=api.getMonthlyCarHistory(carNo).block().getBody();
+
         List<MonthlyCarHistoryMessageResult> results=new ArrayList<>();
         historyResults.forEach(item->{
             MonthlyCarHistoryMessageResult result=new MonthlyCarHistoryMessageResult();

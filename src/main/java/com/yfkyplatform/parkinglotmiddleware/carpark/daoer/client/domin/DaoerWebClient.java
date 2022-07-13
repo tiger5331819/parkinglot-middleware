@@ -72,11 +72,11 @@ public abstract class DaoerWebClient {
     }
 
     private Consumer<HttpHeaders> httpHeadersFunction(){
-        return (httpHeaders -> {
-            if(!StrUtil.isBlank(getToken())) {
-                httpHeaders.add("token",getToken());
+        return (httpHeaders) -> {
+            if (!StrUtil.isBlank(getToken())) {
+                httpHeaders.add("token", getToken());
             }
-        });
+        };
     }
 
     private <T extends DaoerBase> WebClient.ResponseSpec postBase(T data, Boolean isNeedToken) {
