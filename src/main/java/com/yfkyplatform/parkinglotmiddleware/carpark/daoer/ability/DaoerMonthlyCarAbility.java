@@ -26,6 +26,8 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
 
     /**
      * 获取停车场下的月卡费率
+     * 道尔月卡费率将时效描述为中文
+     * 道尔月卡费率金额由元转为 SaaS 使用的分
      *
      * @return
      */
@@ -37,7 +39,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             MonthlyCarRateResult result = new MonthlyCarRateResult();
             result.setPackageType(item.getPackageType());
             result.setPackageName(item.getPackageName());
-            result.setPackageCharge(item.getPackageCharge());
+            result.setPackageCharge(item.getPackageCharge().movePointRight(2));
 
             switch (item.getPackageDuration()) {
                 case "1":
@@ -52,8 +54,10 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
                 case "4":
                     result.setPackageDuration("年租");
                     break;
+                default:
+                    result.setPackageDuration(null);
+                    break;
             }
-
 
             result.setRemark(item.getRemark());
 
