@@ -40,22 +40,23 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             result.setPackageType(item.getPackageType());
             result.setPackageName(item.getPackageName());
             result.setPackageCharge(item.getPackageCharge().movePointRight(2));
+            result.setPackageDuration(item.getPackageDuration());
 
             switch (item.getPackageDuration()) {
                 case "1":
-                    result.setPackageDuration("月租");
+                    result.setPackageDurationMessage("月租");
                     break;
                 case "2":
-                    result.setPackageDuration("季租");
+                    result.setPackageDurationMessage("季租");
                     break;
                 case "3":
-                    result.setPackageDuration("半年租");
+                    result.setPackageDurationMessage("半年租");
                     break;
                 case "4":
-                    result.setPackageDuration("年租");
+                    result.setPackageDurationMessage("年租");
                     break;
                 default:
-                    result.setPackageDuration(null);
+                    result.setPackageDurationMessage(null);
                     break;
             }
 

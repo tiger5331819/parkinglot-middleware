@@ -62,7 +62,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     }
 
     /**
-     * 获取月租车基本信息
+     * 获取月租车续费信息
      *
      * @param operatorId            租户ID
      * @param parkingLotManagerCode 停车场管理名称
@@ -82,6 +82,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
                     data.setDuration(item.getPackageDuration());
                     data.setRemark(item.getRemark());
                     data.setPackageCharge(item.getPackageCharge());
+                    data.setDurationMessage(item.getPackageDurationMessage());
                     return data;
                 }).collect(Collectors.toList());
 

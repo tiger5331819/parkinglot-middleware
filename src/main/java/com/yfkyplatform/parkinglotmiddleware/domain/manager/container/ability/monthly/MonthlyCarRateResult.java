@@ -28,6 +28,10 @@ public class MonthlyCarRateResult {
      */
     private String packageDuration;
     /**
+     * 月卡持续时间描述
+     */
+    private String packageDurationMessage;
+    /**
      * 备注
      */
     private String remark;
