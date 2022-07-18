@@ -56,6 +56,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
             data.setPackageCharge(item.getPackageCharge());
             data.setPackageDuration(item.getPackageDuration());
             data.setRemark(item.getRemark());
+            data.setPackageDurationMessage(item.getPackageDurationMessage());
             result.add(data);
         });
         return result;
