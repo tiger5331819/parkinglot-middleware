@@ -146,15 +146,16 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public BlankCarScanInResult blankCarIn(String openId, int scanType, String channelId) {
+        String carNo = null;
         try {
-            api.blankCarIn(openId, scanType, channelId).block(Duration.ofSeconds(2));
+            BlankCarInResult result = api.blankCarIn(openId, scanType, channelId).block(Duration.ofSeconds(2)).getBody();
+            carNo = ObjectUtil.isNotNull(result) ? "" : result.getCarNo();
         } catch (IllegalStateException ex) {
 
         }
 
-
         BlankCarScanInResult scanInResult = new BlankCarScanInResult();
-        scanInResult.setCarNo("");
+        scanInResult.setCarNo(carNo);
         scanInResult.setStartTime(LocalDateTime.now());
 
         return scanInResult;
