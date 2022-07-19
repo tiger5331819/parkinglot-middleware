@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.m
 
 import lombok.Data;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -26,7 +27,7 @@ public class MonthlyCarRenewal {
     /**
      * 收费金额
      */
-    private String money;
+    private BigDecimal money;
     /**
      * 0 现金 1微信 2支付宝
      */

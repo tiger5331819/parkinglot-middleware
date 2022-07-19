@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
+import cn.hutool.core.date.DatePattern;
+import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
@@ -128,7 +130,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
      */
     @Override
     public Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
-        return api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), monthlyCarRenewal.getNewStartTime().toString(), monthlyCarRenewal.getNewEndTime().toString(), monthlyCarRenewal.getMoney(), monthlyCarRenewal.getPayType())
+        return api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), LocalDateTimeUtil.format(monthlyCarRenewal.getNewStartTime(), DatePattern.NORM_DATETIME_PATTERN), LocalDateTimeUtil.format(monthlyCarRenewal.getNewEndTime(), DatePattern.NORM_DATETIME_PATTERN), monthlyCarRenewal.getMoney().movePointLeft(2).toString(), monthlyCarRenewal.getPayType())
                 .block().getHead().getStatus() == 1;
     }
 
