@@ -6,6 +6,7 @@ import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
@@ -99,7 +100,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         CarFeeResult fee = mono.block().getBody();
 
-        int payState = api.payCarFeeAccess(payMessage.getCarNo(),
+        DaoerBaseRespHead payState = api.payCarFeeAccess(payMessage.getCarNo(),
                 new DateTime(fee.getInTime()).toString(),
                 payMessage.getPayTime(),
                 fee.getChargeDuration(),
@@ -109,8 +110,14 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 payType,
                 payMessage.getPaymentTransactionId(),
                 payMessage.getPayFee().movePointLeft(2),
-                channelId).block().getHead().getStatus();
-        return payState == 1;
+                channelId).block().getHead();
+
+        if (payState.getStatus() == 1) {
+            return true;
+        } else {
+            log.error(payState.getMessage());
+            return false;
+        }
     }
 
     /**

@@ -4,10 +4,12 @@ import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ import java.util.List;
  *
  * @author Suhuyuan
  */
-
+@Slf4j
 public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
 
     private final IDaoerMonthlyCar api;
@@ -130,8 +132,15 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
      */
     @Override
     public Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
-        return api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), LocalDateTimeUtil.format(monthlyCarRenewal.getNewStartTime(), DatePattern.NORM_DATETIME_PATTERN), LocalDateTimeUtil.format(monthlyCarRenewal.getNewEndTime(), DatePattern.NORM_DATETIME_PATTERN), monthlyCarRenewal.getMoney().movePointLeft(2).toString(), monthlyCarRenewal.getPayType())
-                .block().getHead().getStatus() == 1;
+        DaoerBaseRespHead result = api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(), LocalDateTimeUtil.format(monthlyCarRenewal.getNewStartTime(), DatePattern.NORM_DATETIME_PATTERN), LocalDateTimeUtil.format(monthlyCarRenewal.getNewEndTime(), DatePattern.NORM_DATETIME_PATTERN), monthlyCarRenewal.getMoney().movePointLeft(2).toString(), monthlyCarRenewal.getPayType())
+                .block().getHead();
+
+        if (result.getStatus() == 1) {
+            return true;
+        } else {
+            log.error(result.getMessage());
+            return false;
+        }
     }
 
     /**
@@ -142,6 +151,12 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
      */
     @Override
     public Boolean removeMonthlyCar(String carNo) {
-        return api.removeMonthlyCar(carNo).block().getHead().getStatus() == 1;
+        DaoerBaseRespHead result = api.removeMonthlyCar(carNo).block().getHead();
+        if (result.getStatus() == 1) {
+            return true;
+        } else {
+            log.error(result.getMessage());
+            return false;
+        }
     }
 }
