@@ -20,39 +20,38 @@ public enum ParkingLotManagerEnum {
 
     private final int code;
 
-    private final String name;
+    private final String message;
 
     ParkingLotManagerEnum(int value, String message) {
         this.code = value;
-        this.name = message;
+        this.message = message;
     }
 
     public static ParkingLotManagerEnum ValueOf(Integer parkingLotManagerCode) {
         if (ObjectUtil.isNull(parkingLotManagerCode)) {
             return null;
         }
-        switch (parkingLotManagerCode) {
-            case 4:
-                return Daoer;
-            case 3:
-                return Lifang;
-            default:
-                return null;
+
+        for (ParkingLotManagerEnum enums : ParkingLotManagerEnum.values()) {
+            if (enums.getCode() == parkingLotManagerCode) {
+                return enums;
+            }
         }
+        return null;
     }
 
     public static ParkingLotManagerEnum ValueOf(String parkingLotManagerMessage) {
         if (ObjectUtil.isNull(parkingLotManagerMessage)) {
             return null;
         }
-        switch (parkingLotManagerMessage) {
-            case "Daoer":
-                return Daoer;
-            case "Lifang":
-                return Lifang;
-            default:
-                return null;
+
+        for (ParkingLotManagerEnum enums : ParkingLotManagerEnum.values()) {
+            if (enums.getName() == parkingLotManagerMessage) {
+                return enums;
+            }
         }
+        return null;
+
     }
 
     public int getCode() {
@@ -60,6 +59,6 @@ public enum ParkingLotManagerEnum {
     }
 
     public String getName() {
-        return this.name;
+        return this.message;
     }
 }
