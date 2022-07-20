@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.mo
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarRenewal;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import com.yfkyplatform.parkinglotmiddleware.domain.service.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -30,9 +31,12 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
 
     private final ThirdIdProxy thirdIdProxy;
 
-    public MonthlyCarServiceExposer(ParkingLotManagerFactory factory, ThirdIdProxy thirdIdProxy) {
+    private final TestBox testBox;
+
+    public MonthlyCarServiceExposer(ParkingLotManagerFactory factory, ThirdIdProxy thirdIdProxy, TestBox testBox) {
         this.factory = factory;
         this.thirdIdProxy = thirdIdProxy;
+        this.testBox = testBox;
     }
 
 
@@ -83,7 +87,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
                     MonthlyCarRateMessage data = new MonthlyCarRateMessage();
                     data.setDuration(item.getPackageDuration());
                     data.setRemark(item.getRemark());
-                    data.setPackageCharge(item.getPackageCharge());
+                    data.setPackageCharge(testBox.changeFee(item.getPackageCharge()));
                     data.setDurationMessage(item.getPackageDurationMessage());
                     return data;
                 }).collect(Collectors.toList());
