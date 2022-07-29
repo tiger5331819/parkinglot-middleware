@@ -3,7 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability.LifangCarPortAbility;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability.LifangToolAbility;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.LifangClient;
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.ICouponAblitity;

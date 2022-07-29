@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.LifangBase;
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;

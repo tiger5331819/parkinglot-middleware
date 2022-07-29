@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 

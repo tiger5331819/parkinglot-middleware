@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
@@ -69,7 +69,6 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
     @Override
     protected void dataCheck(DaoerParkingLotConfiguration daoerParkingLotConfiguration) {
         if(daoerParkingLotConfiguration instanceof DaoerParkingLotConfiguration){
-            return;
         }else{
             throw new IllegalArgumentException("不是道尔停车场配置文件");
         }

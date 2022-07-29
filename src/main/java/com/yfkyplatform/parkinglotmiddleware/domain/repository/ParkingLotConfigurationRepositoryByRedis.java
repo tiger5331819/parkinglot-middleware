@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.springframework.stereotype.Component;
 

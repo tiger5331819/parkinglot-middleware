@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang;
 
 import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuartion.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
@@ -70,7 +70,6 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
     @Override
     protected void dataCheck(LifangParkingLotConfiguration lifangParkingLotConfiguration) {
         if (lifangParkingLotConfiguration instanceof LifangParkingLotConfiguration) {
-            return;
         } else {
             throw new IllegalArgumentException("不是立方停车场配置文件");
         }
