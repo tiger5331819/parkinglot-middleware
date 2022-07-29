@@ -92,7 +92,7 @@ public class TestController {
         blankCar.setChannelId("21061792051006460326001497368494ae4b2f687bbe15ff70098babdb333c6a");
 
 
-        return carPortService.blankCarOut(100100101, 4, 100100101120060000L, blankCar);
+        return carPortService.blankCarOut(4, "道尔测试", blankCar);
     }
 
     @ApiOperation(value = "无牌车入场")
@@ -103,7 +103,7 @@ public class TestController {
         blankCar.setScanType(1);
         blankCar.setChannelId("21061792051006460326001497368494ae4b2f687bbe15ff70098babdb333c6a");
 
-        return carPortService.blankCarIn(100100101, 4, 100100101120060000L, blankCar);
+        return carPortService.blankCarIn(4, "道尔测试", blankCar);
     }
 
     @ApiOperation(value = "获取版本信息")

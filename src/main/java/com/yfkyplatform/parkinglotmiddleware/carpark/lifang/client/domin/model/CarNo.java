@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model;
 
 
+import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -13,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class CarNo extends LifangBase {
+public class CarNo extends WebRequestBase {
 
     /**
      * 车牌号码

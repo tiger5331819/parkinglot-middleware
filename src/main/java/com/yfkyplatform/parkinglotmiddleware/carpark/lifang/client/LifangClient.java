@@ -1,20 +1,20 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.LifangWebClient;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.CarFeePay;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.CarNo;
-import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.LifangBase;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.LifangBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarportResult;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.ParameterizedTypeReference;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.nio.charset.Charset;
 
 /**
  * 道尔云API代理
@@ -24,8 +24,19 @@ import java.math.BigDecimal;
 @Slf4j
 public class LifangClient extends LifangWebClient implements ILifangCarPort, ILifangTool {
 
-    public LifangClient(String secret, String baseUrl, RedisTool redisTool) {
-        super(secret, baseUrl, redisTool);
+    private final ObjectMapper mapper = new ObjectMapper();
+
+    public LifangClient(String secret, String baseUrl) {
+        super(secret, baseUrl);
+    }
+
+    private <T> T decodeData(byte[] resultBytes, Class<T> dataClass) {
+        String json = new String(resultBytes, Charset.forName("GBK"));
+        try {
+            return mapper.readValue(json, dataClass);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -34,10 +45,11 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
      * @return
      */
     @Override
-    public Mono<CarportResult> getCarPortInfo() {
-        LifangBase model = new LifangBase("/GetParkingLotInfo");
-        return post(model, new ParameterizedTypeReference<CarportResult>() {
-        });
+    public CarportResult getCarPortInfo() {
+        WebRequestBase model = new WebRequestBase("/GetParkingLotInfo");
+        byte[] requestBytes = post(model, byte[].class).block();
+
+        return decodeData(requestBytes, CarportResult.class);
     }
 
     /**
@@ -47,11 +59,11 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
      * @return
      */
     @Override
-    public Mono<CarFeeResult> getCarFeeInfo(String carNo) {
+    public CarFeeResult getCarFeeInfo(String carNo) {
         CarNo model = new CarNo("/GetCarInfo");
         model.setCarCode(carNo);
-        return post(model, new ParameterizedTypeReference<CarFeeResult>() {
-        });
+        byte[] requestBytes = post(model, byte[].class).block();
+        return decodeData(requestBytes, CarFeeResult.class);
     }
 
     /**
@@ -61,8 +73,8 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
      * @return
      */
     @Override
-    public Mono<LifangBaseResp> payCarFeeAccess(String carNo, String payTime, BigDecimal totalAmount, BigDecimal disAmount,
-                                                String paySource, int payType, BigDecimal couponAmount) {
+    public LifangBaseResp payCarFeeAccess(String carNo, String payTime, BigDecimal totalAmount, BigDecimal disAmount,
+                                          String paySource, int payType, BigDecimal couponAmount) {
         CarFeePay model = new CarFeePay("/AddChargeInfo");
         model.setPayTime(payTime);
         model.setCarCode(carNo);
@@ -72,7 +84,8 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
         model.setChargeType(payType);
         model.setPaidMoney(disAmount);
 
-        return post(model, LifangBaseResp.class);
+        byte[] requestBytes = post(model, byte[].class).block();
+        return decodeData(requestBytes, LifangBaseResp.class);
     }
 
     /**

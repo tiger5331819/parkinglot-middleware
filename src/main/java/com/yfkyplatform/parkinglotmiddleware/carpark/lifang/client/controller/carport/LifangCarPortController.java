@@ -38,20 +38,21 @@ public class LifangCarPortController {
     @ApiOperation(value = "车位查询")
     @GetMapping
     public CarportResult getCarport(@PathVariable String parkingLotId) {
-        return api(parkingLotId).getCarPortInfo().block();
+        return api(parkingLotId).getCarPortInfo();
     }
 
     @ApiOperation(value = "获取临时车缴纳金额")
     @GetMapping("/fee")
     public CarFeeResult getCarFee(@PathVariable String parkingLotId, String carNo) {
-        return api(parkingLotId).getCarFeeInfo(carNo).block();
+        return api(parkingLotId).getCarFeeInfo(carNo);
     }
 
     @ApiOperation(value = "临停缴费支付")
     @PostMapping("/fee")
     public LifangBaseResp payCarFee(@PathVariable String parkingLotId, @RequestBody CarFeePayRequest request) {
         return api(parkingLotId).payCarFeeAccess(request.getCarNo(), request.getPayTime(), request.getTotalAmount(), request.getDisAmount(),
-                "协商收费", 11, request.getCouponAmount()).block();
+                "协商收费", 11, request.getCouponAmount());
     }
+
 
 }

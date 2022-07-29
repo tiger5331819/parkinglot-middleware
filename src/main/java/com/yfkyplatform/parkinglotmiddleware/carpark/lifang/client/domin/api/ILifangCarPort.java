@@ -3,7 +3,6 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.LifangBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarportResult;
-import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 
@@ -19,7 +18,7 @@ public interface ILifangCarPort {
      *
      * @return
      */
-    Mono<CarportResult> getCarPortInfo();
+    CarportResult getCarPortInfo();
 
     /**
      * 获取临时车缴纳金额
@@ -27,7 +26,7 @@ public interface ILifangCarPort {
      * @param carNo 车牌号码
      * @return
      */
-    Mono<CarFeeResult> getCarFeeInfo(String carNo);
+    CarFeeResult getCarFeeInfo(String carNo);
 
     /**
      * 临停缴费支付完成
@@ -35,7 +34,7 @@ public interface ILifangCarPort {
      * @param carNo 车牌号码
      * @return
      */
-    Mono<LifangBaseResp> payCarFeeAccess(String carNo, String payTime, BigDecimal totalAmount, BigDecimal disAmount,
-                                         String paySource, int payType, BigDecimal couponAmount);
+    LifangBaseResp payCarFeeAccess(String carNo, String payTime, BigDecimal totalAmount, BigDecimal disAmount,
+                                   String paySource, int payType, BigDecimal couponAmount);
 
 }

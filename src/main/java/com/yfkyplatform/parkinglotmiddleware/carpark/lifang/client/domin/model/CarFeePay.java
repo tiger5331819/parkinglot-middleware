@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model;
 
 
 import cn.hutool.core.util.StrUtil;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -16,7 +17,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @ToString
-public class CarFeePay extends LifangBase {
+public class CarFeePay extends WebRequestBase {
 
     /**
      * 车牌号

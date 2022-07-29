@@ -32,31 +32,31 @@ public class MonthlyCarController {
 
     @ApiOperation(value = "获取停车场下的月卡费率")
     @GetMapping("/rentalRate")
-    public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
-        return monthlyCarService.monthlyCarLongRentalRate(100100101, parkingLotManager, parkingLotId);
+    public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
+        return monthlyCarService.monthlyCarLongRentalRate(parkingLotManager, parkingLotId);
     }
 
     @ApiOperation(value = "获取月租车续费信息")
     @GetMapping("/{carNo}/fee")
-    public MonthlyCarFeeResultRpcResp monthlyCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
-        return monthlyCarService.monthlyCarFee(100100101, parkingLotManager, parkingLotId, carNo);
+    public MonthlyCarFeeResultRpcResp monthlyCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+        return monthlyCarService.monthlyCarFee(parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "获取月租车基本信息")
     @GetMapping("/{carNo}")
-    public MonthlyCarMessageResultRpcResp monthlyCarInfo(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
-        return monthlyCarService.monthlyCarInfo(100100101, parkingLotManager, parkingLotId, carNo);
+    public MonthlyCarMessageResultRpcResp monthlyCarInfo(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+        return monthlyCarService.monthlyCarInfo(parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "获取月租车缴费历史")
     @GetMapping("/{carNo}/History")
-    public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
-        return monthlyCarService.monthlyCarHistory(100100101, parkingLotManager, parkingLotId, carNo);
+    public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+        return monthlyCarService.monthlyCarHistory(parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "月租车续期")
     @PatchMapping("/{carNo}/renewal")
-    public Boolean renewalMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody MonthlyCarRenewalRpcReq monthlyCarRenewal) {
-        return monthlyCarService.renewalMonthlyCar(100100101, parkingLotManager, parkingLotId, monthlyCarRenewal);
+    public Boolean renewalMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody MonthlyCarRenewalRpcReq monthlyCarRenewal) {
+        return monthlyCarService.renewalMonthlyCar(parkingLotManager, parkingLotId, monthlyCarRenewal);
     }
 }

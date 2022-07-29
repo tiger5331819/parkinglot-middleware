@@ -22,7 +22,7 @@ public class LifangParkingLot extends ParkingLotPod {
 
     public LifangParkingLot(LifangParkingLotConfiguration lifangParkingLotInfo, RedisTool redis) {
         super(lifangParkingLotInfo, redis);
-        Lifang = new LifangClient(lifangParkingLotInfo.getSecret(), lifangParkingLotInfo.getBaseUrl(), redis);
+        Lifang = new LifangClient(lifangParkingLotInfo.getSecret(), lifangParkingLotInfo.getBaseUrl());
     }
 
     @Override

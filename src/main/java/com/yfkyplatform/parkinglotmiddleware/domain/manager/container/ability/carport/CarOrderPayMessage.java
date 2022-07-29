@@ -38,6 +38,10 @@ public class CarOrderPayMessage {
      */
     String paymentTransactionId;
     /**
+     * 优惠金额,单位元
+     */
+    BigDecimal discountFee;
+    /**
      * 支付金额
      */
     BigDecimal payFee;

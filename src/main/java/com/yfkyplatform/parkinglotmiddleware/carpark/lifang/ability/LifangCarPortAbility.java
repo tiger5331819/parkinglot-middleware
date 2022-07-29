@@ -36,7 +36,7 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarPortSpaceResult getCarPortSpace() {
-        CarportResult carport = api.getCarPortInfo().block();
+        CarportResult carport = api.getCarPortInfo();
         CarPortSpaceResult result = new CarPortSpaceResult();
         result.setTotal(carport.getTotalNum());
         result.setRest(carport.getTotalRemainNum());
@@ -52,7 +52,7 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public CarOrderResult getCarFeeInfo(String carNo) {
-        CarFeeResult carFee = api.getCarFeeInfo(carNo).block();
+        CarFeeResult carFee = api.getCarFeeInfo(carNo);
 
         CarOrderResult result = new CarOrderResult();
         result.setCarNo(carNo);
@@ -74,10 +74,10 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
-        CarFeeResult carFee = api.getCarFeeInfo(payMessage.getCarNo()).block();
+        CarFeeResult carFee = api.getCarFeeInfo(payMessage.getCarNo());
 
         int payState = api.payCarFeeAccess(payMessage.getCarNo(), payMessage.getPayTime(), carFee.getChargeMoney(), payMessage.getPayFee(), "协商收费", 11, carFee.getJMMoney())
-                .block().getResCode();
+                .getResCode();
         return payState == 0;
     }
 

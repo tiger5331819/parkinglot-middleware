@@ -105,7 +105,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 payMessage.getPayTime(),
                 fee.getChargeDuration(),
                 fee.getPayCharge(),
-                fee.getDiscountAmount(),
+                payMessage.getDiscountFee(),
                 0,
                 payType,
                 payMessage.getPaymentTransactionId(),

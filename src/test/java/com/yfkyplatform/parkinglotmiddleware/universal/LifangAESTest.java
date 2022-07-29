@@ -27,12 +27,12 @@ public class LifangAESTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"9iEepr1twrizIEKrs1hs2A=="})
-    public void encryptDataAESTest(String key) throws Exception {
+    @CsvSource({"9iEepr1twrizIEKrs1hs2A==,{\"requestName\":\"BeforeIn\",\"requestValue\":{\"carCode\":\"浙AD0V07\",\"inTime\":\"2016-09-29 10:06:03\",\"inChannelId\":\"4\",\"GUID\":\"1403970b-4eb2-46bc-8f2b-eeec91ddcd5f\",\"inOrOut\":\"0\"},\"Type\":\"0\"}",
+            "9iEepr1twrizIEKrs1hs2A==,{\"carCode\":\"渝A00008\"}",
+            "9iEepr1twrizIEKrs1hs2A==,{\"carcode\":\"渝A00008\"}"})
+    public void encryptDataAESTest(String key, String data) throws Exception {
         System.out.println("key:" + showByteArray(Base64.decodeBase64(key)));
 
-
-        String data = "{\"requestName\":\"BeforeIn\",\"requestValue\":{\"carCode\":\"浙AD0V07\",\"inTime\":\"2016-09-29 10:06:03\",\"inChannelId\":\"4\",\"GUID\":\"1403970b-4eb2-46bc-8f2b-eeec91ddcd5f\",\"inOrOut\":\"0\"},\"Type\":\"0\"}";
         System.out.println("加密前数据: string:" + data);
         System.out.println("加密前数据: byte[]:" + showByteArray(data.getBytes(StandardCharsets.UTF_8)));
         System.out.println();
@@ -46,7 +46,9 @@ public class LifangAESTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"9iEepr1twrizIEKrs1hs2A==,96C7F3AA5346EDC06B5D8B5453ED6E9A2BF0B63A8733382D622C1F7113A2EE031570CEB018B3A27EABCC872542744C7B986EE1E719BF177D205566DE1D5BD6A603E61F51BBAC06572D6E02FEAD1E559AB05F8883F87CDFF8A1547C21DB17561CCCB9878A30939EB991983578A1C021CBD85D442AC55B801C9B89910A2FC5F0A4D88BF6EB9756E41D8ED8DCC93893C29763BD94A1EF5A826DC3F5F82FBE8941604E9C628250B633ADD0B51649080271C393EF38A68DD89725D8CB21CE5CAE9D4D"})
+    @CsvSource({"9iEepr1twrizIEKrs1hs2A==,96C7F3AA5346EDC06B5D8B5453ED6E9A2BF0B63A8733382D622C1F7113A2EE031570CEB018B3A27EABCC872542744C7B986EE1E719BF177D205566DE1D5BD6A603E61F51BBAC06572D6E02FEAD1E559AB05F8883F87CDFF8A1547C21DB17561CCCB9878A30939EB991983578A1C021CBD85D442AC55B801C9B89910A2FC5F0A4D88BF6EB9756E41D8ED8DCC93893C29763BD94A1EF5A826DC3F5F82FBE8941604E9C628250B633ADD0B51649080271C393EF38A68DD89725D8CB21CE5CAE9D4D",
+            "9iEepr1twrizIEKrs1hs2A==,E31FBE35BC434364585E8A83E0CB6D5DE9A7504D198AD773C3CCB05EED40E101",
+            "9iEepr1twrizIEKrs1hs2A==,EA2BDBBF7A58E78654F19C68023A2E76E9A7504D198AD773C3CCB05EED40E101"})
     public void decryptDataAESTest(String key, String encryptStr) throws Exception {
         System.out.println("key:" + showByteArray(Base64.decodeBase64(key)));
 

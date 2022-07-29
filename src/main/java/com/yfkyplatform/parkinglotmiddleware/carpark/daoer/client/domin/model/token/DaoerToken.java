@@ -3,7 +3,6 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.t
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 
 /**
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
  * @author Suhuyuan
  */
 @Getter
-@NoArgsConstructor
 public class DaoerToken extends DaoerBase {
     /**
      * 应用名称
@@ -23,14 +21,20 @@ public class DaoerToken extends DaoerBase {
      */
     private String token;
 
-    public DaoerToken(String parkId,String appName){
+    public DaoerToken() {
         super("api/index/auth/token");
-        this.appName=appName;
     }
 
-    public void setToken(String token){
-        if(!StrUtil.isBlank(token)){
-            this.token=token;
+    public DaoerToken(String appName) {
+        super("api/index/auth/token");
+        this.appName = appName;
+    }
+
+    public void setToken(String token) {
+        if (!StrUtil.isBlank(token)) {
+            this.token = token;
         }
     }
+
+
 }

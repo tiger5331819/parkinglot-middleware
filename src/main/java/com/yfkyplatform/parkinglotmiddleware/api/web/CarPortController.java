@@ -1,10 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
-import cn.hutool.core.date.DateTime;
-import com.yfkyplatform.ordercenter.api.resp.OrderParkingRecordRpcResp;
-import com.yfkyplatform.ordercenter.api.resp.OrderPayDetailRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
@@ -35,53 +33,52 @@ public class CarPortController {
 
     @ApiOperation(value = "车场余位")
     @GetMapping("/space")
-    public CarPortSpaceRpcResp getCarPortSpace(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
-        return carPortService.getCarPortSpace(100100101, parkingLotManager, parkingLotId);
+    public CarPortSpaceRpcResp getCarPortSpace(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
+        return carPortService.getCarPortSpace(parkingLotManager, parkingLotId);
     }
 
     @ApiOperation(value = "无牌车出场")
     @PostMapping("/blankCarOut")
-    public CarOrderResultRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarOut(100100101, parkingLotManager, parkingLotId, blankCar);
+    public CarOrderResultRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
+        return carPortService.blankCarOut(parkingLotManager, parkingLotId, blankCar);
     }
 
     @ApiOperation(value = "无牌车入场")
     @PostMapping("/blankCarIn")
-    public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarIn(100100101, parkingLotManager, parkingLotId, blankCar);
+    public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
+        return carPortService.blankCarIn(parkingLotManager, parkingLotId, blankCar);
     }
 
     @ApiOperation(value = "临时车出场（获取车辆费用）")
     @GetMapping("/{carNo}/Fee")
-    public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo) {
-        return carPortService.getCarFee(100100101, parkingLotManager, parkingLotId, carNo);
+    public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+        return carPortService.getCarFee(parkingLotManager, parkingLotId, carNo);
     }
 
     @ApiOperation(value = "车辆缴费")
     @PatchMapping("/{carNo}/Fee")
-    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessage payData) {
-        OrderParkingRecordRpcResp orderParkingRecord = new OrderParkingRecordRpcResp();
-        orderParkingRecord.setPlateNumber(carNo);
-        orderParkingRecord.setParkinglotId(parkingLotId);
+    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessage payData) {
 
-        OrderPayDetailRpcResp payMessage = new OrderPayDetailRpcResp();
-        payMessage.setPaidAmount(payData.getPayFee());
-        payMessage.setPaidTime(new DateTime(payData.getPayTime()).toTimestamp().toLocalDateTime());
-        payMessage.setPaidModeId(payData.getPayType());
-        payMessage.setPayOrderId(Long.valueOf(payData.getPaymentTransactionId()));
+        OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
+        orderPayMessageRpcReq.setPayTime(payData.getPayTime());
+        orderPayMessageRpcReq.setDiscountFee(payData.getDiscountFee());
+        orderPayMessageRpcReq.setPayType(payData.getPayType());
+        orderPayMessageRpcReq.setPaymentTransactionId(payData.getPaymentTransactionId());
+        orderPayMessageRpcReq.setPayFee(payData.getPayFee());
 
-        return carPortService.payAccess(100100101, parkingLotManager, orderParkingRecord, payMessage);
+
+        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
     }
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
-    public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        return carPortService.getChannelCarFee(100100101, parkingLotManager, parkingLotId, channelId, carNo, openId);
+    public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
+        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, carNo, openId);
     }
 
     @ApiOperation(value = "获取通道列表")
     @GetMapping("/channel")
-    public List<ChannelInfoResultRpcResp> getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable Long parkingLotId) {
-        return carPortService.getChannelsInfo(100100101, parkingLotManager, parkingLotId);
+    public List<ChannelInfoResultRpcResp> getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
+        return carPortService.getChannelsInfo(parkingLotManager, parkingLotId);
     }
 }
