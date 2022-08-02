@@ -152,7 +152,7 @@ public class CarportServiceExposer implements ICarPortService {
     public CarOrderResultRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).carport();
 
-        return makeCarOrderResultRpcResp(carPortService.getChannelCarFee(channelId, carNo, openId));
+        return makeCarOrderResultRpcResp(carPortService.getCarFeeInfo(channelId, carNo, openId));
     }
 
     /**

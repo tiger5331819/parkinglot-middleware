@@ -30,13 +30,15 @@ public interface ICarPortAblitity {
      * @return
      */
     Boolean payCarFeeAccess(CarOrderPayMessage payMessage);
+
     /**
      * 根据通道号获取车辆费用信息
      *
      * @param carNo 车牌号码
      * @return
      */
-    CarOrderResult getChannelCarFee(String channelId,String carNo, String openId);
+    CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId);
+
     /**
      * 无牌车入场
      *

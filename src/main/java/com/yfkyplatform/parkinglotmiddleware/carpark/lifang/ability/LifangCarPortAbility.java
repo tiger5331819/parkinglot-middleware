@@ -90,7 +90,7 @@ public class LifangCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
+    public CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId) {
         throw new UnsupportedOperationException();
     }
 

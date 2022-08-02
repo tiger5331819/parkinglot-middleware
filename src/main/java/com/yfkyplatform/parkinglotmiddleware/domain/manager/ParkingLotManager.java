@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.*;
  *
  * @author Suhuyuan
  */
-
+@Slf4j
 public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends ParkingLotConfiguration> {
 
     protected IParkingLotConfigurationRepository cfgRepository;
@@ -101,7 +102,11 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
         List cfgList = new ArrayList();
 
         if (ObjectUtil.isNotNull(parkingLotId)) {
-            cfgList.add(parkingLot(parkingLotId).configuration());
+            try {
+                cfgList.add(parkingLot(parkingLotId).configuration());
+            } catch (Exception ex) {
+                log.warn(parkingLotId + "不存在", ex);
+            }
         } else {
             load().forEach(item -> cfgList.add(item.configuration()));
         }
@@ -117,8 +122,12 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
     public Map<String, Boolean> parkingLotHealthCheck(@Nullable String parkingLotId) {
         Map<String, Boolean> healthCheckMap = new HashMap(100);
         if (ObjectUtil.isNotNull(parkingLotId)) {
-            T parkingLot = parkingLot(parkingLotId);
-            healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
+            try {
+                T parkingLot = parkingLot(parkingLotId);
+                healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
+            } catch (Exception ex) {
+                log.warn(parkingLotId + "不存在", ex);
+            }
         } else {
             load().forEach(item -> healthCheckMap.put(item.Id(), item.healthCheck()));
         }

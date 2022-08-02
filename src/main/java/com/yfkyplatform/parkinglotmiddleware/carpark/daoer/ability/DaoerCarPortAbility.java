@@ -72,6 +72,27 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     }
 
     /**
+     * 根据通道号获取车辆费用信息
+     *
+     * @param channelId 通道Id
+     * @param carNo     车牌号码
+     * @param openId    openId
+     * @return
+     */
+    @Override
+    public CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId) {
+        CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
+
+
+        if (ObjectUtil.isNull(result)) {
+            result = new CarFeeResult();
+        } else {
+            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofHours(1));
+        }
+        return CarFeeToCarOrder(result);
+    }
+
+    /**
      * 临停缴费支付完成
      *
      * @param payMessage 订单支付信息
@@ -118,27 +139,6 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
             log.error(payState.getMessage());
             return false;
         }
-    }
-
-    /**
-     * 根据通道号获取车辆费用信息
-     *
-     * @param channelId 通道Id
-     * @param carNo     车牌号码
-     * @param openId    openId
-     * @return
-     */
-    @Override
-    public CarOrderResult getChannelCarFee(String channelId, String carNo, String openId) {
-        CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
-
-
-        if (ObjectUtil.isNull(result)) {
-            result = new CarFeeResult();
-        } else {
-            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofHours(1));
-        }
-        return CarFeeToCarOrder(result);
     }
 
     /**
