@@ -126,7 +126,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 payMessage.getPayTime(),
                 fee.getChargeDuration(),
                 fee.getPayCharge(),
-                payMessage.getDiscountFee(),
+                payMessage.getDiscountFee().movePointLeft(2),
                 0,
                 payType,
                 payMessage.getPaymentTransactionId(),
@@ -156,7 +156,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         String carNo = null;
         try {
             BlankCarInResult result = api.blankCarIn(openId, scanType, channelId).block(Duration.ofSeconds(2)).getBody();
-            carNo = ObjectUtil.isNotNull(result) ? "" : result.getCarNo();
+            carNo = ObjectUtil.isNull(result) ? "" : result.getCarNo();
         } catch (IllegalStateException ex) {
 
         }
