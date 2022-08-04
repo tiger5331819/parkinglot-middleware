@@ -63,14 +63,12 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     public CarOrderResult getCarFeeInfo(String carNo) {
         DaoerBaseResp<CarFeeResult> resp = api.getCarFeeInfo(carNo).block();
         CarFeeResult result = resp.getBody();
-        if (ObjectUtil.isNull(result)) {
+        if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResult();
+            result.setCarNo(resp.getHead().getMessage());
             result.setAmount(new BigDecimal(0));
             result.setPayCharge(new BigDecimal(0));
             result.setDiscountAmount(new BigDecimal(0));
-        }
-        if (StrUtil.isBlank(result.getCarNo())) {
-            result.setCarNo(resp.getHead().getMessage());
         }
         return CarFeeToCarOrder(result);
     }
@@ -88,7 +86,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
 
 
-        if (ObjectUtil.isNull(result)) {
+        if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResult();
             result.setAmount(new BigDecimal(0));
             result.setPayCharge(new BigDecimal(0));
