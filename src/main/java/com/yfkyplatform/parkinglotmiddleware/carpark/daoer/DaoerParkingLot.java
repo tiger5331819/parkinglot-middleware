@@ -34,7 +34,7 @@ public class DaoerParkingLot extends ParkingLotPod{
 
     @Override
     public Boolean healthCheck() {
-        return Daoer.healthCheck();
+        return Daoer.getCarPortInfo().block().getHead().getStatus() == 1;
     }
 
     /**

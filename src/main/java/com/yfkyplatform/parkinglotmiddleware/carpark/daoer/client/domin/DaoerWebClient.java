@@ -87,14 +87,4 @@ public abstract class DaoerWebClient extends YfkyWebClient {
             return token();
         }
     }
-
-    public Boolean healthCheck() {
-        try {
-            refreshToken = true;
-            String token = token();
-            return !StrUtil.isEmpty(token) && !StrUtil.isBlank(token);
-        } catch (Throwable ex) {
-            return false;
-        }
-    }
 }
