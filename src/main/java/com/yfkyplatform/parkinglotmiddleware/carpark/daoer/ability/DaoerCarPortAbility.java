@@ -13,6 +13,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -64,6 +65,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         CarFeeResult result = resp.getBody();
         if (ObjectUtil.isNull(result)) {
             result = new CarFeeResult();
+            result.setAmount(new BigDecimal(0));
+            result.setPayCharge(new BigDecimal(0));
+            result.setDiscountAmount(new BigDecimal(0));
         }
         if (StrUtil.isBlank(result.getCarNo())) {
             result.setCarNo(resp.getHead().getMessage());
@@ -86,6 +90,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         if (ObjectUtil.isNull(result)) {
             result = new CarFeeResult();
+            result.setAmount(new BigDecimal(0));
+            result.setPayCharge(new BigDecimal(0));
+            result.setDiscountAmount(new BigDecimal(0));
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofHours(1));
         }
