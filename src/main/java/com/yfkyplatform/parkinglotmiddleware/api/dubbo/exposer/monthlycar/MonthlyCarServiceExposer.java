@@ -12,7 +12,6 @@ import com.yfkyplatform.parkinglotmiddleware.domain.service.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -169,7 +168,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         renewal.setCarNo(monthlyCarRenewal.getCarNo());
         renewal.setNewStartTime(monthlyCarRenewal.getNewStartTime());
         renewal.setNewEndTime(monthlyCarRenewal.getNewEndTime());
-        renewal.setMoney(new BigDecimal(monthlyCarRenewal.getMoney()));
+        renewal.setMoney(monthlyCarRenewal.getMoney());
         renewal.setPayType(monthlyCarRenewal.getPayType());
 
 
