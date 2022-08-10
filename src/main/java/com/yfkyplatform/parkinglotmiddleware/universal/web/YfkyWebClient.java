@@ -45,6 +45,8 @@ public abstract class YfkyWebClient {
             if (err instanceof WebClientResponseException) {
                 String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
                 throw new RuntimeException(errResult);
+            } else {
+                throw new RuntimeException(err.getMessage());
             }
         };
     }
