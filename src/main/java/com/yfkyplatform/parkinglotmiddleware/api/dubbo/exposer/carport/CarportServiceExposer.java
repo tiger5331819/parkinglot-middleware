@@ -1,6 +1,5 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
-import cn.hutool.core.date.DateTime;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
@@ -64,7 +63,7 @@ public class CarportServiceExposer implements ICarPortService {
         CarOrderPayMessage message = new CarOrderPayMessage();
         message.setCarNo(carNo);
         message.setPayFee(payMessage.getPayFee());
-        message.setPayTime(new DateTime(payMessage.getPayTime()).toString());
+        message.setPayTime(payMessage.getPayTime());
         message.setPayType(payMessage.getPayType());
         message.setPaymentTransactionId(payMessage.getPaymentTransactionId());
         message.setDiscountFee(payMessage.getDiscountFee());

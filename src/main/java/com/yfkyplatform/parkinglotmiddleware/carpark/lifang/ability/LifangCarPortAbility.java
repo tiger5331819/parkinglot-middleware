@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.Pa
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -76,7 +77,8 @@ public class LifangCarPortAbility implements ICarPortAblitity {
     public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
         CarFeeResult carFee = api.getCarFeeInfo(payMessage.getCarNo());
 
-        int payState = api.payCarFeeAccess(payMessage.getCarNo(), payMessage.getPayTime(), carFee.getChargeMoney(), payMessage.getPayFee(), "协商收费", 11, carFee.getJMMoney())
+        int payState = api.payCarFeeAccess(payMessage.getCarNo(), payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                        carFee.getChargeMoney(), payMessage.getPayFee(), "协商收费", 11, carFee.getJMMoney())
                 .getResCode();
         return payState == 0;
     }

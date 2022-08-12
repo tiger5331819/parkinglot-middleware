@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.c
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 车辆订单缴费信息
@@ -18,7 +19,7 @@ public class CarOrderPayMessage {
     /**
      * 支付时间
      */
-    String payTime;
+    LocalDateTime payTime;
     /**
      * 支付类型
      * 0 缺省

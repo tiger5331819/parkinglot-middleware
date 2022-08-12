@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -128,7 +129,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         DaoerBaseRespHead payState = api.payCarFeeAccess(payMessage.getCarNo(),
                 new DateTime(fee.getInTime()).toString(),
-                payMessage.getPayTime(),
+                payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 fee.getChargeDuration(),
                 fee.getPayCharge(),
                 payMessage.getDiscountFee().movePointLeft(2),
