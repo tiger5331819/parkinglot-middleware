@@ -1,10 +1,12 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yfkyframework.common.core.domain.BaseRpcReq;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 车辆订单缴费信息
@@ -17,7 +19,8 @@ public class OrderPayMessage extends BaseRpcReq {
      * 支付时间
      */
     @ApiModelProperty(value = "支付时间")
-    String payTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    LocalDateTime payTime;
     /**
      * 支付类型
      * 0 缺省

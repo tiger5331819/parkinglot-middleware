@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoRes
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import com.yfkyplatform.parkinglotmiddleware.domain.service.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -27,8 +28,11 @@ public class CarportServiceExposer implements ICarPortService {
 
     private final ParkingLotManagerFactory factory;
 
-    public CarportServiceExposer(ParkingLotManagerFactory factory) {
+    private final TestBox testBox;
+
+    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) {
         this.factory = factory;
+        this.testBox = testBox;
     }
 
     private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
@@ -38,7 +42,7 @@ public class CarportServiceExposer implements ICarPortService {
         result.setStartTime(data.getStartTime());
         result.setCreateTime(data.getCreateTime());
         result.setServiceTime(data.getServiceTime());
-        result.setTotalFee(data.getTotalFee());
+        result.setTotalFee(testBox.changeFee(data.getTotalFee()));
         result.setPayFee(data.getPayFee());
         result.setDiscountFee(data.getDiscountFee());
 
