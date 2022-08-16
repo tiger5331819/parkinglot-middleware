@@ -42,8 +42,8 @@ public class CarportServiceExposer implements ICarPortService {
         result.setStartTime(data.getStartTime());
         result.setCreateTime(data.getCreateTime());
         result.setServiceTime(data.getServiceTime());
-        result.setTotalFee(testBox.changeFee(data.getTotalFee()));
-        result.setPayFee(data.getPayFee());
+        result.setTotalFee(data.getTotalFee());
+        result.setPayFee(testBox.changeFee(data.getPayFee()));
         result.setDiscountFee(data.getDiscountFee());
 
         return result;
