@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ import java.util.function.Consumer;
  *
  * @author Suhuyuan
  */
-
+@Slf4j
 public abstract class YfkyWebClient {
     private final WebClient client;
 
@@ -44,7 +45,8 @@ public abstract class YfkyWebClient {
         return (Throwable err) -> {
             if (err instanceof WebClientResponseException) {
                 String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
-                throw new RuntimeException(errResult);
+                log.error(errResult);
+                throw new RuntimeException("网络错误");
             } else {
                 throw new RuntimeException(err.getMessage());
             }
