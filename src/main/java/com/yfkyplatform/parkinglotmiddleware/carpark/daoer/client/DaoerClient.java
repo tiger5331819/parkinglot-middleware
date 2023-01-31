@@ -8,6 +8,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.co
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.coupon.CouponUse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.guest.GuestMessage;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.guest.GuestWithId;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.CreateMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.RenewalMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
@@ -291,11 +292,36 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<MonthlyCarResult>> getMonthlyCarInfo(String carNo){
-        DaoerBase model=new DaoerBase("api/index/monthlycar/info");
+    public Mono<DaoerBaseResp<MonthlyCarResult>> getMonthlyCarInfo(String carNo) {
+        DaoerBase model = new DaoerBase("api/index/monthlycar/info");
         model.setCarNo(carNo);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {});
+        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        });
+    }
+
+    /**
+     * 月租车开户
+     *
+     * @param carNo
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<MonthlyCarResult>> createMonthlyCar(String carNo, Integer cardType,
+                                                                  String startTime, String endTime, String balanceMoney, int payType,
+                                                                  String concatName, String concatPhone) {
+        CreateMonthlyCar model = new CreateMonthlyCar("api/index/monthlycar/create");
+        model.setBalanceMoney(balanceMoney);
+        model.setCardTypeId(cardType);
+        model.setStartTime(startTime);
+        model.setEndTime(endTime);
+        model.setPayType(payType);
+        model.setConcatName(concatName);
+        model.setConcatPhone(concatPhone);
+        model.setCarNo(carNo);
+
+        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        });
     }
 
     /**
@@ -304,8 +330,8 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<List<MonthlyCarHistoryResult>>> getMonthlyCarHistory(String carNo){
-        DaoerBase model=new DaoerBase("api/index/monthlycar/history");
+    public Mono<DaoerBaseResp<List<MonthlyCarHistoryResult>>> getMonthlyCarHistory(String carNo) {
+        DaoerBase model = new DaoerBase("api/index/monthlycar/history");
         model.setCarNo(carNo);
 
         return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarHistoryResult>>>() {});

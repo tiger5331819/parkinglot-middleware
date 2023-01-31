@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.CreateMonthlyCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarFeeResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarHistoryMessageResultRpcResp;
@@ -52,6 +53,12 @@ public class MonthlyCarController {
     @GetMapping("/{carNo}/History")
     public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
         return monthlyCarService.monthlyCarHistory(parkingLotManager, parkingLotId, carNo);
+    }
+
+    @ApiOperation(value = "创建月租车")
+    @PostMapping("/{carNo}")
+    public Boolean createMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody CreateMonthlyCarRpcReq createMonthlyCarRpcReq) {
+        return monthlyCarService.createMonthlyCar(parkingLotManager, parkingLotId, createMonthlyCarRpcReq);
     }
 
     @ApiOperation(value = "月租车续期")

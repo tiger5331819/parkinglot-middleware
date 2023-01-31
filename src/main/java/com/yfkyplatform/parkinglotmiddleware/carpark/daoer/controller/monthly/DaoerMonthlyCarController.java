@@ -57,6 +57,12 @@ public class DaoerMonthlyCarController {
         return api(parkingLotId).getMonthlyCarHistory(carNo).block();
     }
 
+    @ApiOperation(value = "创建月租车")
+    @PostMapping(value = "/monthlycar/{carNo}")
+    public DaoerBaseResp<MonthlyCarResult> createCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody RenewalMonthlyCarRequest request) {
+        return api(parkingLotId).renewalMonthlyCar(carNo, request.getNewStartTime(), request.getNewEndTime(), request.getBalanceMoney(), request.getPayType()).block();
+    }
+
     @ApiOperation(value = "月租车续期")
     @PostMapping(value = "/monthlycar/{carNo}/renewal")
     public DaoerBaseResp<MonthlyCarResult> renewalCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody RenewalMonthlyCarRequest request) {

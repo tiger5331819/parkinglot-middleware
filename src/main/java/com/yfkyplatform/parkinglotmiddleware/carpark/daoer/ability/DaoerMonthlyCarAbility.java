@@ -162,4 +162,27 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return false;
         }
     }
+
+    /**
+     * 月租车开户
+     *
+     * @param createMonthlyCar
+     * @return
+     */
+    @Override
+    public Boolean createMonthlyCar(CreateMonthlyCar createMonthlyCar) {
+        DaoerBaseRespHead result = api.createMonthlyCar(createMonthlyCar.getCarNo(), createMonthlyCar.getCardTypeId(),
+                        LocalDateTimeUtil.format(createMonthlyCar.getStartTime(), DatePattern.NORM_DATETIME_PATTERN),
+                        LocalDateTimeUtil.format(createMonthlyCar.getEndTime(), DatePattern.NORM_DATETIME_PATTERN),
+                        createMonthlyCar.getBalanceMoney(), createMonthlyCar.getPayType(), createMonthlyCar.getConcatName(), createMonthlyCar.getConcatPhone())
+                .block().getHead();
+
+        if (result.getStatus() == 1) {
+            return true;
+        } else {
+            log.error(result.getMessage());
+            return false;
+        }
+    }
+
 }

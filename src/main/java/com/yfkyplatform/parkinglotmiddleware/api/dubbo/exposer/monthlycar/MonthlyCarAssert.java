@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.monthlycar;
 
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
+import java.time.LocalDateTime;
 
 /**
  * 月卡车断言
@@ -9,9 +9,15 @@ import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRe
  */
 
 public class MonthlyCarAssert {
-    public static void newStartTimeLessThanEndTime(MonthlyCarRenewalRpcReq monthlyCarRenewal) {
-        if (monthlyCarRenewal.getNewStartTime().isAfter(monthlyCarRenewal.getNewEndTime())) {
-            throw new IllegalArgumentException("月租车新的开始时间不能低于新的结束时间");
+    /**
+     * 断言：检查开始时间是否低于结束时间
+     *
+     * @param startTime
+     * @param endTime
+     */
+    public static void startTimeLessThanEndTimeCheck(LocalDateTime startTime, LocalDateTime endTime) {
+        if (startTime.isAfter(endTime)) {
+            throw new IllegalArgumentException("开始时间不能低于结束时间");
         }
     }
 }

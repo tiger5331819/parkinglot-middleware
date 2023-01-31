@@ -9,7 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoRes
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 

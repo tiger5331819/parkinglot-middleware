@@ -11,12 +11,15 @@ import java.util.List;
 public interface IMonthlyAblitity {
     /**
      * 获取停车场下的月卡费率
+     *
      * @return
      */
     List<MonthlyCarRateResult> getMonthlyCarLongRentalRate();
+
     /**
      * 获取月租车基本信息
      *
+     * @param carNo
      * @return
      */
     MonthlyCarMessageResult getMonthlyCarInfo(String carNo);
@@ -24,6 +27,7 @@ public interface IMonthlyAblitity {
     /**
      * 获取月租车缴费历史
      *
+     * @param carNo
      * @return
      */
     List<MonthlyCarHistoryMessageResult> getMonthlyCarHistory(String carNo);
@@ -31,6 +35,7 @@ public interface IMonthlyAblitity {
     /**
      * 月租车续期
      *
+     * @param monthlyCarRenewal
      * @return
      */
     Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal);
@@ -38,7 +43,16 @@ public interface IMonthlyAblitity {
     /**
      * 月租车销户
      *
+     * @param carNo
      * @return
      */
     Boolean removeMonthlyCar(String carNo);
+
+    /**
+     * 月租车开户
+     *
+     * @param createMonthlyCar
+     * @return
+     */
+    Boolean createMonthlyCar(CreateMonthlyCar createMonthlyCar);
 }

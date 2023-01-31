@@ -1,14 +1,16 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.monthlycar;
 
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.CreateMonthlyCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.CreateMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.IMonthlyAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.MonthlyCarRenewal;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -152,6 +154,32 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     }
 
     /**
+     * 创建月租车
+     *
+     * @param parkingLotManagerCode 停车场管理名称
+     * @param parkingLotId          停车场Id
+     * @param createMonthlyCar      月租车创建信息
+     * @return
+     */
+    @Override
+    public Boolean createMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, CreateMonthlyCarRpcReq createMonthlyCar) {
+        MonthlyCarAssert.startTimeLessThanEndTimeCheck(createMonthlyCar.getStartTime(), createMonthlyCar.getEndTime());
+
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        CreateMonthlyCar create = new CreateMonthlyCar();
+        create.setCarNo(createMonthlyCar.getCarNo());
+        create.setStartTime(createMonthlyCar.getStartTime());
+        create.setEndTime(createMonthlyCar.getEndTime());
+        create.setCardTypeId(createMonthlyCar.getCardTypeId());
+        create.setBalanceMoney(createMonthlyCar.getBalanceMoney());
+        create.setPayType(createMonthlyCar.getPayType());
+        create.setConcatName(createMonthlyCar.getConcatName());
+        create.setConcatPhone(createMonthlyCar.getConcatPhone());
+
+        return monthlyAblitity.createMonthlyCar(create);
+    }
+
+    /**
      * 月租车续期
      *
      * @param parkingLotManagerCode 停车场管理名称
@@ -161,7 +189,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public Boolean renewalMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
-        MonthlyCarAssert.newStartTimeLessThanEndTime(monthlyCarRenewal);
+        MonthlyCarAssert.startTimeLessThanEndTimeCheck(monthlyCarRenewal.getNewStartTime(), monthlyCarRenewal.getNewEndTime());
 
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         MonthlyCarRenewal renewal = new MonthlyCarRenewal();
@@ -173,5 +201,18 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
 
 
         return monthlyAblitity.renewalMonthlyCar(renewal);
+    }
+
+    /**
+     * 月租车销户
+     *
+     * @param parkingLotManagerCode 停车场管理名称
+     * @param parkingLotId          停车场Id
+     * @param carNo                 车牌号
+     * @return
+     */
+    @Override
+    public Boolean removeMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
+        return null;
     }
 }

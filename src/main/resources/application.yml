@@ -1,5 +1,5 @@
 server:
-  port: 8082
+  port: 9000
 
 dubbo:
   protocol:
@@ -31,3 +31,5 @@ rocketmq:
   # Producer 配置项
   producer:
     group: parkinglot-middleware-producer-group # 生产者分组
+
+app.version: @project.version@
