@@ -72,13 +72,13 @@ public class DaoerMonthlyCarController {
         return api(parkingLotId).renewalMonthlyCar(carNo, request.getNewStartTime(), request.getNewEndTime(), request.getBalanceMoney(), request.getPayType()).block();
     }
 
-    @ApiOperation(value = "月租车销户")
+    @ApiOperation(value = "月租车锁车/解锁")
     @PatchMapping(value = "/monthlycar/{carNo}/lock")
     public DaoerBaseResp<MonthlyCarLockResult> lockCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody LockMonthlyCarRequest request) {
         return api(parkingLotId).lockMonthlyCar(carNo, request.getStatus()).block();
     }
 
-    @ApiOperation(value = "月租车销户")
+    @ApiOperation(value = "月租车锁车状态")
     @GetMapping(value = "/monthlycar/{carNo}/lock")
     public DaoerBaseResp<MonthlyCarLockResult> carLockInfo(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo) {
         return api(parkingLotId).monthlyCarLockInfo(carNo).block();
