@@ -7,6 +7,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.dao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.CreateMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.RenewalMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import io.swagger.annotations.Api;
@@ -59,8 +60,8 @@ public class DaoerMonthlyCarController {
 
     @ApiOperation(value = "创建月租车")
     @PostMapping(value = "/monthlycar/{carNo}")
-    public DaoerBaseResp<MonthlyCarResult> createCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody RenewalMonthlyCarRequest request) {
-        return api(parkingLotId).renewalMonthlyCar(carNo, request.getNewStartTime(), request.getNewEndTime(), request.getBalanceMoney(), request.getPayType()).block();
+    public DaoerBaseResp<MonthlyCarResult> createCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody CreateMonthlyCarRequest request) {
+        return api(parkingLotId).createMonthlyCar(carNo, request.getCardTypeId(), request.getStartTime(), request.getEndTime(), request.getBalanceMoney(), request.getPayType(), request.getConcatName(), request.getConcatPhone()).block();
     }
 
     @ApiOperation(value = "月租车续期")

@@ -66,4 +66,10 @@ public class MonthlyCarController {
     public Boolean renewalMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody MonthlyCarRenewalRpcReq monthlyCarRenewal) {
         return monthlyCarService.renewalMonthlyCar(parkingLotManager, parkingLotId, monthlyCarRenewal);
     }
+
+    @ApiOperation(value = "月租车销户")
+    @DeleteMapping("/{carNo}")
+    public Boolean removeMonthlyCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+        return monthlyCarService.removeMonthlyCar(parkingLotManager, parkingLotId, carNo);
+    }
 }

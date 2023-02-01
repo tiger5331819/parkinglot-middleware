@@ -213,6 +213,8 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public Boolean removeMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
-        return null;
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+
+        return monthlyAblitity.removeMonthlyCar(carNo);
     }
 }
