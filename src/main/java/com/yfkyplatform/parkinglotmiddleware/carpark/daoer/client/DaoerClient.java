@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.co
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.guest.GuestMessage;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.guest.GuestWithId;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.CreateMonthlyCar;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.LockMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.RenewalMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
@@ -16,6 +17,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.cou
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.guest.GuestResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
@@ -359,20 +361,52 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<MonthlyCarResult>> removeMonthlyCar(String carNo){
-        DaoerBase model= new DaoerBase("api/index/monthlycar/del");
+    public Mono<DaoerBaseResp<MonthlyCarResult>> removeMonthlyCar(String carNo) {
+        DaoerBase model = new DaoerBase("api/index/monthlycar/del");
         model.setCarNo(carNo);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {});
+        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        });
+    }
+
+    /**
+     * 月租车锁车/解锁
+     *
+     * @param carNo
+     * @param status
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<MonthlyCarLockResult>> lockMonthlyCar(String carNo, Integer status) {
+        LockMonthlyCar model = new LockMonthlyCar("api/index/lockCar/lockCar");
+        model.setCarNo(carNo);
+        model.setStatus(status);
+        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarLockResult>>() {
+        });
+    }
+
+    /**
+     * 月租车锁车状态
+     *
+     * @param carNo
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<MonthlyCarLockResult>> monthlyCarLockInfo(String carNo) {
+        DaoerBase model = new DaoerBase("api/index/lockCar/getCarInfo");
+        model.setCarNo(carNo);
+        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarLockResult>>() {
+        });
     }
 
     /**
      * 获取图片
+     *
      * @param imgPath 图片路径
      * @return
      */
     @Override
-    public Mono<byte[]> getImage(String imgPath){
-        DaoerBase model=new DaoerBase("img");
+    public Mono<byte[]> getImage(String imgPath) {
+        DaoerBase model = new DaoerBase("img");
         model.appendUri(imgPath);
         return get(model,byte[].class);
     }

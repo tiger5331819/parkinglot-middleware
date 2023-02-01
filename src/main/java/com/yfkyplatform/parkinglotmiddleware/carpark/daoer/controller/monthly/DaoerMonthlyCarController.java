@@ -5,9 +5,11 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManage
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.CreateMonthlyCarRequest;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.LockMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.RenewalMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import io.swagger.annotations.Api;
@@ -68,6 +70,18 @@ public class DaoerMonthlyCarController {
     @PostMapping(value = "/monthlycar/{carNo}/renewal")
     public DaoerBaseResp<MonthlyCarResult> renewalCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody RenewalMonthlyCarRequest request) {
         return api(parkingLotId).renewalMonthlyCar(carNo, request.getNewStartTime(), request.getNewEndTime(), request.getBalanceMoney(), request.getPayType()).block();
+    }
+
+    @ApiOperation(value = "月租车销户")
+    @PatchMapping(value = "/monthlycar/{carNo}/lock")
+    public DaoerBaseResp<MonthlyCarLockResult> lockCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody LockMonthlyCarRequest request) {
+        return api(parkingLotId).lockMonthlyCar(carNo, request.getStatus()).block();
+    }
+
+    @ApiOperation(value = "月租车销户")
+    @GetMapping(value = "/monthlycar/{carNo}/lock")
+    public DaoerBaseResp<MonthlyCarLockResult> carLockInfo(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo) {
+        return api(parkingLotId).monthlyCarLockInfo(carNo).block();
     }
 
     @ApiOperation(value = "月租车销户")

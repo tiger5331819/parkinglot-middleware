@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import reactor.core.publisher.Mono;
@@ -56,7 +57,7 @@ public interface IDaoerMonthlyCar {
      * @param payType
      * @return
      */
-    Mono<DaoerBaseResp<MonthlyCarResult>> renewalMonthlyCar(String carNo,String newStartTime,String newEndTime,String balanceMoney,int payType);
+    Mono<DaoerBaseResp<MonthlyCarResult>> renewalMonthlyCar(String carNo, String newStartTime, String newEndTime, String balanceMoney, int payType);
 
     /**
      * 月租车销户
@@ -65,4 +66,21 @@ public interface IDaoerMonthlyCar {
      * @return
      */
     Mono<DaoerBaseResp<MonthlyCarResult>> removeMonthlyCar(String carNo);
+
+    /**
+     * 月租车锁车/解锁
+     *
+     * @param carNo
+     * @param status
+     * @return
+     */
+    Mono<DaoerBaseResp<MonthlyCarLockResult>> lockMonthlyCar(String carNo, Integer status);
+
+    /**
+     * 月租车锁车状态
+     *
+     * @param carNo
+     * @return
+     */
+    Mono<DaoerBaseResp<MonthlyCarLockResult>> monthlyCarLockInfo(String carNo);
 }
