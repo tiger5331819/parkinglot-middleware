@@ -173,8 +173,8 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         create.setCardTypeId(createMonthlyCar.getCardTypeId());
         create.setBalanceMoney(createMonthlyCar.getBalanceMoney());
         create.setPayType(createMonthlyCar.getPayType());
-        create.setConcatName(createMonthlyCar.getConcatName());
-        create.setConcatPhone(createMonthlyCar.getConcatPhone());
+        create.setContactName(createMonthlyCar.getContactName());
+        create.setContactPhone(createMonthlyCar.getContactPhone());
 
         return monthlyAblitity.createMonthlyCar(create);
     }

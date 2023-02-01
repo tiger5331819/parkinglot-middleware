@@ -36,7 +36,7 @@ public interface IDaoerMonthlyCar {
      */
     Mono<DaoerBaseResp<MonthlyCarResult>> createMonthlyCar(String carNo, Integer cardType,
                                                            String startTime, String endTime, String balanceMoney, int payType,
-                                                           String concatName, String concatPhone);
+                                                           String contactName, String concatPhone);
 
     /**
      * 获取月租车缴费历史

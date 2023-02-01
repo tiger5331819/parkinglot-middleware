@@ -27,8 +27,8 @@ public class CreateMonthlyCarRequest {
     private int payType;
 
     @ApiModelProperty(value = "人员名称", required = true)
-    private String concatName;
+    private String contactName;
 
     @ApiModelProperty(value = "人员手机号码", required = true)
-    private String concatPhone;
+    private String contactPhone;
 }

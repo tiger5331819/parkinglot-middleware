@@ -309,14 +309,14 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     @Override
     public Mono<DaoerBaseResp<MonthlyCarResult>> createMonthlyCar(String carNo, Integer cardType,
                                                                   String startTime, String endTime, String balanceMoney, int payType,
-                                                                  String concatName, String concatPhone) {
+                                                                  String contactName, String concatPhone) {
         CreateMonthlyCar model = new CreateMonthlyCar("api/index/monthlycar/create");
         model.setBalanceMoney(balanceMoney);
         model.setCardTypeId(cardType);
         model.setStartTime(startTime);
         model.setEndTime(endTime);
         model.setPayType(payType);
-        model.setConcatName(concatName);
+        model.setContactName(contactName);
         model.setConcatPhone(concatPhone);
         model.setCarNo(carNo);
 

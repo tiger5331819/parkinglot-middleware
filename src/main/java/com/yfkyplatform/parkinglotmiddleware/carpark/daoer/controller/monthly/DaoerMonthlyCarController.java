@@ -61,7 +61,7 @@ public class DaoerMonthlyCarController {
     @ApiOperation(value = "创建月租车")
     @PostMapping(value = "/monthlycar/{carNo}")
     public DaoerBaseResp<MonthlyCarResult> createCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody CreateMonthlyCarRequest request) {
-        return api(parkingLotId).createMonthlyCar(carNo, request.getCardTypeId(), request.getStartTime(), request.getEndTime(), request.getBalanceMoney(), request.getPayType(), request.getConcatName(), request.getConcatPhone()).block();
+        return api(parkingLotId).createMonthlyCar(carNo, request.getCardTypeId(), request.getStartTime(), request.getEndTime(), request.getBalanceMoney(), request.getPayType(), request.getContactName(), request.getContactPhone()).block();
     }
 
     @ApiOperation(value = "月租车续期")

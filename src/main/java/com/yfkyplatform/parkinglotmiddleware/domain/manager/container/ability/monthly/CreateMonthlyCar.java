@@ -39,10 +39,10 @@ public class CreateMonthlyCar {
     /**
      * 人员名称
      */
-    private String concatName;
+    private String contactName;
 
     /**
      * 人员手机号码
      */
-    private String concatPhone;
+    private String contactPhone;
 }
