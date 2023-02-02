@@ -46,7 +46,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     @Override
     public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(Integer parkingLotManagerCode, String parkingLotId) {
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         List<MonthlyCarRateResultRpcResp> result = new ArrayList<>();
         monthlyAblitity.getMonthlyCarLongRentalRate().forEach(item -> {
             MonthlyCarRateResultRpcResp data = new MonthlyCarRateResultRpcResp();
@@ -72,7 +72,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     @Override
     public MonthlyCarFeeResultRpcResp monthlyCarFee(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         MonthlyCarMessageResult carInfo = monthlyAblitity.getMonthlyCarInfo(carNo);
         List<MonthlyCarRateMessage> monthlyCarRateList = monthlyAblitity.getMonthlyCarLongRentalRate()
                 .stream().filter(item -> item.getPackageType() == carInfo.getCardTypeId()).map(item -> {
@@ -109,7 +109,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     @Override
     public MonthlyCarMessageResultRpcResp monthlyCarInfo(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         MonthlyCarMessageResult monthlyCar = monthlyAblitity.getMonthlyCarInfo(carNo);
 
         MonthlyCarMessageResultRpcResp result = new MonthlyCarMessageResultRpcResp();
@@ -136,7 +136,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     @Override
     public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         List<MonthlyCarHistoryMessageResultRpcResp> result = new ArrayList<>();
         monthlyAblitity.getMonthlyCarHistory(carNo).forEach(item -> {
             MonthlyCarHistoryMessageResultRpcResp data = new MonthlyCarHistoryMessageResultRpcResp();
@@ -165,7 +165,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     public Boolean createMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, CreateMonthlyCarRpcReq createMonthlyCar) {
         MonthlyCarAssert.startTimeLessThanEndTimeCheck(createMonthlyCar.getStartTime(), createMonthlyCar.getEndTime());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         CreateMonthlyCar create = new CreateMonthlyCar();
         create.setCarNo(createMonthlyCar.getCarNo());
         create.setStartTime(createMonthlyCar.getStartTime());
@@ -191,7 +191,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     public Boolean renewalMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal) {
         MonthlyCarAssert.startTimeLessThanEndTimeCheck(monthlyCarRenewal.getNewStartTime(), monthlyCarRenewal.getNewEndTime());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
         MonthlyCarRenewal renewal = new MonthlyCarRenewal();
         renewal.setCarNo(monthlyCarRenewal.getCarNo());
         renewal.setNewStartTime(monthlyCarRenewal.getNewStartTime());
@@ -213,7 +213,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
      */
     @Override
     public Boolean removeMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.ValueOf(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).monthly();
 
         return monthlyAblitity.removeMonthlyCar(carNo);
     }
