@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import reactor.core.publisher.Mono;
@@ -19,29 +20,67 @@ public interface IDaoerMonthlyCar {
      * @return
      */
     Mono<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>> getMonthlyCarLongRentalRate();
+
     /**
      * 获取月租车基本信息
      *
+     * @param carNo
      * @return
      */
     Mono<DaoerBaseResp<MonthlyCarResult>> getMonthlyCarInfo(String carNo);
 
     /**
+     * 月租车开户
+     *
+     * @param carNo
+     * @return
+     */
+    Mono<DaoerBaseResp<MonthlyCarResult>> createMonthlyCar(String carNo, Integer cardType,
+                                                           String startTime, String endTime, String balanceMoney, int payType,
+                                                           String contactName, String concatPhone);
+
+    /**
      * 获取月租车缴费历史
      *
+     * @param carNo
      * @return
      */
     Mono<DaoerBaseResp<List<MonthlyCarHistoryResult>>> getMonthlyCarHistory(String carNo);
+
     /**
      * 月租车续期
      *
+     * @param carNo
+     * @param newStartTime
+     * @param newEndTime
+     * @param balanceMoney
+     * @param payType
      * @return
      */
-    Mono<DaoerBaseResp<MonthlyCarResult>> renewalMonthlyCar(String carNo,String newStartTime,String newEndTime,String balanceMoney,int payType);
+    Mono<DaoerBaseResp<MonthlyCarResult>> renewalMonthlyCar(String carNo, String newStartTime, String newEndTime, String balanceMoney, int payType);
+
     /**
      * 月租车销户
      *
+     * @param carNo
      * @return
      */
     Mono<DaoerBaseResp<MonthlyCarResult>> removeMonthlyCar(String carNo);
+
+    /**
+     * 月租车锁车/解锁
+     *
+     * @param carNo
+     * @param status
+     * @return
+     */
+    Mono<DaoerBaseResp<MonthlyCarLockResult>> lockMonthlyCar(String carNo, Integer status);
+
+    /**
+     * 月租车锁车状态
+     *
+     * @param carNo
+     * @return
+     */
+    Mono<DaoerBaseResp<MonthlyCarLockResult>> monthlyCarLockInfo(String carNo);
 }

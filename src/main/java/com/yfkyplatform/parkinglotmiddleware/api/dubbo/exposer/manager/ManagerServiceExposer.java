@@ -63,6 +63,9 @@ public class ManagerServiceExposer implements IManagerService {
             cfgList = factory.getParkingLotConfiguration(null, parkingLotId);
         }
 
+        if (cfgList.isEmpty()) {
+            throw new NoSuchElementException(parkingLotManagerCode + ":" + parkingLotId + "不存在");
+        }
 
         List<ParkingLotCfgRpcResp> result = new ArrayList<>();
         cfgList.forEach(item -> {
@@ -106,6 +109,10 @@ public class ManagerServiceExposer implements IManagerService {
             health = factory.healthCheck(parkingLotManagerEnum.getName(), parkingLotId);
         } else {
             health = factory.healthCheck(null, parkingLotId);
+        }
+
+        if (health.isEmpty() || health.values().isEmpty()) {
+            throw new NoSuchElementException(parkingLotManagerCode + ":" + parkingLotId + "不存在");
         }
 
 

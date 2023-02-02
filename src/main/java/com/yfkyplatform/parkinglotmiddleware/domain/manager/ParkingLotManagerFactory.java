@@ -68,9 +68,7 @@ public class ParkingLotManagerFactory {
             return parkingLotManagerMap.get(parkingLotManagerName).configurationList(parkingLotId);
         } else {
             List dataList = new ArrayList();
-            parkingLotManagerMap.values().forEach(manager -> {
-                dataList.addAll(manager.configurationList(parkingLotId));
-            });
+            parkingLotManagerMap.values().forEach(manager -> dataList.addAll(manager.configurationList(parkingLotId)));
             return dataList;
         }
     }
