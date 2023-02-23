@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability.LifangCarPortAbility;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability.LifangToolAbility;
-import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.LifangClient;
+import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.LifangParkingLotClient;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
@@ -18,11 +18,11 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.to
  */
 
 public class LifangParkingLot extends ParkingLotPod {
-    private final LifangClient Lifang;
+    private final LifangParkingLotClient Lifang;
 
     public LifangParkingLot(LifangParkingLotConfiguration lifangParkingLotInfo, RedisTool redis) {
         super(lifangParkingLotInfo, redis);
-        Lifang = new LifangClient(lifangParkingLotInfo.getSecret(), lifangParkingLotInfo.getBaseUrl());
+        Lifang = new LifangParkingLotClient(lifangParkingLotInfo.getSecret(), lifangParkingLotInfo.getBaseUrl());
     }
 
     @Override

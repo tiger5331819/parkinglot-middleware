@@ -11,15 +11,16 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.gu
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.CreateMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.LockMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.RenewalMonthlyCar;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponUseResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.guest.GuestResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.SpecialMonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -47,9 +48,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<List<CarportResult>>> getCarPortInfo(){
-        DaoerBase model=new DaoerBase("api/index/carport");
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<List<CarportResult>>>() {});
+    public Mono<DaoerBaseResp<List<CarportResult>>> getCarPortInfo() {
+        DaoerBase model = new DaoerBase();
+        return post(model, "api/index/carport", new ParameterizedTypeReference<DaoerBaseResp<List<CarportResult>>>() {
+        });
     }
 
     /**
@@ -59,9 +61,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<CarFeeResult>> getCarFeeInfo(String carNo){
-        DaoerBase model=new DaoerBase("api/index/tempFee/getcarfee");
+        DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {});
+        return post(model, "api/index/tempFee/getcarfee", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {
+        });
     }
 
     /**
@@ -73,7 +76,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     @Override
     public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
                                                int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId) {
-        CarFeePay model = new CarFeePay("api/index/tempFee/paysuccess");
+        CarFeePay model = new CarFeePay();
 
         model.setEntryTime(entryTime);
         model.setCarNo(carNo);
@@ -87,7 +90,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setCouponAmount(couponAmount);
         model.setDsn(channelId);
 
-        return post(model, DaoerBaseResp.class);
+        return post(model, "api/index/tempFee/paysuccess", DaoerBaseResp.class);
     }
 
     /**
@@ -98,13 +101,14 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<CarFeeResult>> getChannelCarFee(String channelId,String carNo, String openId){
-        ChannelCarFee model=new ChannelCarFee("/api/index/tempFee/getCarBayDsn");
+        ChannelCarFee model = new ChannelCarFee();
 
         model.setCarNo(carNo);
         model.setDsn(channelId);
         model.setOpenId(openId);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {});
+        return post(model, "/api/index/tempFee/getCarBayDsn", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {
+        });
     }
 
     /**
@@ -114,13 +118,14 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<BlankCarInResult>> blankCarIn(String openId, int scanType, String channelId){
-        BlankCarInOrOut model=new BlankCarInOrOut("api/index/scanin");
+        BlankCarInOrOut model = new BlankCarInOrOut();
 
         model.setChannelId(channelId);
         model.setScanType(scanType);
         model.setOpenId(openId);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<BlankCarInResult>>() {});
+        return post(model, "api/index/scanin", new ParameterizedTypeReference<DaoerBaseResp<BlankCarInResult>>() {
+        });
     }
 
     /**
@@ -130,30 +135,33 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<BlankCarOutResult>> blankCarOut(String openId, int scanType, String channelId){
-        BlankCarInOrOut model=new BlankCarInOrOut("api/index/scanout");
+        BlankCarInOrOut model = new BlankCarInOrOut();
 
         model.setChannelId(channelId);
         model.setScanType(scanType);
         model.setOpenId(openId);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<BlankCarOutResult>>() {});
+        return post(model, "api/index/scanout", new ParameterizedTypeReference<DaoerBaseResp<BlankCarOutResult>>() {
+        });
     }
 
     /**
      * 获取入场记录
+     *
      * @param carNo 车牌号码
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<CarInOrOutResult<CarInData>>> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize){
-        CarInOrOut model=new CarInOrOut("api/index/carins");
+    public Mono<DaoerBaseResp<PageModel<CarInData>>> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
+        CarInOrOut model = new CarInOrOut();
 
         model.setCarNo(carNo);
         model.setStartTime(startTime);
         model.setEndTime(endTime);
-        model.configPage(pageNum,pageSize);
+        model.configPage(pageNum, pageSize);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<CarInOrOutResult<CarInData>>>() {});
+        return post(model, "api/index/carins", new ParameterizedTypeReference<DaoerBaseResp<PageModel<CarInData>>>() {
+        });
     }
 
     /**
@@ -163,15 +171,16 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<CarInOrOutResult<CarOutData>>> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize){
-        CarInOrOut model=new CarInOrOut("api/index/carouts");
+    public Mono<DaoerBaseResp<PageModel<CarOutData>>> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
+        CarInOrOut model = new CarInOrOut();
 
         model.setCarNo(carNo);
         model.setStartTime(startTime);
         model.setEndTime(endTime);
-        model.configPage(pageNum,pageSize);
+        model.configPage(pageNum, pageSize);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<CarInOrOutResult<CarOutData>>>() {});
+        return post(model, "api/index/carouts", new ParameterizedTypeReference<DaoerBaseResp<PageModel<CarOutData>>>() {
+        });
     }
 
     /**
@@ -180,9 +189,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<List<ChannelResult>>> getChannelsInfo(){
-        DaoerBase model=new DaoerBase("api/index/getchannels");
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<ChannelResult>>>() {});
+    public Mono<DaoerBaseResp<List<ChannelResult>>> getChannelsInfo() {
+        DaoerBase model = new DaoerBase();
+        return post(model, "api/index/getchannels", new ParameterizedTypeReference<DaoerBaseResp<List<ChannelResult>>>() {
+        });
     }
 
     /**
@@ -191,9 +201,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<List<ChannelStateResult>>> getChannelStates(){
-        DaoerBase model=new DaoerBase("api/index/getchannelstatus");
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<ChannelStateResult>>>() {});
+    public Mono<DaoerBaseResp<List<ChannelStateResult>>> getChannelStates() {
+        DaoerBase model = new DaoerBase();
+        return post(model, "api/index/getchannelstatus", new ParameterizedTypeReference<DaoerBaseResp<List<ChannelStateResult>>>() {
+        });
     }
 
     /**
@@ -203,10 +214,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<List<ChannelStatusResult>>> controlChannel(String channelId, int channelIdStatus){
-        Channel model=new Channel("api/index/onandoff");
+        Channel model = new Channel();
         model.setChannelId(channelId);
         model.setChannelIdStatus(channelIdStatus);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<ChannelStatusResult>>>() {});
+        return post(model, "api/index/onandoff", new ParameterizedTypeReference<DaoerBaseResp<List<ChannelStatusResult>>>() {});
     }
 
     /**
@@ -215,14 +226,14 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<GuestResult>> createGuest(String guestName, String carNo, LocalDateTime visitTime, String mobile, String description){
-        GuestMessage model=new GuestMessage("api/guest/create");
+        GuestMessage model = new GuestMessage();
         model.setGuestName(guestName);
         model.setDescription(description);
         model.setMobile(mobile);
         model.setVisitTime(visitTime);
         model.setCarNo(carNo);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<GuestResult>>() {});
+        return post(model, "api/guest/create", new ParameterizedTypeReference<DaoerBaseResp<GuestResult>>() {});
     }
 
     /**
@@ -231,13 +242,13 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp> changeGuestMessage(String objectId,String guestName,LocalDateTime visitTime,String mobile,String description){
-        GuestMessage model=new GuestWithId("api/guest/update",objectId);
+        GuestMessage model = new GuestWithId(objectId);
         model.setGuestName(guestName);
         model.setDescription(description);
         model.setMobile(mobile);
         model.setVisitTime(visitTime);
 
-        return post(model,DaoerBaseResp.class);
+        return post(model, "api/guest/update", DaoerBaseResp.class);
     }
 
     /**
@@ -246,9 +257,9 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp> removeGuestMessage(String objectId){
-        GuestMessage model=new GuestWithId("api/guest/cancel",objectId);
+        GuestMessage model = new GuestWithId(objectId);
 
-        return post(model,DaoerBaseResp.class);
+        return post(model, "api/guest/cancel", DaoerBaseResp.class);
     }
 
     /**
@@ -258,9 +269,9 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<List<CouponResult>>> getCoupon(String openId){
-        CouponQuery model=new CouponQuery("api/index/coupon/getcoupon");
+        CouponQuery model = new CouponQuery();
         model.setOpenId(openId);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<CouponResult>>>() {});
+        return post(model, "api/index/coupon/getcoupon", new ParameterizedTypeReference<DaoerBaseResp<List<CouponResult>>>() {});
     }
 
     /**
@@ -270,10 +281,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<CouponUseResult>> useCoupon(String objectId, String carNo){
-        CouponUse model=new CouponUse("api/index/coupon/bindcar");
+        CouponUse model = new CouponUse();
         model.setObjectId(objectId);
         model.setCarNo(carNo);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<CouponUseResult>>() {});
+        return post(model, "api/index/coupon/bindcar", new ParameterizedTypeReference<DaoerBaseResp<CouponUseResult>>() {});
     }
 
     /**
@@ -282,10 +293,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>> getMonthlyCarLongRentalRate(){
-        DaoerBase model=new DaoerBase("api/index/monthlycar/long-rental-rate");
-        model.appendUri("/" + parkId);
-
-        return get(model,new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>>() {});
+        return get("api/index/monthlycar/long-rental-rate" + "/" + parkId, new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarLongRentalRateResult>>>() {});
     }
 
     /**
@@ -295,10 +303,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<MonthlyCarResult>> getMonthlyCarInfo(String carNo) {
-        DaoerBase model = new DaoerBase("api/index/monthlycar/info");
+        DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
 
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        return post(model, "api/index/monthlycar/info", new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
         });
     }
 
@@ -312,7 +320,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     public Mono<DaoerBaseResp<MonthlyCarResult>> createMonthlyCar(String carNo, Integer cardType,
                                                                   String startTime, String endTime, String balanceMoney, int payType,
                                                                   String contactName, String concatPhone) {
-        CreateMonthlyCar model = new CreateMonthlyCar("api/index/monthlycar/create");
+        CreateMonthlyCar model = new CreateMonthlyCar();
         model.setBalanceMoney(balanceMoney);
         model.setCardTypeId(cardType);
         model.setStartTime(startTime);
@@ -322,7 +330,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setConcatPhone(concatPhone);
         model.setCarNo(carNo);
 
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        return post(model, "api/index/monthlycar/create", new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
         });
     }
 
@@ -333,10 +341,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<List<MonthlyCarHistoryResult>>> getMonthlyCarHistory(String carNo) {
-        DaoerBase model = new DaoerBase("api/index/monthlycar/history");
+        DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
 
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarHistoryResult>>>() {});
+        return post(model, "api/index/monthlycar/history", new ParameterizedTypeReference<DaoerBaseResp<List<MonthlyCarHistoryResult>>>() {});
     }
 
     /**
@@ -346,13 +354,13 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<MonthlyCarResult>> renewalMonthlyCar(String carNo,String newStartTime,String newEndTime,String balanceMoney,int payType){
-        RenewalMonthlyCar model= new RenewalMonthlyCar("api/index/monthlycar/newdate");
+        RenewalMonthlyCar model = new RenewalMonthlyCar();
         model.setCarNo(carNo);
         model.setNewEndTime(newEndTime);
         model.setNewStartTime(newStartTime);
         model.setBalanceMoney(balanceMoney);
         model.setPayType(payType);
-        return post(model,new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {});
+        return post(model, "api/index/monthlycar/newdate", new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {});
     }
 
     /**
@@ -362,11 +370,51 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<DaoerBaseResp<MonthlyCarResult>> removeMonthlyCar(String carNo) {
-        DaoerBase model = new DaoerBase("api/index/monthlycar/del");
+        DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
+        return post(model, "api/index/monthlycar/del", new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarResult>>() {
         });
     }
+
+    /**
+     * 新增修改特殊车辆
+     *
+     * @param carNo
+     * @param carNoType
+     * @param isStop
+     * @param description
+     * @param objectId
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp> specialMonthlyCar(String carNo, Integer carNoType, Integer isStop, String description, String objectId) {
+        SaveSepcialCar model = new SaveSepcialCar();
+        model.setCarNo(carNo);
+        model.setCarNoType(carNoType);
+        model.setIsStop(isStop);
+        model.setDescription(description);
+        model.setObjectId(objectId);
+
+        return post(model, "api/index/special/save", new ParameterizedTypeReference<DaoerBaseResp>() {
+        });
+    }
+
+    /**
+     * 查询特殊车辆
+     *
+     * @param pageNum
+     * @param pageSize
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<PageModel<SpecialMonthlyCarResult>>> getSpecialMonthlyCar(Integer pageNum, Integer pageSize) {
+        SpecialCarSearch model = new SpecialCarSearch();
+        model.configPage(pageNum, pageSize);
+
+        return post(model, "api/index/special/getpage", new ParameterizedTypeReference<DaoerBaseResp<PageModel<SpecialMonthlyCarResult>>>() {
+        });
+    }
+
 
     /**
      * 月租车锁车/解锁
@@ -376,11 +424,11 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<MonthlyCarLockResult>> lockMonthlyCar(String carNo, Integer status) {
-        LockMonthlyCar model = new LockMonthlyCar("api/index/lockCar/lockCar");
+    public Mono<DaoerBaseResp<CarLockResult>> lockMonthlyCar(String carNo, Integer status) {
+        LockMonthlyCar model = new LockMonthlyCar();
         model.setCarNo(carNo);
         model.setStatus(status);
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarLockResult>>() {
+        return post(model, "api/index/lockCar/lockCar", new ParameterizedTypeReference<DaoerBaseResp<CarLockResult>>() {
         });
     }
 
@@ -391,10 +439,10 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<MonthlyCarLockResult>> monthlyCarLockInfo(String carNo) {
-        DaoerBase model = new DaoerBase("api/index/lockCar/getCarInfo");
+    public Mono<DaoerBaseResp<CarLockResult>> monthlyCarLockInfo(String carNo) {
+        DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
-        return post(model, new ParameterizedTypeReference<DaoerBaseResp<MonthlyCarLockResult>>() {
+        return post(model, "api/index/lockCar/getCarInfo", new ParameterizedTypeReference<DaoerBaseResp<CarLockResult>>() {
         });
     }
 
@@ -406,8 +454,6 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<byte[]> getImage(String imgPath) {
-        DaoerBase model = new DaoerBase("img");
-        model.appendUri(imgPath);
-        return get(model,byte[].class);
+        return get("img" + imgPath, byte[].class);
     }
 }

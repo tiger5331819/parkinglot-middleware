@@ -2,24 +2,18 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.c
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 无牌车入场
  *
  * @author Suhuyuan
  */
-@Getter
-@Setter
+@Data
 public class BlankCarInOrOut extends DaoerBase {
     private String openId;
     private int scanType;
     private String channelId;
-
-    public BlankCarInOrOut(String uri) {
-        super(uri);
-    }
 
     public void setOpenId(String openId) {
         if(!StrUtil.isBlank(openId)) {

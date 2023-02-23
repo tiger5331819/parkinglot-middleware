@@ -3,9 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.c
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -14,9 +12,7 @@ import java.math.BigDecimal;
  *
  * @author Suhuyuan
  */
-@Getter
-@Setter
-@ToString
+@Data
 public class CarFeePay extends DaoerBase {
 
     /**
@@ -59,11 +55,6 @@ public class CarFeePay extends DaoerBase {
      * 通道ID
      */
     private String dsn;
-
-    public CarFeePay(String uri) {
-        super(uri);
-    }
-
     public void setPayTime(String payTime) {
         if(!StrUtil.isBlank(payTime)) {
             this.payTime = payTime;

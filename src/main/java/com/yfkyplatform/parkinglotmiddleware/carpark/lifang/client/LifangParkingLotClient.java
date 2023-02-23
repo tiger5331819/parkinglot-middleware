@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.LifangWebClient;
+import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.LifangParkingLotWebClient;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.CarFeePay;
@@ -10,7 +10,6 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model.C
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.LifangBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarportResult;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
 import lombok.extern.slf4j.Slf4j;
 
 import java.math.BigDecimal;
@@ -22,11 +21,11 @@ import java.nio.charset.Charset;
  * @author Suhuyuan
  */
 @Slf4j
-public class LifangClient extends LifangWebClient implements ILifangCarPort, ILifangTool {
+public class LifangParkingLotClient extends LifangParkingLotWebClient implements ILifangCarPort, ILifangTool {
 
     private final ObjectMapper mapper = new ObjectMapper();
 
-    public LifangClient(String secret, String baseUrl) {
+    public LifangParkingLotClient(String secret, String baseUrl) {
         super(secret, baseUrl);
     }
 
@@ -46,8 +45,8 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
      */
     @Override
     public CarportResult getCarPortInfo() {
-        WebRequestBase model = new WebRequestBase("/GetParkingLotInfo");
-        byte[] requestBytes = post(model, byte[].class).block();
+
+        byte[] requestBytes = post(null, "/GetParkingLotInfo", byte[].class).block();
 
         return decodeData(requestBytes, CarportResult.class);
     }
@@ -60,9 +59,9 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
      */
     @Override
     public CarFeeResult getCarFeeInfo(String carNo) {
-        CarNo model = new CarNo("/GetCarInfo");
+        CarNo model = new CarNo();
         model.setCarCode(carNo);
-        byte[] requestBytes = post(model, byte[].class).block();
+        byte[] requestBytes = post(model, "/GetCarInfo", byte[].class).block();
         return decodeData(requestBytes, CarFeeResult.class);
     }
 
@@ -75,7 +74,7 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
     @Override
     public LifangBaseResp payCarFeeAccess(String carNo, String payTime, BigDecimal totalAmount, BigDecimal disAmount,
                                           String paySource, int payType, BigDecimal couponAmount) {
-        CarFeePay model = new CarFeePay("/AddChargeInfo");
+        CarFeePay model = new CarFeePay();
         model.setPayTime(payTime);
         model.setCarCode(carNo);
         model.setChargeMoney(totalAmount);
@@ -84,7 +83,7 @@ public class LifangClient extends LifangWebClient implements ILifangCarPort, ILi
         model.setChargeType(payType);
         model.setPaidMoney(disAmount);
 
-        byte[] requestBytes = post(model, byte[].class).block();
+        byte[] requestBytes = post(model, "/AddChargeInfo", byte[].class).block();
         return decodeData(requestBytes, LifangBaseResp.class);
     }
 

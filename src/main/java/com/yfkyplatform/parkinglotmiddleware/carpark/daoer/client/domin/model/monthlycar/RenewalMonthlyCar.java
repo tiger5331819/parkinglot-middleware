@@ -2,16 +2,14 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.m
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 月租车续期
  *
  * @author Suhuyuan
  */
-@Getter
-@Setter
+@Data
 public class RenewalMonthlyCar extends DaoerBase {
     /**
      * 月租开始时间 yyyy-MM-dd HH:mm:ss
@@ -29,10 +27,6 @@ public class RenewalMonthlyCar extends DaoerBase {
      * 0 现金 1微信 2支付宝
      */
     private int payType;
-
-    public RenewalMonthlyCar(String uri) {
-        super(uri);
-    }
 
     public void setNewStartTime(String newStartTime) {
         if(!StrUtil.isBlank(newStartTime)) {

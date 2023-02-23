@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp;
 
 import lombok.Data;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * @author Suhuyuan
  */
 @Data
-public class CarInOrOutResult<T> {
+public class PageModel<T> {
     /**
      * 当前页
      */

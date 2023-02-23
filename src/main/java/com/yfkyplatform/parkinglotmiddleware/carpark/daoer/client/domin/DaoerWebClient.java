@@ -5,7 +5,6 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.Da
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.DaoerToken;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.TokenResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -56,22 +55,20 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     }
 
     @Override
-    protected <T extends WebRequestBase> WebClient.ResponseSpec postBase(T data) {
+    protected <T> WebClient.ResponseSpec postBase(T data, String url) {
         DaoerBase daoerBase = (DaoerBase) data;
         daoerBase.setParkId(parkId);
-        return super.postBase(daoerBase);
+        return super.postBase(daoerBase, url);
     }
 
     @Override
-    protected <T extends WebRequestBase> WebClient.ResponseSpec getBase(T data) {
-        DaoerBase daoerBase = (DaoerBase) data;
-        daoerBase.setParkId(parkId);
-        return super.getBase(daoerBase);
+    protected <T> WebClient.ResponseSpec getBase(String url) {
+        return super.getBase(url);
     }
 
     private String token() {
         DaoerToken token = new DaoerToken(appName);
-        TokenResult result = postBase(token).bodyToMono(TokenResult.class).doOnError(errFunction()).block();
+        TokenResult result = postBase(token, "api/index/auth/token").bodyToMono(TokenResult.class).doOnError(errFunction()).block();
         token.setToken(result.getData());
         redis.set(tokenName, token, Duration.ofSeconds(7199));
         refreshToken = false;
