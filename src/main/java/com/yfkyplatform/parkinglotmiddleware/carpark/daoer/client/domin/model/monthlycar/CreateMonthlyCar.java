@@ -2,16 +2,14 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.m
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
 
 /**
  * 创建月租车
  *
  * @author Suhuyuan
  */
-@Getter
-@Setter
+@Data
 public class CreateMonthlyCar extends DaoerBase {
     /**
      * 卡类型编号：11~18:月租车A~H,41~42:免费车A~B,51~58:储值车A~H
@@ -43,10 +41,6 @@ public class CreateMonthlyCar extends DaoerBase {
      * 人员手机号码
      */
     private String concatPhone;
-
-    public CreateMonthlyCar(String uri) {
-        super(uri);
-    }
 
     public void setBalanceMoney(String balanceMoney) {
         if (!StrUtil.isBlank(balanceMoney)) {

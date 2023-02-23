@@ -4,6 +4,7 @@ import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
@@ -266,9 +267,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public PageResult<CarInResult> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
-        CarInOrOutResult<CarInData> carInData=api.getCarInInfo(carNo, startTime, endTime, pageNum, pageSize).block().getBody();
-        List<CarInResult> dataList=carInData.getList().stream().map(carIn->{
-            CarInResult data=new CarInResult();
+        PageModel<CarInData> carInData = api.getCarInInfo(carNo, startTime, endTime, pageNum, pageSize).block().getBody();
+        List<CarInResult> dataList = carInData.getList().stream().map(carIn -> {
+            CarInResult data = new CarInResult();
             data.setCarNo(carIn.getCarNo());
             data.setCardTypeId(carIn.getCardTypeId());
             data.setCardTypeName(carIn.getCardTypeName());
@@ -292,9 +293,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public PageResult<CarOutResult> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
-        CarInOrOutResult<CarOutData> carOutData=api.getCarOutInfo(carNo, startTime, endTime, pageNum, pageSize).block().getBody();
-        List<CarOutResult> dataList=carOutData.getList().stream().map(carOut->{
-            CarOutResult data=new CarOutResult();
+        PageModel<CarOutData> carOutData = api.getCarOutInfo(carNo, startTime, endTime, pageNum, pageSize).block().getBody();
+        List<CarOutResult> dataList = carOutData.getList().stream().map(carOut -> {
+            CarOutResult data = new CarOutResult();
             data.setCarNo(carOut.getCarNo());
             data.setCardTypeId(carOut.getCardTypeId());
             data.setCardTypeName(carOut.getCardTypeName());

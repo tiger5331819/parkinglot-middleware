@@ -3,14 +3,15 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLockResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.SpecialMonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.CreateMonthlyCarRequest;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.LockMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.RenewalMonthlyCarRequest;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.SpecialCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -49,44 +50,44 @@ public class DaoerMonthlyCarController {
     }
 
     @ApiOperation(value = "获取月租车基本信息")
-    @GetMapping(value = "/monthlycar/{carNo}")
+    @GetMapping(value = "/{carNo}")
     public DaoerBaseResp<MonthlyCarResult> getCarInfo(@PathVariable String parkingLotId, @ApiParam(value = "车牌号") @PathVariable String carNo) {
         return api(parkingLotId).getMonthlyCarInfo(carNo).block();
     }
 
     @ApiOperation(value = "获取月租车历史缴费信息")
-    @GetMapping(value = "/monthlycar/{carNo}/history")
+    @GetMapping(value = "/{carNo}/history")
     public DaoerBaseResp<List<MonthlyCarHistoryResult>> getCarHistory(@PathVariable String parkingLotId, @ApiParam(value = "车牌号") @PathVariable String carNo) {
         return api(parkingLotId).getMonthlyCarHistory(carNo).block();
     }
 
     @ApiOperation(value = "创建月租车")
-    @PostMapping(value = "/monthlycar/{carNo}")
+    @PostMapping(value = "/{carNo}")
     public DaoerBaseResp<MonthlyCarResult> createCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody CreateMonthlyCarRequest request) {
         return api(parkingLotId).createMonthlyCar(carNo, request.getCardTypeId(), request.getStartTime(), request.getEndTime(), request.getBalanceMoney(), request.getPayType(), request.getContactName(), request.getContactPhone()).block();
     }
 
     @ApiOperation(value = "月租车续期")
-    @PostMapping(value = "/monthlycar/{carNo}/renewal")
+    @PostMapping(value = "/{carNo}/renewal")
     public DaoerBaseResp<MonthlyCarResult> renewalCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody RenewalMonthlyCarRequest request) {
         return api(parkingLotId).renewalMonthlyCar(carNo, request.getNewStartTime(), request.getNewEndTime(), request.getBalanceMoney(), request.getPayType()).block();
     }
 
-    @ApiOperation(value = "月租车锁车/解锁")
-    @PatchMapping(value = "/monthlycar/{carNo}/lock")
-    public DaoerBaseResp<MonthlyCarLockResult> lockCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody LockMonthlyCarRequest request) {
-        return api(parkingLotId).lockMonthlyCar(carNo, request.getStatus()).block();
-    }
-
-    @ApiOperation(value = "月租车锁车状态")
-    @GetMapping(value = "/monthlycar/{carNo}/lock")
-    public DaoerBaseResp<MonthlyCarLockResult> carLockInfo(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo) {
-        return api(parkingLotId).monthlyCarLockInfo(carNo).block();
-    }
-
     @ApiOperation(value = "月租车销户")
-    @DeleteMapping(value = "/monthlycar/{carNo}")
+    @DeleteMapping(value = "/{carNo}")
     public DaoerBaseResp<MonthlyCarResult> removeCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo) {
         return api(parkingLotId).removeMonthlyCar(carNo).block();
+    }
+
+    @ApiOperation(value = "查询特殊车辆")
+    @GetMapping(value = "/special")
+    public DaoerBaseResp<PageModel<SpecialMonthlyCarResult>> getSpecialCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") Integer pageIndex, Integer pageSize) {
+        return api(parkingLotId).getSpecialMonthlyCar(pageIndex, pageSize).block();
+    }
+
+    @ApiOperation(value = "新增修改特殊车辆")
+    @PostMapping(value = "/special/{carNo}")
+    public DaoerBaseResp saveSpecialCar(@PathVariable String parkingLotId, @ApiParam(value = "车牌号码") @PathVariable String carNo, @RequestBody SpecialCarRequest request) {
+        return api(parkingLotId).specialMonthlyCar(carNo, request.getCarNoType(), request.getIsStop(), request.getDescription(), request.getObjectId()).block();
     }
 }

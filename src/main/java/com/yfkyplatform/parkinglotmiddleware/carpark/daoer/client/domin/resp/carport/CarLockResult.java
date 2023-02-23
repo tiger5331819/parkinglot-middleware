@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport;
 
 import lombok.Data;
 
@@ -8,7 +8,7 @@ import lombok.Data;
  * @author Suhuyuan
  */
 @Data
-public class MonthlyCarLockResult {
+public class CarLockResult {
     /**
      * 车牌号码
      */
