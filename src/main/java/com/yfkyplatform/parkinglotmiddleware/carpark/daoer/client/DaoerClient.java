@@ -38,8 +38,8 @@ import java.util.List;
 @Slf4j
 public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
 
-    public DaoerClient(String id,String appName, String parkId, String baseUrl, RedisTool redisTool){
-        super(id,appName, parkId, baseUrl, redisTool);
+    public DaoerClient(String id, String appName, String parkId, String baseUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
+        super(id, appName, parkId, baseUrl, redisTool, reeaTimeOutSeconds);
     }
 
     /**
