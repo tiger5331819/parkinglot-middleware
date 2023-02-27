@@ -21,6 +21,10 @@ public class DaoerToken extends DaoerBase {
      */
     private String token;
 
+    public DaoerToken() {
+
+    }
+
     public DaoerToken(String appName) {
         this.appName = appName;
     }
