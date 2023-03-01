@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.domain.service;
+package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 /**
- * 月卡车费用修改
+ * 测试盒
  *
  * @author Suhuyuan
  */
@@ -23,6 +23,12 @@ public class TestBox {
         return env.getProperty(prefix + "." + "enable", Boolean.class, false);
     }
 
+    /**
+     * 费用修改
+     *
+     * @param fee
+     * @return
+     */
     public BigDecimal changeFee(BigDecimal fee) {
         if (boxEnable()) {
             return env.getProperty(prefix + "." + "newFee", BigDecimal.class);

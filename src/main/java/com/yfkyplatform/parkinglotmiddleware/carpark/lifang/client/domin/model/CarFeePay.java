@@ -2,10 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.model;
 
 
 import cn.hutool.core.util.StrUtil;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.WebRequestBase;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import java.math.BigDecimal;
 
@@ -14,10 +11,8 @@ import java.math.BigDecimal;
  *
  * @author Suhuyuan
  */
-@Getter
-@Setter
-@ToString
-public class CarFeePay extends WebRequestBase {
+@Data
+public class CarFeePay {
 
     /**
      * 车牌号
@@ -51,10 +46,6 @@ public class CarFeePay extends WebRequestBase {
      * 实付金额（单位：分）
      */
     private BigDecimal paidMoney;
-
-    public CarFeePay(String uri) {
-        super(uri);
-    }
 
     public void setPayTime(String payTime) {
         if (!StrUtil.isBlank(payTime)) {

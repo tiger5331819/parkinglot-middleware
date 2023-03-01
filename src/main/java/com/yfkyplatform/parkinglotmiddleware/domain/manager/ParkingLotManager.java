@@ -105,7 +105,6 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
             try {
                 cfgList.add(parkingLot(parkingLotId).configuration());
             } catch (Exception ex) {
-                log.warn(parkingLotId + "不存在", ex);
             }
         } else {
             load().forEach(item -> cfgList.add(item.configuration()));
@@ -126,7 +125,6 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
                 T parkingLot = parkingLot(parkingLotId);
                 healthCheckMap.put(parkingLot.Id(), parkingLot.healthCheck());
             } catch (Exception ex) {
-                log.warn(parkingLotId + "不存在", ex);
             }
         } else {
             load().forEach(item -> healthCheckMap.put(item.Id(), item.healthCheck()));

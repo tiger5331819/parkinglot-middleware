@@ -58,41 +58,41 @@ public abstract class YfkyWebClient {
         };
     }
 
-    protected <T extends WebRequestBase> WebClient.ResponseSpec postBase(T data) {
+    protected <T> WebClient.ResponseSpec postBase(T data, String url) {
         return client.post()
-                .uri(data.getUri())
+                .uri(url)
                 .headers(httpHeadersFunction())
                 .bodyValue(data)
                 .retrieve();
     }
 
-    protected <T extends WebRequestBase> WebClient.ResponseSpec getBase(T data) {
+    protected <T> WebClient.ResponseSpec getBase(String url) {
         return client.get()
-                .uri(data.getUri())
+                .uri(url)
                 .headers(httpHeadersFunction())
                 .retrieve();
     }
 
-    protected <R, T extends WebRequestBase> Mono<R> post(T data, ParameterizedTypeReference<R> result) {
-        return postBase(data)
+    protected <R, T> Mono<R> post(T data, String url, ParameterizedTypeReference<R> result) {
+        return postBase(data, url)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
-    protected <R, T extends WebRequestBase> Mono<R> post(T data, Class<R> result) {
-        return postBase(data)
+    protected <R, T> Mono<R> post(T data, String url, Class<R> result) {
+        return postBase(data, url)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
-    protected <R, T extends WebRequestBase> Mono<R> get(T data, Class<R> result) {
-        return getBase(data)
+    protected <R> Mono<R> get(String url, Class<R> result) {
+        return getBase(url)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
-    protected <R, T extends WebRequestBase> Mono<R> get(T data, ParameterizedTypeReference<R> result) {
-        return getBase(data)
+    protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
+        return getBase(url)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }

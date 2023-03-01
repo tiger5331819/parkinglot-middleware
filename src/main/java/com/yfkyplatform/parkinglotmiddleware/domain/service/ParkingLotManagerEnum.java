@@ -27,7 +27,7 @@ public enum ParkingLotManagerEnum {
         this.message = message;
     }
 
-    public static ParkingLotManagerEnum ValueOf(Integer parkingLotManagerCode) {
+    public static ParkingLotManagerEnum fromCode(Integer parkingLotManagerCode) {
         if (ObjectUtil.isNull(parkingLotManagerCode)) {
             return null;
         }
@@ -40,7 +40,7 @@ public enum ParkingLotManagerEnum {
         return null;
     }
 
-    public static ParkingLotManagerEnum ValueOf(String parkingLotManagerMessage) {
+    public static ParkingLotManagerEnum fromMessage(String parkingLotManagerMessage) {
         if (ObjectUtil.isNull(parkingLotManagerMessage)) {
             return null;
         }

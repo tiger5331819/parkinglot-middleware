@@ -3,7 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.g
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
-import lombok.Getter;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
  *
  * @author Suhuyuan
  */
-@Getter
+@Data
 public class GuestMessage extends DaoerBase {
     /**
      * 访客名称
@@ -30,10 +30,6 @@ public class GuestMessage extends DaoerBase {
      * 访问理由
      */
     private String description;
-
-    public GuestMessage(String uri) {
-        super(uri);
-    }
 
     /**
      * 车场编号

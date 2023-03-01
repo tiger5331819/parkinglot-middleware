@@ -24,10 +24,10 @@ class DaoerParkingLotManagerTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"52361700001,d813cfb7959548f9a5f311286d713150,X52361700001,https://parklot.q-parking.com,科盈测试",
-            "24400000001,a909fb0eb10240979b2b374273bf6342,X24400000001,https://parklot.q-parking.com,铜陵"})
-    void addCongfiguration(String id, String appName, String parkId, String baseUrl, String description) throws JsonProcessingException {
-        DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description);
+    @CsvSource({"52361700001,d813cfb7959548f9a5f311286d713150,X52361700001,https://parklot.q-parking.com,,科盈测试",
+            "24400000001,a909fb0eb10240979b2b374273bf6342,X24400000001,https://parklot.q-parking.com,,铜陵"})
+    void addCongfiguration(String id, String appName, String parkId, String baseUrl, String imgUrl, String description) throws JsonProcessingException {
+        DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description, imgUrl);
 
         assertTrue(daoerManager.addParkingLot(cfg));
     }

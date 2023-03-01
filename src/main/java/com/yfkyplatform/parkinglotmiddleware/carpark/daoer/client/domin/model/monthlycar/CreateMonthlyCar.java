@@ -5,20 +5,24 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.Da
 import lombok.Data;
 
 /**
- * 月租车续期
+ * 创建月租车
  *
  * @author Suhuyuan
  */
 @Data
-public class RenewalMonthlyCar extends DaoerBase {
+public class CreateMonthlyCar extends DaoerBase {
+    /**
+     * 卡类型编号：11~18:月租车A~H,41~42:免费车A~B,51~58:储值车A~H
+     */
+    private Integer cardTypeId;
     /**
      * 月租开始时间 yyyy-MM-dd HH:mm:ss
      */
-    private String newStartTime;
+    private String startTime;
     /**
      * 月租结束时间 yyyy-MM-dd HH:mm:ss
      */
-    private String newEndTime;
+    private String endTime;
     /**
      * 收费金额
      */
@@ -28,20 +32,18 @@ public class RenewalMonthlyCar extends DaoerBase {
      */
     private int payType;
 
-    public void setNewStartTime(String newStartTime) {
-        if(!StrUtil.isBlank(newStartTime)) {
-            this.newStartTime = newStartTime;
-        }
-    }
+    /**
+     * 人员名称
+     */
+    private String contactName;
 
-    public void setNewEndTime(String newEndTime) {
-        if(!StrUtil.isBlank(newEndTime)) {
-            this.newEndTime = newEndTime;
-        }
-    }
+    /**
+     * 人员手机号码
+     */
+    private String concatPhone;
 
     public void setBalanceMoney(String balanceMoney) {
-        if(!StrUtil.isBlank(balanceMoney)) {
+        if (!StrUtil.isBlank(balanceMoney)) {
             this.balanceMoney = balanceMoney;
         }
     }

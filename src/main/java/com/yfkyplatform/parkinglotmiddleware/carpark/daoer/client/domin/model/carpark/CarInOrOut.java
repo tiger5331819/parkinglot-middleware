@@ -4,22 +4,18 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.IPageModel;
-import lombok.Getter;
+import lombok.Data;
 /**
  * 车辆入场记录
  *
  * @author Suhuyuan
  */
-@Getter
+@Data
 public class CarInOrOut extends DaoerBase implements IPageModel {
     private String startTime;
     private String endTime;
     private int pageNum=1;
     private int pageSize=10;
-
-    public CarInOrOut(String uri){
-        super(uri);
-    }
 
     @Override
     public void configPage(int pageNum, int pageSize) {

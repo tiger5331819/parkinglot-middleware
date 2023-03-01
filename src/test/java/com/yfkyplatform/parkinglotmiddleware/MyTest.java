@@ -6,6 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Objects;
+
 /**
  * @author Suhuyuan
  */
@@ -24,14 +26,10 @@ public class MyTest {
 
     @Test
     public void Test1() {
-        ParkingLotManagerEnum data = ParkingLotManagerEnum.ValueOf((Integer) null);
-        switch (data) {
-
-            case Daoer:
-                break;
-            default:
-                System.out.println("123");
-                break;
+        ParkingLotManagerEnum data = ParkingLotManagerEnum.fromCode(null);
+        if (Objects.requireNonNull(data) == ParkingLotManagerEnum.Daoer) {
+        } else {
+            System.out.println("123");
         }
     }
 }

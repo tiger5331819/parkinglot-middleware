@@ -55,7 +55,7 @@ public class ManagerServiceExposer implements IManagerService {
     @Override
     public List<ParkingLotCfgRpcResp> parkingMangerConfiguration(@Nullable Integer parkingLotManagerCode, @Nullable String parkingLotId) {
 
-        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
+        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.fromCode(parkingLotManagerCode);
         List<ParkingLotConfiguration> cfgList;
         if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {
             cfgList = factory.getParkingLotConfiguration(parkingLotManagerEnum.getName(), parkingLotId);
@@ -63,6 +63,9 @@ public class ManagerServiceExposer implements IManagerService {
             cfgList = factory.getParkingLotConfiguration(null, parkingLotId);
         }
 
+        if (cfgList.isEmpty()) {
+            throw new NoSuchElementException(parkingLotManagerCode + ":" + parkingLotId + "不存在");
+        }
 
         List<ParkingLotCfgRpcResp> result = new ArrayList<>();
         cfgList.forEach(item -> {
@@ -74,7 +77,7 @@ public class ManagerServiceExposer implements IManagerService {
 
                 data.setId(item.getId());
                 data.setDescription(item.getDescription());
-                data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
+                data.setManagerType(ParkingLotManagerEnum.fromMessage(item.getManagerType()).getCode());
                 result.add(data);
             }
             if ((item instanceof LifangParkingLotConfiguration)) {
@@ -83,7 +86,7 @@ public class ManagerServiceExposer implements IManagerService {
                 data.setSecret(((LifangParkingLotConfiguration) item).getSecret());
                 data.setBaseUrl(((LifangParkingLotConfiguration) item).getBaseUrl());
 
-                data.setManagerType(ParkingLotManagerEnum.ValueOf(item.getManagerType()).getCode());
+                data.setManagerType(ParkingLotManagerEnum.fromMessage(item.getManagerType()).getCode());
                 data.setDescription(item.getDescription());
                 result.add(data);
             }
@@ -100,12 +103,16 @@ public class ManagerServiceExposer implements IManagerService {
      */
     @Override
     public Map<Integer, Map<Long, Boolean>> parkingManagerHealthCheck(@Nullable Integer parkingLotManagerCode, @Nullable String parkingLotId) {
-        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.ValueOf(parkingLotManagerCode);
+        ParkingLotManagerEnum parkingLotManagerEnum = ParkingLotManagerEnum.fromCode(parkingLotManagerCode);
         Map<String, Map<Long, Boolean>> health;
         if (ObjectUtil.isNotNull(parkingLotManagerEnum)) {
             health = factory.healthCheck(parkingLotManagerEnum.getName(), parkingLotId);
         } else {
             health = factory.healthCheck(null, parkingLotId);
+        }
+
+        if (health.isEmpty() || health.values().isEmpty()) {
+            throw new NoSuchElementException(parkingLotManagerCode + ":" + parkingLotId + "不存在");
         }
 
 

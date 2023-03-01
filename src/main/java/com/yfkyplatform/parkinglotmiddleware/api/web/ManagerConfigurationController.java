@@ -25,13 +25,13 @@ public class ManagerConfigurationController {
 
     @ApiOperation(value = "添加道尔停车场配置文件")
     @PostMapping("/Daoer/Configuration")
-    public Boolean addDaoerConfiguration(String id, String appName, String parkId, String baseUrl, String description) {
-        return managerConfigurationService.addDaoerCongfiguration(id, appName, parkId, baseUrl, description);
+    public Boolean addDaoerConfiguration(String id, String appName, String parkId, String baseUrl, String description, String imgUrl) {
+        return managerConfigurationService.addDaoerCongfiguration(id, appName, parkId, baseUrl, description, imgUrl);
     }
 
     @ApiOperation(value = "修改道尔停车场配置文件")
     @PutMapping("/Daoer/Configuration/{id}")
-    public Boolean updateDoerConfiguration(@PathVariable String id, String appName, String parkId, String baseUrl, String description) {
-        return managerConfigurationService.addDaoerCongfiguration(id, appName, parkId, baseUrl, description);
+    public Boolean updateDoerConfiguration(@PathVariable String id, String appName, String parkId, String baseUrl, String description, String imgUrl) {
+        return managerConfigurationService.addDaoerCongfiguration(id, appName, parkId, baseUrl, description, imgUrl);
     }
 }

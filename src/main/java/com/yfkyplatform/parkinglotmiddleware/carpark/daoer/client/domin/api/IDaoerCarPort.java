@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api;
 
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import reactor.core.publisher.Mono;
@@ -55,19 +56,22 @@ public interface IDaoerCarPort {
      * @return
      */
     Mono<DaoerBaseResp<BlankCarOutResult>> blankCarOut(String openId, int scanType, String channelId);
+
     /**
      * 获取入场记录
+     *
      * @param carNo 车牌号码
      * @return
      */
-    Mono<DaoerBaseResp<CarInOrOutResult<CarInData>>> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+    Mono<DaoerBaseResp<PageModel<CarInData>>> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+
     /**
      * 获取出场记录
      *
      * @param carNo 车牌号码
      * @return
      */
-    Mono<DaoerBaseResp<CarInOrOutResult<CarOutData>>> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+    Mono<DaoerBaseResp<PageModel<CarOutData>>> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
 
     /**
      * 获取通道列表
@@ -81,7 +85,7 @@ public interface IDaoerCarPort {
      *
      * @return
      */
-     Mono<DaoerBaseResp<List<ChannelStateResult>>> getChannelStates();
+    Mono<DaoerBaseResp<List<ChannelStateResult>>> getChannelStates();
 
     /**
      * 控制道闸开、关。
@@ -89,4 +93,21 @@ public interface IDaoerCarPort {
      * @return
      */
     Mono<DaoerBaseResp<List<ChannelStatusResult>>> controlChannel(String channelId, int channelIdStatus);
+
+    /**
+     * 月租车锁车/解锁
+     *
+     * @param carNo
+     * @param status
+     * @return
+     */
+    Mono<DaoerBaseResp<CarLockResult>> lockMonthlyCar(String carNo, Integer status);
+
+    /**
+     * 月租车锁车状态
+     *
+     * @param carNo
+     * @return
+     */
+    Mono<DaoerBaseResp<CarLockResult>> monthlyCarLockInfo(String carNo);
 }
