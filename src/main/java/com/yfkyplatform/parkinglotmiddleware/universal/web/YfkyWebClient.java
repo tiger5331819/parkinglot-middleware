@@ -85,13 +85,13 @@ public abstract class YfkyWebClient {
                 .doOnError(errFunction());
     }
 
-    protected <R, T> Mono<R> get(String url, Class<R> result) {
+    protected <R> Mono<R> get(String url, Class<R> result) {
         return getBase(url)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
-    protected <R, T> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
+    protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
         return getBase(url)
                 .bodyToMono(result)
                 .doOnError(errFunction());

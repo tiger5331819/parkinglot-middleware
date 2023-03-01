@@ -45,6 +45,7 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
                     daoerCfg.setAppName(env.getProperty(prefix2 + "config." + "appName"));
                     daoerCfg.setParkId(env.getProperty(prefix2 + "config." + "parkId"));
                     daoerCfg.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
+                    daoerCfg.setImgUrl(env.getProperty(prefix2 + "config." + "imgUrl"));
                     cfg.setConfig(daoerCfg);
                 }
                 break;

@@ -24,6 +24,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.mon
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
@@ -38,8 +40,8 @@ import java.util.List;
 @Slf4j
 public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
 
-    public DaoerClient(String id, String appName, String parkId, String baseUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
-        super(id, appName, parkId, baseUrl, redisTool, reeaTimeOutSeconds);
+    public DaoerClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
+        super(id, appName, parkId, baseUrl, imgUrl, redisTool, reeaTimeOutSeconds);
     }
 
     /**
@@ -454,6 +456,16 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      */
     @Override
     public Mono<byte[]> getImage(String imgPath) {
-        return get("img" + imgPath, byte[].class);
+        Mono<byte[]> result = WebClient.create().get()
+                .uri(imgUrl + imgPath)
+                .retrieve()
+                .bodyToMono(byte[].class)
+                .doOnError(WebClientResponseException.class, err -> {
+                    String errResult = err.getResponseBodyAsString();
+                    log.error(errResult);
+                    throw new RuntimeException(errResult);
+                });
+
+        return result;
     }
 }
