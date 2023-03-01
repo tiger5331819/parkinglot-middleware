@@ -16,10 +16,13 @@ public class DaoerParkingLotConfiguration extends ParkingLotConfiguration {
     private final String parkId;
     private final String baseUrl;
 
-    public DaoerParkingLotConfiguration(String id, String appName, String parkId, String baseUrl, String description) {
+    private final String imgUrl;
+
+    public DaoerParkingLotConfiguration(String id, String appName, String parkId, String baseUrl, String description, String imgUrl) {
         super(id, description, "Daoer");
         this.appName = appName;
         this.parkId = parkId;
         this.baseUrl = baseUrl;
+        this.imgUrl = imgUrl;
     }
 }

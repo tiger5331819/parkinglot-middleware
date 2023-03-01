@@ -24,13 +24,13 @@ public class DaoerParkingLot extends ParkingLotPod{
 
     public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis) {
         super(daoerParkingLotInfo, redis);
-        Daoer = new DaoerClient(daoerParkingLotInfo.getId(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), redis, 3);
+        Daoer = new DaoerClient(daoerParkingLotInfo.getId(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), daoerParkingLotInfo.getImgUrl(), redis, 3);
     }
 
     @Override
     public <T> T client() {
         DaoerParkingLotConfiguration configuration = (DaoerParkingLotConfiguration) cfg;
-        return (T) new DaoerClient(configuration.getId(), configuration.getAppName(), configuration.getParkId(), configuration.getBaseUrl(), redis, -1);
+        return (T) new DaoerClient(configuration.getId(), configuration.getAppName(), configuration.getParkId(), configuration.getBaseUrl(), configuration.getImgUrl(), redis, -1);
     }
 
     @Override

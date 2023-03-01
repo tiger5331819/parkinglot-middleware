@@ -33,15 +33,21 @@ public abstract class DaoerWebClient extends YfkyWebClient {
      */
     protected final String parkId;
 
+    /**
+     * 图片地址
+     */
+    protected final String imgUrl;
+
     protected RedisTool redis;
 
     private boolean refreshToken = false;
 
-    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
+    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
         super(baseUrl, reeaTimeOutSeconds);
         redis = redisTool;
         this.appName = appName;
         this.parkId = parkId;
+        this.imgUrl = imgUrl;
         tokenName = "token:" + id;
     }
 
@@ -62,7 +68,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     }
 
     @Override
-    protected <T> WebClient.ResponseSpec getBase(String url) {
+    protected WebClient.ResponseSpec getBase(String url) {
         return super.getBase(url);
     }
 
