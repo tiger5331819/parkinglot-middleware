@@ -1,6 +1,5 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
-import cn.hutool.core.util.IdUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
@@ -83,18 +82,5 @@ public class CarPortController {
         return carPortService.getChannelsInfo(parkingLotManager, parkingLotId);
     }
 
-    @ApiOperation(value = "直接支付完整金额")
-    @GetMapping("/{carNo}/FeeTest")
-    public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
-        CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, carNo);
 
-        OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
-        orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());
-        orderPayMessageRpcReq.setDiscountFee(rpcResp.getDiscountFee());
-        orderPayMessageRpcReq.setPayType(2000);
-        orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
-        orderPayMessageRpcReq.setPayFee(rpcResp.getPayFee());
-
-        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
-    }
 }
