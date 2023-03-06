@@ -132,7 +132,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 new DateTime(fee.getInTime()).toString(),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 fee.getChargeDuration(),
-                fee.getPayCharge(),
+                fee.getAmount(),
                 payMessage.getDiscountFee().movePointLeft(2),
                 0,
                 payType,
