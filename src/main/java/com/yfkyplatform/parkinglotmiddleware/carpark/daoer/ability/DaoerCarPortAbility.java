@@ -314,8 +314,8 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         orderResult.setCarNo(carFeeResult.getCarNo());
         orderResult.setDiscountFee(carFeeResult.getDiscountAmount().movePointRight(2));
-        orderResult.setPayFee(carFeeResult.getAmount().movePointRight(2));
-        orderResult.setTotalFee(carFeeResult.getPayCharge().movePointRight(2));
+        orderResult.setPayFee(carFeeResult.getPayCharge().movePointRight(2));
+        orderResult.setTotalFee(carFeeResult.getAmount().movePointRight(2));
         orderResult.setCreateTime(carFeeResult.getChargeTime());
         orderResult.setStartTime(carFeeResult.getInTime());
         orderResult.setServiceTime(carFeeResult.getChargeDuration());
