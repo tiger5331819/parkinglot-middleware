@@ -10,7 +10,7 @@
 
     <groupId>com.yfkyplatform.parkinglot</groupId>
     <artifactId>parkinglot-middleware</artifactId>
-    <version>1.0.1-SNAPSHOT</version>
+    <version>1.0.2</version>
     <name>parkinglot-middleware</name>
     <description>parkinglot-middleware</description>
     <properties>
