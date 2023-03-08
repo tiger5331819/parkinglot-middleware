@@ -66,7 +66,7 @@ public abstract class YfkyWebClient {
                 .retrieve();
     }
 
-    protected <T> WebClient.ResponseSpec getBase(String url) {
+    protected WebClient.ResponseSpec getBase(String url) {
         return client.get()
                 .uri(url)
                 .headers(httpHeadersFunction())
