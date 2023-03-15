@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.HongmenConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.LifangConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import lombok.extern.slf4j.Slf4j;
@@ -54,6 +55,14 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
                     lifangCfg.setSecret(env.getProperty(prefix2 + "config." + "secret"));
                     lifangCfg.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
                     cfg.setConfig(lifangCfg);
+                }
+                break;
+                case "hongmen": {
+                    HongmenConfiguration hongmen = new HongmenConfiguration();
+                    hongmen.setAppId(env.getProperty(prefix2 + "config." + "appID"));
+                    hongmen.setSecret(env.getProperty(prefix2 + "config." + "secret"));
+                    hongmen.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
+                    cfg.setConfig(hongmen);
                 }
                 break;
                 default:
