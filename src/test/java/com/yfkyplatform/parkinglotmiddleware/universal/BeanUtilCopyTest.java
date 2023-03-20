@@ -6,17 +6,15 @@ import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgR
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
-import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import static org.junit.jupiter.api.Assertions.*;
-import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * @author Suhuyuan
