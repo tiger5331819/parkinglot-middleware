@@ -81,4 +81,6 @@ public class CarPortController {
     public List<ChannelInfoResultRpcResp> getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
         return carPortService.getChannelsInfo(parkingLotManager, parkingLotId);
     }
+
+
 }

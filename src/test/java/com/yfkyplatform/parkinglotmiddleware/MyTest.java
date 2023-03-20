@@ -6,6 +6,8 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 /**
@@ -31,5 +33,36 @@ public class MyTest {
         } else {
             System.out.println("123");
         }
+    }
+
+    @ParameterizedTest
+    @CsvSource({"b8754039bbf911edad48000c29bdcc13",
+            "c7200e02bbfa11edad48000c29bdcc13",
+            "f2ec6b24bbff11edad48000c29bdcc13"})
+    void ttttt(String tt) {
+        byte[] bs = tt.getBytes();
+        long value = 0;
+        for (int count = 0; count < 12; ++count) {
+            int shift = count << 3;
+            value |= ((long) 255 << shift) & ((long) bs[count] << shift);
+        }
+        System.out.println("1结果：" + value);
+
+        for (int count = 0; count < 12; ++count) {
+
+            value |= bs[count];
+        }
+        System.out.println("2结果：" + value);
+
+        for (int count = 0; count < 12; ++count) {
+
+            value &= bs[count];
+        }
+        System.out.println("3结果：" + value);
+    }
+
+    @Test
+    public void dateTimeTest() {
+        System.out.println(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss")));
     }
 }
