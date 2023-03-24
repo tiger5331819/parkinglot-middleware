@@ -21,6 +21,9 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.mon
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarLongRentalRateResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.SpecialMonthlyCarResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.BlankCarURL;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.CarOutPayURL;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -31,6 +34,7 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 道尔云API代理
@@ -467,5 +471,49 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
                 });
 
         return result;
+    }
+
+    /**
+     * 生成URL
+     *
+     * @return
+     */
+    @Override
+    public URLResult makeURL() {
+        List<ChannelResult> channelResultList = getChannelsInfo().block().getBody();
+
+        List<BlankCarURL> blankCarURLS = channelResultList.stream().filter(item -> item.getType() == 0).map(item -> {
+            String stringBuilder = "?companyParkingLotCode=" +
+                    parkId +
+                    "&dsn=" +
+                    item.getChannelId();
+
+            BlankCarURL blankCarURL = new BlankCarURL();
+            blankCarURL.setUrl(stringBuilder);
+            blankCarURL.setChannelId(item.getChannelId());
+            blankCarURL.setChannelName(item.getChannelName());
+            blankCarURL.setType(item.getType());
+            return blankCarURL;
+        }).collect(Collectors.toList());
+
+        List<CarOutPayURL> carOutPayURLS = channelResultList.stream().filter(item -> item.getType() == 1).map(item -> {
+            String stringBuilder = "?companyParkingLotCode=" +
+                    parkId +
+                    "&dsn=" +
+                    item.getChannelId();
+
+            CarOutPayURL carOutPayURL = new CarOutPayURL();
+            carOutPayURL.setUrl(stringBuilder);
+            carOutPayURL.setChannelId(item.getChannelId());
+            carOutPayURL.setChannelName(item.getChannelName());
+            carOutPayURL.setType(item.getType());
+            return carOutPayURL;
+        }).collect(Collectors.toList());
+
+        URLResult urlResult = new URLResult();
+        urlResult.setBlankCarURLList(blankCarURLS);
+        urlResult.setCarOutPayURLList(carOutPayURLS);
+
+        return urlResult;
     }
 }

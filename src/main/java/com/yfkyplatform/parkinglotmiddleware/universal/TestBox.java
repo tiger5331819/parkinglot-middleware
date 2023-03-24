@@ -36,4 +36,24 @@ public class TestBox {
             return fee;
         }
     }
+
+    /**
+     * 获取网关环境域名
+     *
+     * @param environment
+     * @return
+     */
+    public String environmentGateWayURL(String environment) {
+        return env.getProperty(prefix + ".env.gateway" + environment, "");
+    }
+
+    /**
+     * 获取网页环境域名
+     *
+     * @param environment
+     * @return
+     */
+    public String environmentWebURL(String environment) {
+        return env.getProperty(prefix + ".env.Web" + environment, "");
+    }
 }
