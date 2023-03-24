@@ -93,7 +93,7 @@ public class DaoerToolsController {
             item.setUrl(stringBuilder.toString());
         });
 
-        urlResult.getBlankCarURLList().forEach(item -> {
+        urlResult.getCarOutPayURLList().forEach(item -> {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(webUrl);
             stringBuilder.append("scanh5/daoer/orderdetailpay/");
@@ -120,7 +120,7 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "出入场通知地址")
     @GetMapping(value = "/carpassthoughurl/{environment}")
-    public CarPassThoughNoticeResultResp getCarPassThoughURL(@PathVariable String parkingLotId, @PathVariable String environment, @ApiParam(value = "运营商ID") Integer operator) {
+    public CarPassThoughNoticeResultResp getCarPassThoughURL(@PathVariable String parkingLotId, @PathVariable String environment, @ApiParam(value = "运营商ID") String operator) {
         String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + operator;
 
         CarPassThoughNoticeResultResp result = new CarPassThoughNoticeResultResp();

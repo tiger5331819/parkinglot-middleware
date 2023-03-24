@@ -54,6 +54,6 @@ public class TestBox {
      * @return
      */
     public String environmentWebURL(String environment) {
-        return env.getProperty(prefix + ".env.Web" + environment, "");
+        return env.getProperty(prefix + ".env.web" + environment, "");
     }
 }
