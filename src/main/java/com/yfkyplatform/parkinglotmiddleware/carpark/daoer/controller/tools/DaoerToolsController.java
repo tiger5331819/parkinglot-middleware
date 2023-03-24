@@ -119,8 +119,8 @@ public class DaoerToolsController {
     }
 
     @ApiOperation(value = "出入场通知地址")
-    @GetMapping(value = "/carpassthoughurl/{environment}")
-    public CarPassThoughNoticeResultResp getCarPassThoughURL(@PathVariable String parkingLotId, @PathVariable String environment, @ApiParam(value = "运营商ID") String operator) {
+    @GetMapping(value = "/carpassthoughurl/{environment}/{operator}")
+    public CarPassThoughNoticeResultResp getCarPassThoughURL(@PathVariable String parkingLotId, @PathVariable String environment, @PathVariable @ApiParam(value = "运营商ID") Integer operator) {
         String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + operator;
 
         CarPassThoughNoticeResultResp result = new CarPassThoughNoticeResultResp();

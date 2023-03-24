@@ -44,7 +44,7 @@ public class TestBox {
      * @return
      */
     public String environmentGateWayURL(String environment) {
-        return env.getProperty(prefix + ".env.gateway" + environment, "");
+        return env.getProperty(prefix + ".env.gateway." + environment, "");
     }
 
     /**
@@ -54,6 +54,6 @@ public class TestBox {
      * @return
      */
     public String environmentWebURL(String environment) {
-        return env.getProperty(prefix + ".env.web" + environment, "");
+        return env.getProperty(prefix + ".env.web." + environment, "");
     }
 }
