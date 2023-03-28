@@ -67,8 +67,8 @@ public class ToolController {
     }
 
     @ApiOperation(value = "批量人工清场")
-    @PostMapping("/version")
-    public List<CleanCarResp> getVersion(@RequestBody CleanCarReq req) throws JsonProcessingException {
+    @PostMapping("/cleanCar")
+    public List<CleanCarResp> cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
         Mono<String> result = WebClient.create().method(HttpMethod.POST)
                 .uri("https://mgnt-pc.q-parking.com/api/mgntpc/pc/order/page")
                 .headers(httpHeaders -> {
