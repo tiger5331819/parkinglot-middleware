@@ -10,6 +10,10 @@ import cn.hutool.core.util.ObjectUtil;
 
 public enum ParkingLotManagerEnum {
     /**
+     * 未知 code:-1
+     */
+    None(-1, "others"),
+    /**
      * 道尔 code:4
      */
     Daoer(4, "Daoer"),
@@ -37,7 +41,7 @@ public enum ParkingLotManagerEnum {
                 return enums;
             }
         }
-        return null;
+        return None;
     }
 
     public static ParkingLotManagerEnum fromMessage(String parkingLotManagerMessage) {
@@ -46,11 +50,11 @@ public enum ParkingLotManagerEnum {
         }
 
         for (ParkingLotManagerEnum enums : ParkingLotManagerEnum.values()) {
-            if (enums.getName() == parkingLotManagerMessage) {
+            if (enums.getName().equals(parkingLotManagerMessage)) {
                 return enums;
             }
         }
-        return null;
+        return None;
 
     }
 

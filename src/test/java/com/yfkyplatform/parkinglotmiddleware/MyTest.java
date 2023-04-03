@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware;
 
+import cn.hutool.core.bean.BeanUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -117,5 +118,22 @@ public class MyTest {
         });
     }
 
+    @Test
+    public void ttt() throws JsonProcessingException {
+        ObjectMapper mapper = new ObjectMapper();
+        System.out.println(mapper.writeValueAsString(TestD.make()));
+    }
 
+
+    @Test
+    public void ttt2() throws JsonProcessingException {
+        System.out.println(BeanUtil.copyProperties(TestD.make(), TestDD.class));
+    }
+
+    @Test
+    public void ttt3() {
+        Boolean ttt = null;
+        boolean tttee = Boolean.TRUE.equals(ttt);
+        System.out.println(tttee);
+    }
 }
