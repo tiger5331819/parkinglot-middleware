@@ -5,11 +5,13 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.request.ViewHttpApiProxy;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarPassThoughNoticeResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
@@ -25,7 +27,9 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 工具控制器
@@ -116,6 +120,26 @@ public class DaoerToolsController {
         resp.setCarOutPayURLList(urlResult.getCarOutPayURLList());
 
         return resp;
+    }
+
+    @ApiOperation(value = "全部URL地址")
+    @GetMapping(value = "/url/{environment}/all")
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName, @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay) {
+        List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
+
+        return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
+            URLResultResp resp = getURL(cfg.getId(), environment, wechatPay, aliPay);
+            AllURLResultResp allURLResultResp = new AllURLResultResp();
+            allURLResultResp.setParkingLotId(cfg.getId());
+            allURLResultResp.setParkingLotName(cfg.getDescription());
+            allURLResultResp.setParkingLotThirdCode(cfg.getParkId());
+            allURLResultResp.setBlankCarURLList(resp.getBlankCarURLList());
+            allURLResultResp.setCarOutPayURLList(resp.getCarOutPayURLList());
+
+            return allURLResultResp;
+        }).collect(Collectors.toList());
+
+
     }
 
     @ApiOperation(value = "出入场通知地址")
