@@ -205,7 +205,7 @@ public class DaoerToolsController {
         String[] carNos = data.split("\r\n");
         List<CarCheckResultResp> resultResps = new LinkedList<>();
         for (String carNo : carNos) {
-            PageResult result = manager.parkingLot(parkingLotId).carport().getCarInInfo(carNo, null, null, 1, 10);
+            PageResult result = manager.parkingLot(parkingLotId).carport().getCarInInfo(carNo, "", "", 1, 10);
             CarCheckResultResp resp = new CarCheckResultResp();
             resp.setCarNo(carNo);
             resp.setIn(result.getTotal() != 0);
