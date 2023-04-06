@@ -12,9 +12,11 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.dao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.request.ViewHttpApiProxy;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarCheckResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarPassThoughNoticeResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,6 +29,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -186,12 +189,30 @@ public class DaoerToolsController {
                 .bodyValue(apiProxy.getData())
                 .retrieve()
                 .bodyToMono(String.class)
-                .doOnError(WebClientResponseException.class, err ->{
-                    String errResult=err.getResponseBodyAsString();
+                .doOnError(WebClientResponseException.class, err -> {
+                    String errResult = err.getResponseBodyAsString();
                     log.error(errResult);
                     throw new RuntimeException(errResult);
                 });
-        Map<String,Object> resultJson= mapper.readValue(result.block(), new TypeReference<Map<String, Object>>() {});
+        Map<String, Object> resultJson = mapper.readValue(result.block(), new TypeReference<Map<String, Object>>() {
+        });
         return resultJson;
+    }
+
+    @ApiOperation(value = "检查车辆是否在场")
+    @PostMapping("/checkCar")
+    public List<CarCheckResultResp> checkCar(@PathVariable String parkingLotId, @RequestBody String data) {
+        String[] carNos = data.split("\r\n");
+        List<CarCheckResultResp> resultResps = new LinkedList<>();
+        for (String carNo : carNos) {
+            PageResult result = manager.parkingLot(parkingLotId).carport().getCarInInfo(carNo, null, null, 1, 10);
+            CarCheckResultResp resp = new CarCheckResultResp();
+            resp.setCarNo(carNo);
+            resp.setIn(result.getTotal() != 0);
+
+            resultResps.add(resp);
+        }
+
+        return resultResps;
     }
 }
