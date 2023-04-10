@@ -18,6 +18,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -268,7 +269,10 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     @Override
     public PageResult<CarInResult> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
         PageModel<CarInData> carInData = api.getCarInInfo(carNo, startTime, endTime, pageNum, pageSize).block().getBody();
-        List<CarInResult> dataList = carInData.getList().stream().map(carIn -> {
+        if (ObjectUtil.isNull(carInData.getList())) {
+
+        }
+        List<CarInResult> dataList = ObjectUtil.isNull(carInData.getList()) ? new LinkedList<>() : carInData.getList().stream().map(carIn -> {
             CarInResult data = new CarInResult();
             data.setCarNo(carIn.getCarNo());
             data.setCardTypeId(carIn.getCardTypeId());
@@ -278,7 +282,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
             return data;
         }).collect(Collectors.toList());
 
-        return new PageResult(carInData.getPageNum(),carInData.getPageSize(),carInData.getTotal(),dataList);
+        return new PageResult(carInData.getPageNum(), carInData.getPageSize(), carInData.getTotal(), dataList);
     }
 
     /**

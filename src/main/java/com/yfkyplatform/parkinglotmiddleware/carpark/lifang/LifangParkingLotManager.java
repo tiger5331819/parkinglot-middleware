@@ -34,7 +34,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
      */
     @Override
     protected LifangParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<LifangConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<LifangConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }

@@ -120,7 +120,7 @@
         <dependency>
             <groupId>com.yfkyplatform.parkinglot</groupId>
             <artifactId>parkinglot-middleware-api</artifactId>
-            <version>1.0.1-RELEASE</version>
+            <version>1.0.1.1-SNAPSHOTS</version>
         </dependency>
 
         <!-- YfkyFramework -->

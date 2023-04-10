@@ -97,7 +97,7 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
      * @return
      */
     @Override
-    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndAndParkingLotId(String parkingType, String parkingLotId) {
+    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
         Map<String, ParkingLotConfiguration> cache = makeConfigurationCache(parkingType);
         return cache.get(parkingLotId);
     }
