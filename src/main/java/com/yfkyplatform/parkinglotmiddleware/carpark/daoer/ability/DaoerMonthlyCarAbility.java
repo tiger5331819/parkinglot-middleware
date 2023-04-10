@@ -174,7 +174,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
         DaoerBaseRespHead result = api.createMonthlyCar(createMonthlyCar.getCarNo(), createMonthlyCar.getCardTypeId(),
                         LocalDateTimeUtil.format(createMonthlyCar.getStartTime(), DatePattern.NORM_DATETIME_PATTERN),
                         LocalDateTimeUtil.format(createMonthlyCar.getEndTime(), DatePattern.NORM_DATETIME_PATTERN),
-                        createMonthlyCar.getMoney().toString(), createMonthlyCar.getPayType(), createMonthlyCar.getContactName(), createMonthlyCar.getContactPhone())
+                        createMonthlyCar.getMoney().movePointLeft(2).toString(), createMonthlyCar.getPayType(), createMonthlyCar.getContactName(), createMonthlyCar.getContactPhone())
                 .block().getHead();
 
         if (result.getStatus() == 1) {
