@@ -33,7 +33,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
      */
     @Override
     protected HongmenParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<HongmenConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<HongmenConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
