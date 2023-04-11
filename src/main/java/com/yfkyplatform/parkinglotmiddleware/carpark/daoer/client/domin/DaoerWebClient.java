@@ -54,7 +54,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         return (httpHeaders) -> {
             String token = getToken();
             if (!StrUtil.isBlank(token)) {
-                httpHeaders.add("token", getToken());
+                httpHeaders.add("token", token);
             }
         };
     }
