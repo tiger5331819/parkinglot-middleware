@@ -40,6 +40,8 @@ public abstract class DaoerWebClient extends YfkyWebClient {
 
     protected RedisTool redis;
 
+    private boolean refreshToken = false;
+
     public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
         super(baseUrl, reeaTimeOutSeconds);
         redis = redisTool;
@@ -52,9 +54,8 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     @Override
     protected Consumer<HttpHeaders> httpHeadersFunction() {
         return (httpHeaders) -> {
-            String token = getToken();
-            if (!StrUtil.isBlank(token)) {
-                httpHeaders.add("token", token);
+            if (!refreshToken && !StrUtil.isBlank(getToken())) {
+                httpHeaders.add("token", getToken());
             }
         };
     }
@@ -76,6 +77,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         TokenResult result = postBase(token, "api/index/auth/token").bodyToMono(TokenResult.class).doOnError(errFunction()).block();
         token.setToken(result.getData());
         redis.set(tokenName, token, Duration.ofSeconds(7198));
+        refreshToken = false;
         return token.getToken();
     }
 
@@ -84,6 +86,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
             DaoerToken token= redis.get(tokenName);
             return StrUtil.isBlank(token.getToken()) ? token() : token.getToken();
         }else {
+            refreshToken = true;
             return token();
         }
     }
