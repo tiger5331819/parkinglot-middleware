@@ -76,7 +76,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         DaoerToken token = new DaoerToken(appName);
         TokenResult result = postBase(token, "api/index/auth/token").bodyToMono(TokenResult.class).doOnError(errFunction()).block();
         token.setToken(result.getData());
-        redis.set(tokenName, token, Duration.ofSeconds(7199));
+        redis.set(tokenName, token, Duration.ofSeconds(7198));
         refreshToken = false;
         return token.getToken();
     }
@@ -84,7 +84,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     public String getToken(){
         if(redis.check(tokenName)){
             DaoerToken token= redis.get(tokenName);
-            return token.getToken();
+            return StrUtil.isBlank(token.getToken()) ? token() : token.getToken();
         }else {
             refreshToken = true;
             return token();

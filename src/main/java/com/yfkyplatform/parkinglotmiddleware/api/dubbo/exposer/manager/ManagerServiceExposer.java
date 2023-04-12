@@ -42,7 +42,7 @@ public class ManagerServiceExposer implements IManagerService {
     @Override
     public Set<Integer> managerSupport() {
         Set<String> managerSet = factory.getManagerSupport();
-        return managerSet.stream().map(item -> ParkingLotManagerEnum.valueOf(item).getCode()).collect(Collectors.toSet());
+        return managerSet.stream().map(item -> ParkingLotManagerEnum.fromMessage(item).getCode()).collect(Collectors.toSet());
     }
 
     /**
@@ -118,7 +118,7 @@ public class ManagerServiceExposer implements IManagerService {
 
         Map<Integer, Map<Long, Boolean>> result = new HashMap<>();
         health.forEach((key, value) -> {
-            result.put(ParkingLotManagerEnum.valueOf(key).getCode(), value);
+            result.put(ParkingLotManagerEnum.fromMessage(key).getCode(), value);
         });
         return result;
     }

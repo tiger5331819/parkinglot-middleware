@@ -12,13 +12,14 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.co
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.IGuestAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.IMonthlyAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.tool.IToolAblitity;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 道尔停车场容器
  *
  * @author Suhuyuan
  */
-
+@Slf4j
 public class DaoerParkingLot extends ParkingLotPod{
     private final DaoerClient Daoer;
 
@@ -35,7 +36,12 @@ public class DaoerParkingLot extends ParkingLotPod{
 
     @Override
     public Boolean healthCheck() {
-        return Daoer.getCarPortInfo().block().getHead().getStatus() == 1;
+        try {
+            return Daoer.getCarPortInfo().block().getHead().getStatus() == 1;
+        } catch (Exception ex) {
+            log.error(cfg.getId() + "健康检查异常", ex);
+            return false;
+        }
     }
 
     /**
