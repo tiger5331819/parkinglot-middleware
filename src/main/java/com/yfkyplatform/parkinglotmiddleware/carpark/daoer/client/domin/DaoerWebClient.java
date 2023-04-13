@@ -85,12 +85,13 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     }
 
     public String getToken(){
-        if(redis.check(tokenName)){
-            DaoerToken token= redis.get(tokenName);
-            return StrUtil.isBlank(token.getToken()) ? token() : token.getToken();
-        }else {
-            refreshToken = true;
-            return token();
+        if (redis.check(tokenName)) {
+            DaoerToken token = redis.get(tokenName);
+            if (StrUtil.isNotBlank(token.getToken())) {
+                return token.getToken();
+            }
         }
+        refreshToken = true;
+        return token();
     }
 }
