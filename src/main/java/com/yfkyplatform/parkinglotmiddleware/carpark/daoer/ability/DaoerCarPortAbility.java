@@ -129,11 +129,13 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         CarFeeResult fee = mono.block().getBody();
 
+        BigDecimal totalFee = payMessage.getPayFee().add(payMessage.getDiscountFee());
+
         DaoerBaseRespHead payState = api.payCarFeeAccess(payMessage.getCarNo(),
                 new DateTime(fee.getInTime()).toString(),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 fee.getChargeDuration(),
-                payMessage.getPayFee().movePointLeft(2),
+                totalFee.movePointLeft(2),
                 payMessage.getDiscountFee().movePointLeft(2),
                 0,
                 payType,
