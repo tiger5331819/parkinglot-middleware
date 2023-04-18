@@ -131,6 +131,9 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
         BigDecimal totalFee = payMessage.getPayFee().add(payMessage.getDiscountFee());
 
+        log.info("ToltalFee:" + totalFee);
+
+
         DaoerBaseRespHead payState = api.payCarFeeAccess(payMessage.getCarNo(),
                 new DateTime(fee.getInTime()).toString(),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
@@ -142,7 +145,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                 payMessage.getPaymentTransactionId(),
                 payMessage.getPayFee().movePointLeft(2),
                 channelId).block().getHead();
-
+        log.info("ToltalFee:" + totalFee.movePointLeft(2));
         if (payState.getStatus() == 1) {
             return true;
         } else {
