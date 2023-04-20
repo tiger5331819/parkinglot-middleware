@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
+import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
 import io.swagger.annotations.Api;
@@ -42,7 +43,12 @@ public class ManagerController {
     @GetMapping("/manager/configuration")
     public List<ParkingLotCfgRpcResp> getAllManagerConfiguartion(String parkingLotName) {
         List<ParkingLotCfgRpcResp> rpcRespList = managerService.parkingMangerConfiguration(null, null);
-        return rpcRespList.stream().filter(item -> item.getDescription().contains(parkingLotName)).collect(Collectors.toList());
+        if (StrUtil.isNotBlank(parkingLotName)) {
+            return rpcRespList.stream().filter(item -> item.getDescription().contains(parkingLotName)).collect(Collectors.toList());
+        } else {
+            return rpcRespList;
+        }
+
     }
 
     @ApiOperation(value = "获取指定停车场管理的所有停车场配置文件")
