@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 测试控制器
@@ -39,8 +40,9 @@ public class ManagerController {
 
     @ApiOperation(value = "获取所有配置文件")
     @GetMapping("/manager/configuration")
-    public List<ParkingLotCfgRpcResp> getAllManagerConfiguartion(){
-        return managerService.parkingMangerConfiguration(null,null);
+    public List<ParkingLotCfgRpcResp> getAllManagerConfiguartion(String parkingLotName) {
+        List<ParkingLotCfgRpcResp> rpcRespList = managerService.parkingMangerConfiguration(null, null);
+        return rpcRespList.stream().filter(item -> item.getDescription().contains(parkingLotName)).collect(Collectors.toList());
     }
 
     @ApiOperation(value = "获取指定停车场管理的所有停车场配置文件")
