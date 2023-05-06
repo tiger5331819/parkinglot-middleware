@@ -1,5 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.configuration.web;
 
+import com.yfkyplatform.parkinglotmiddleware.universal.extension.IExtensionFuction;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.servlet.config.annotation.PathMatchConfigurer;
@@ -13,11 +16,27 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    private final IExtensionFuction extensionFuction;
+
+    public WebConfig(IExtensionFuction extensionFuction) {
+        this.extensionFuction = extensionFuction;
+    }
+
     @Override
-    public void configurePathMatch(PathMatchConfigurer configurer){
-        AntPathMatcher matcher=new AntPathMatcher();
+    public void configurePathMatch(PathMatchConfigurer configurer) {
+        AntPathMatcher matcher = new AntPathMatcher();
         matcher.setCaseSensitive(false);
         configurer.setPathMatcher(matcher);
+    }
+
+    @Bean
+    public FilterRegistrationBean registFilter() {
+        FilterRegistrationBean registration = new FilterRegistrationBean();
+        registration.setFilter(new TestBoxRequestFilter(extensionFuction));
+        registration.addUrlPatterns("/api/*");
+        registration.setName("TestBoxRequestFilter");
+        registration.setOrder(1);
+        return registration;
     }
 
 /*    @Override

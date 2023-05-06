@@ -1,13 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerInfrastructure;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,8 +18,8 @@ import java.util.List;
 @Component
 public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, DaoerParkingLotConfiguration> {
 
-    public DaoerParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByConfiguration") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
-        super(redisTool, cfgRepository, "Daoer");
+    public DaoerParkingLotManager(ParkingLotManagerInfrastructure infrastructure) {
+        super(infrastructure, "Daoer");
     }
 
     /**
@@ -33,7 +30,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
      */
     @Override
     protected DaoerParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository().findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
@@ -50,7 +47,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
     @Override
     protected List<DaoerParkingLot> load() {
         List<DaoerParkingLot> dataList = new ArrayList<>();
-        List<ParkingLotConfiguration> cfgList = cfgRepository.findParkingLotConfigurationByParkingType(managerType);
+        List<ParkingLotConfiguration> cfgList = cfgRepository().findParkingLotConfigurationByParkingType(managerType);
 
         for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
             DaoerConfiguration daoerCfg = item.getConfig();
@@ -93,7 +90,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
         data.setDescription(daoerParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 
-        ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository.save(data);
+        ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository().save(data);
         return ObjectUtil.isNotNull(result);
     }
 }

@@ -1,13 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.hongmen;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerInfrastructure;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.HongmenConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -21,8 +18,8 @@ import java.util.List;
 @Component
 public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLot, HongmenParkingLotConfiguration> {
 
-    public HongmenParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByConfiguration") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
-        super(redisTool, cfgRepository, "Hongmen");
+    public HongmenParkingLotManager(ParkingLotManagerInfrastructure infrastructure) {
+        super(infrastructure, "Hongmen");
     }
 
     /**
@@ -33,7 +30,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
      */
     @Override
     protected HongmenParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<HongmenConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<HongmenConfiguration> cfg = cfgRepository().findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
@@ -50,7 +47,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
     @Override
     protected List<HongmenParkingLot> load() {
         List<HongmenParkingLot> dataList = new ArrayList<>();
-        List<ParkingLotConfiguration> cfgList = cfgRepository.findParkingLotConfigurationByParkingType(managerType);
+        List<ParkingLotConfiguration> cfgList = cfgRepository().findParkingLotConfigurationByParkingType(managerType);
 
         for (ParkingLotConfiguration<HongmenConfiguration> item : cfgList) {
             HongmenConfiguration hongmen = item.getConfig();
@@ -93,7 +90,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
         data.setDescription(HongmenParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 
-        ParkingLotConfiguration<HongmenConfiguration> result = cfgRepository.save(data);
+        ParkingLotConfiguration<HongmenConfiguration> result = cfgRepository().save(data);
         return ObjectUtil.isNotNull(result);
     }
 }

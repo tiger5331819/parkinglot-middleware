@@ -123,6 +123,12 @@
             <version>1.0.1.1-RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.yfkyplatform.passthrough</groupId>
+            <artifactId>passthrough-api</artifactId>
+            <version>feature-thirdOS-SNAPSHOT</version>
+        </dependency>
+
         <!-- YfkyFramework -->
         <dependency>
             <groupId>com.yfkyframework</groupId>

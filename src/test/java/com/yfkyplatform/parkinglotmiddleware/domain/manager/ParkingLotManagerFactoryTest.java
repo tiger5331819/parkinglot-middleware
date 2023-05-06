@@ -5,7 +5,6 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.HashSet;
 import java.util.List;
@@ -26,7 +25,7 @@ class ParkingLotManagerFactoryTest {
     @Autowired
     List<ParkingLotManager> parkingLotManagerList;
 
-    @MockBean
+    //@MockBean
     ParkingLotManagerFactory mockFactory;
 
     @Test
@@ -35,15 +34,13 @@ class ParkingLotManagerFactoryTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"Daoer,X24400000001", "Daoer,X52361700001", "Daoer,",
-            ",X24400000001", ",X52361700001", ","})
+    @CsvSource({"Daoer,2006001120010000",
+            ","})
     void parkingManagerConfigurationTest(String parkingLotManagerName, String parkingLotId) {
         List cfgList = factory.getParkingLotConfiguration(parkingLotManagerName, parkingLotId);
         assertNotNull(cfgList);
         assertNotEquals(0, cfgList.size());
-        cfgList.forEach(item -> {
-            System.out.println(item);
-        });
+        cfgList.forEach(item -> System.out.println(item));
     }
 
     @Test

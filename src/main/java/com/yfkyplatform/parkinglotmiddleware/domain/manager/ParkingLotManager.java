@@ -18,16 +18,20 @@ import java.util.*;
 @Slf4j
 public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends ParkingLotConfiguration> {
 
-    protected IParkingLotConfigurationRepository cfgRepository;
+    private final ParkingLotManagerInfrastructure infrastructure;
+
+    public ParkingLotManager(ParkingLotManagerInfrastructure infrastructure, String managerType) {
+        this.redis = infrastructure.getRedis();
+        this.infrastructure = infrastructure;
+        this.managerType = managerType;
+    }
 
     protected RedisTool redis;
 
     protected String managerType;
 
-    public ParkingLotManager(RedisTool redisTool, IParkingLotConfigurationRepository cfgRepository, String managerType) throws JsonProcessingException {
-        redis = redisTool;
-        this.cfgRepository = cfgRepository;
-        this.managerType = managerType;
+    protected IParkingLotConfigurationRepository cfgRepository() {
+        return infrastructure.getCfgRepository();
     }
 
     /**

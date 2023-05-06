@@ -8,7 +8,7 @@ dubbo:
   consumer:
     check: false
   cloud:
-    subscribed-services: parkinglot-middleware
+    subscribed-services: ${spring.application.name},passthrough-service
 
 spring:
   main:

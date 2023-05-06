@@ -5,9 +5,9 @@ import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfig
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
@@ -15,7 +15,6 @@ import java.util.List;
 @SpringBootTest
 class ParkingLotConfigurationRepositoryTest {
 
-    @Qualifier("parkingLotConfigurationRepositoryByConfiguration")
     @Autowired
     private IParkingLotConfigurationRepository repository;
 
@@ -37,9 +36,9 @@ class ParkingLotConfigurationRepositoryTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"DaoerTest"})
-    void getTest(String Id){
-        ParkingLotConfiguration<DaoerConfiguration> data=repository.findById(Id).get();
+    @CsvSource({"Daoer,2006001120010000"})
+    void getTest(String type, String Id) {
+        ParkingLotConfiguration<DaoerConfiguration> data = repository.findParkingLotConfigurationByParkingTypeAndParkingLotId(type, Id);
         System.out.println(data);
     }
 

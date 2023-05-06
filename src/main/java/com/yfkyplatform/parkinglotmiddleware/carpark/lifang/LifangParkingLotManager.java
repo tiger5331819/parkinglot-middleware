@@ -1,14 +1,11 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerInfrastructure;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.LifangConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,8 +19,8 @@ import java.util.List;
 @Component
 public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot, LifangParkingLotConfiguration> {
 
-    public LifangParkingLotManager(RedisTool redisTool, @Qualifier("parkingLotConfigurationRepositoryByConfiguration") IParkingLotConfigurationRepository cfgRepository) throws JsonProcessingException {
-        super(redisTool, cfgRepository, "Lifang");
+    public LifangParkingLotManager(ParkingLotManagerInfrastructure infrastructure) {
+        super(infrastructure, "Lifang");
     }
 
     /**
@@ -34,7 +31,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
      */
     @Override
     protected LifangParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<LifangConfiguration> cfg = cfgRepository.findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<LifangConfiguration> cfg = cfgRepository().findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
@@ -51,7 +48,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
     @Override
     protected List<LifangParkingLot> load() {
         List<LifangParkingLot> dataList = new ArrayList<>();
-        List<ParkingLotConfiguration> cfgList = cfgRepository.findParkingLotConfigurationByParkingType(managerType);
+        List<ParkingLotConfiguration> cfgList = cfgRepository().findParkingLotConfigurationByParkingType(managerType);
 
         for (ParkingLotConfiguration<LifangConfiguration> item : cfgList) {
             LifangConfiguration lifangCfg = item.getConfig();
@@ -93,7 +90,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
         data.setDescription(LifangParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 
-        ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository.save(data);
+        ParkingLotConfiguration<DaoerConfiguration> result = cfgRepository().save(data);
         return ObjectUtil.isNotNull(result);
     }
 }
