@@ -33,7 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
     public FilterRegistrationBean registFilter() {
         FilterRegistrationBean registration = new FilterRegistrationBean();
         registration.setFilter(new TestBoxRequestFilter(extensionFuction));
-        registration.addUrlPatterns("/api/*");
+        registration.addUrlPatterns("/api/*", "/Daoer/*",
+                "/Lifang/*", "/Hongmen/*");
         registration.setName("TestBoxRequestFilter");
         registration.setOrder(1);
         return registration;
