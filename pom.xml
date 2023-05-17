@@ -126,7 +126,7 @@
         <dependency>
             <groupId>com.yfkyplatform.passthrough</groupId>
             <artifactId>passthrough-api</artifactId>
-            <version>feature-thirdOS-SNAPSHOT</version>
+            <version>1.0.34-RELEASE</version>
         </dependency>
 
         <!-- YfkyFramework -->

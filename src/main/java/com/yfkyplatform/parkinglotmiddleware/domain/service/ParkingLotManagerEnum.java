@@ -33,7 +33,7 @@ public enum ParkingLotManagerEnum {
 
     public static ParkingLotManagerEnum fromCode(Integer parkingLotManagerCode) {
         if (ObjectUtil.isNull(parkingLotManagerCode)) {
-            return null;
+            return None;
         }
 
         for (ParkingLotManagerEnum enums : ParkingLotManagerEnum.values()) {
@@ -46,7 +46,7 @@ public enum ParkingLotManagerEnum {
 
     public static ParkingLotManagerEnum fromMessage(String parkingLotManagerMessage) {
         if (ObjectUtil.isNull(parkingLotManagerMessage)) {
-            return null;
+            return None;
         }
 
         for (ParkingLotManagerEnum enums : ParkingLotManagerEnum.values()) {
