@@ -33,22 +33,24 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
             return cache;
         }
         String saasParkingLotConfigPrefix = "saasParkingLotConfig." + parkingType + ".";
-        config.getDaoer().forEach(item -> {
-            ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-            cfg.setParkingLotId(item.get("parkingLotId"));
-            cfg.setParkingType("Daoer");
-            cfg.setDescription(item.get("description"));
 
-            DaoerConfiguration daoerCfg = new DaoerConfiguration();
-            daoerCfg.setAppName(item.get("config." + "appName"));
-            daoerCfg.setParkId(item.get("config." + "parkId"));
-            daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
-            daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
+        if (parkingType.equals("Daoer")) {
+            config.getDaoer().forEach(item -> {
+                ParkingLotConfiguration cfg = new ParkingLotConfiguration();
+                cfg.setParkingLotId(item.get("parkingLotId"));
+                cfg.setParkingType("Daoer");
+                cfg.setDescription(item.get("description"));
 
-            cfg.setConfig(daoerCfg);
-            cache.put(cfg.getParkingLotId(), cfg);
-        });
+                DaoerConfiguration daoerCfg = new DaoerConfiguration();
+                daoerCfg.setAppName(item.get("config." + "appName"));
+                daoerCfg.setParkId(item.get("config." + "parkId"));
+                daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
+                daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
 
+                cfg.setConfig(daoerCfg);
+                cache.put(cfg.getParkingLotId(), cfg);
+            });
+        }
         return cache;
     }
 
