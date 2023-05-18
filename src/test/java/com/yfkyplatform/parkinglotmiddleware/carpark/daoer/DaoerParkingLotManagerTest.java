@@ -33,12 +33,13 @@ class DaoerParkingLotManagerTest {
     }
 
     @ParameterizedTest
-    @CsvSource({"24400000001", "52361700001"})
+    @CsvSource({"2006001120010000"})
     void clientTest(String parkingLotId) {
         /*ParkingLotPod parkingLotPod= daoerManager.parkingLot(parkingLotId);
         DaoerClient client=parkingLotPod.client();*/
 
         DaoerClient client = daoerManager.parkingLot(parkingLotId).client();
+        System.out.println(client.getToken());
         assertNotNull(client);
     }
 

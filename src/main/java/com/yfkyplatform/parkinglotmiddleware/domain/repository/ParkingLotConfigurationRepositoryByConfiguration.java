@@ -1,9 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
-import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.HongmenConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.LifangConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfig;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
@@ -22,59 +20,35 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
 
     private final Environment env;
 
-    public ParkingLotConfigurationRepositoryByConfiguration(Environment environment) {
+    private final ParkingLotConfig config;
+
+    public ParkingLotConfigurationRepositoryByConfiguration(Environment environment, ParkingLotConfig config) {
         this.env = environment;
+        this.config = config;
     }
 
     private Map<String, ParkingLotConfiguration> makeConfigurationCache(String parkingType) {
         Map<String, ParkingLotConfiguration> cache = new HashMap<>(100);
-        String prefix = "parkingLotConfig." + parkingType + ".";
-        String list = env.getProperty(prefix + "all");
-        if (StrUtil.isBlank(list)) {
+        if (config.getDaoer().isEmpty()) {
             return cache;
         }
-        String[] cfgList = list.split(",");
-        for (String cfgId : cfgList) {
-            String prefix2 = "parkingLotConfig." + parkingType + "." + cfgId + ".";
-
+        String saasParkingLotConfigPrefix = "saasParkingLotConfig." + parkingType + ".";
+        config.getDaoer().forEach(item -> {
             ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-            cfg.setParkingLotId(env.getProperty(prefix2 + "parkingLotId"));
+            cfg.setParkingLotId(item.get("parkingLotId"));
+            cfg.setParkingType("Daoer");
+            cfg.setDescription(item.get("description"));
 
-            switch (parkingType) {
-                case "Daoer": {
-                    DaoerConfiguration daoerCfg = new DaoerConfiguration();
-                    daoerCfg.setAppName(env.getProperty(prefix2 + "config." + "appName"));
-                    daoerCfg.setParkId(env.getProperty(prefix2 + "config." + "parkId"));
-                    daoerCfg.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
-                    daoerCfg.setImgUrl(env.getProperty(prefix2 + "config." + "imgUrl"));
-                    cfg.setConfig(daoerCfg);
-                }
-                break;
-                case "Lifang": {
-                    LifangConfiguration lifangCfg = new LifangConfiguration();
-                    lifangCfg.setSecret(env.getProperty(prefix2 + "config." + "secret"));
-                    lifangCfg.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
-                    cfg.setConfig(lifangCfg);
-                }
-                break;
-                case "hongmen": {
-                    HongmenConfiguration hongmen = new HongmenConfiguration();
-                    hongmen.setAppId(env.getProperty(prefix2 + "config." + "appID"));
-                    hongmen.setSecret(env.getProperty(prefix2 + "config." + "secret"));
-                    hongmen.setBaseUrl(env.getProperty(prefix2 + "config." + "baseUrl"));
-                    cfg.setConfig(hongmen);
-                }
-                break;
-                default:
-                    cfg.setConfig(new Object());
-                    break;
-            }
+            DaoerConfiguration daoerCfg = new DaoerConfiguration();
+            daoerCfg.setAppName(item.get("config." + "appName"));
+            daoerCfg.setParkId(item.get("config." + "parkId"));
+            daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
+            daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
 
-            cfg.setParkingType(parkingType);
-            cfg.setDescription(env.getProperty(prefix2 + "description"));
-
+            cfg.setConfig(daoerCfg);
             cache.put(cfg.getParkingLotId(), cfg);
-        }
+        });
+
         return cache;
     }
 

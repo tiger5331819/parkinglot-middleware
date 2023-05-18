@@ -43,10 +43,10 @@ class ParkingLotConfigurationRepositoryTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings={"Daoer"})
-    void getTest2(String Id) throws JsonProcessingException {
-        List<ParkingLotConfiguration> data=repository.findParkingLotConfigurationByParkingType(Id);
-        for (ParkingLotConfiguration cfg:data){
+    @ValueSource(strings = {"Daoer"})
+    void getTest2(String Id) {
+        List<ParkingLotConfiguration> data = repository.findParkingLotConfigurationByParkingType(Id);
+        for (ParkingLotConfiguration cfg : data) {
             System.out.println(cfg);
             System.out.println(cfg.getConfig());
         }
