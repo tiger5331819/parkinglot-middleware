@@ -34,11 +34,11 @@ public class ParkingLotManagerInfrastructure {
 
     public IParkingLotConfigurationRepository getCfgRepository() {
         boolean token = false;
-        try {
+/*        try {
             token = extensionFuction.getToken();
         } catch (Exception ex) {
             token = false;
-        }
+        }*/
 
         if (token) {
             Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().getSimpleName().contains("ParkingLotConfigurationRepositoryByConfiguration")).findFirst();
