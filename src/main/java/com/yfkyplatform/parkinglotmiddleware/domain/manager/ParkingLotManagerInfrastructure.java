@@ -26,19 +26,19 @@ public class ParkingLotManagerInfrastructure {
 
     private IExtensionFuction extensionFuction;
 
-    public ParkingLotManagerInfrastructure(List<IParkingLotConfigurationRepository> cfgRepositoryList, RedisTool redis, IExtensionFuction extensionFuction, List<IParkingLotConfigurationRepository> cfgRepositoryList1, IExtensionFuction extensionFuction1) {
+    public ParkingLotManagerInfrastructure(List<IParkingLotConfigurationRepository> cfgRepositoryList, RedisTool redis, IExtensionFuction extensionFuction) {
         this.redis = redis;
-        this.cfgRepositoryList = cfgRepositoryList1;
-        this.extensionFuction = extensionFuction1;
+        this.cfgRepositoryList = cfgRepositoryList;
+        this.extensionFuction = extensionFuction;
     }
 
     public IParkingLotConfigurationRepository getCfgRepository() {
         boolean token = false;
-        try {
+/*        try {
             token = extensionFuction.getToken();
         } catch (Exception ex) {
             token = false;
-        }
+        }*/
 
         if (token) {
             Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().getSimpleName().contains("ParkingLotConfigurationRepositoryByConfiguration")).findFirst();
