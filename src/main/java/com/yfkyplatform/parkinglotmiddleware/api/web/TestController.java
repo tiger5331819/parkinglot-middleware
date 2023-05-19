@@ -44,6 +44,6 @@ public class TestController {
     @GetMapping("/test2")
     public MonthlyCarMessageResultRpcResp test2() {
         extensionFuction.setToken();
-        return monthlyCarService.monthlyCarInfo(4, "2006001120010000", "桂JJJJJJ");
+        return monthlyCarService.monthlyCarInfo(4, "2003001200000002", "桂JJJJJJ");
     }
 }
