@@ -2,7 +2,8 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
-import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.MonthlyCarMessageResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.universal.extension.IExtensionFuction;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -10,8 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author Suhuyuan
@@ -27,21 +26,24 @@ public class TestController {
 
     private final IExtensionFuction extensionFuction;
 
-    public TestController(IManagerService managerService, IExtensionFuction extensionFuction) {
+    private final IMonthlyCarService monthlyCarService;
+
+    public TestController(IManagerService managerService, IExtensionFuction extensionFuction, IMonthlyCarService monthlyCarService) {
         this.managerService = managerService;
         this.extensionFuction = extensionFuction;
+        this.monthlyCarService = monthlyCarService;
     }
 
     @ApiOperation(value = "test1")
     @GetMapping("/test1")
-    public List<ParkingLotCfgRpcResp> test1() {
-        return managerService.parkingMangerConfiguration(null, "2003001200000002");
+    public MonthlyCarMessageResultRpcResp test1() {
+        return monthlyCarService.monthlyCarInfo(4, "2003001200000002", "桂JJJJJJ");
     }
 
     @ApiOperation(value = "test2")
     @GetMapping("/test2")
-    public List<ParkingLotCfgRpcResp> test2() {
+    public MonthlyCarMessageResultRpcResp test2() {
         extensionFuction.setToken();
-        return managerService.parkingMangerConfiguration(null, "2006001120010000");
+        return monthlyCarService.monthlyCarInfo(4, "2006001120010000", "桂JJJJJJ");
     }
 }
