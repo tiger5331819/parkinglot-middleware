@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
-import com.yfkyplatform.parkinglotmiddleware.universal.extension.IExtensionFuction;
+import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
 import lombok.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -24,23 +24,16 @@ public class ParkingLotManagerInfrastructure {
 
     private RedisTool redis;
 
-    private IExtensionFuction extensionFuction;
+    private TestBox testBox;
 
-    public ParkingLotManagerInfrastructure(List<IParkingLotConfigurationRepository> cfgRepositoryList, RedisTool redis, IExtensionFuction extensionFuction) {
+    public ParkingLotManagerInfrastructure(List<IParkingLotConfigurationRepository> cfgRepositoryList, RedisTool redis, TestBox testBox) {
         this.redis = redis;
         this.cfgRepositoryList = cfgRepositoryList;
-        this.extensionFuction = extensionFuction;
+        this.testBox = testBox;
     }
 
     public IParkingLotConfigurationRepository getCfgRepository() {
-        boolean token = false;
-        try {
-            token = extensionFuction.getToken();
-        } catch (Exception ex) {
-            token = false;
-        }
-
-        if (token) {
+        if (testBox.checkTest()) {
             Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().getSimpleName().contains("ParkingLotConfigurationRepositoryByConfiguration")).findFirst();
             return cfgOptional.get();
         } else {

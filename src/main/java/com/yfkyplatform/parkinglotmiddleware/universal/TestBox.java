@@ -56,4 +56,13 @@ public class TestBox {
     public String environmentWebURL(String environment) {
         return env.getProperty(prefix + ".env.web." + environment, "");
     }
+
+    /**
+     * 获取测试存储库状态
+     *
+     * @return
+     */
+    public Boolean checkTest() {
+        return env.getProperty(prefix + ".configRepository", Boolean.class, false);
+    }
 }
