@@ -26,6 +26,8 @@ spring:
   mvc:
     format:
       date-time: yyyy-MM-dd HH:mm:ss
+  codec:
+    max-in-memory-size: 100MB
 
 rocketmq:
   # Producer 配置项
