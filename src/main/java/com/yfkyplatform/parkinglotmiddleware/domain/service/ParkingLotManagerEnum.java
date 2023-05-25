@@ -20,7 +20,11 @@ public enum ParkingLotManagerEnum {
     /**
      * 立方 code:3
      */
-    Lifang(3, "Lifang");
+    Lifang(3, "Lifang"),
+    /**
+     * 红门 code:8
+     */
+    Hongmen(8, "Hongmen");
 
     private final int code;
 
