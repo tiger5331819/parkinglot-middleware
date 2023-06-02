@@ -24,6 +24,15 @@ public class AllURLResultResp {
     @ApiModelProperty(value = "停车场第三方ID")
     private String parkingLotThirdCode;
 
+    @ApiModelProperty(value = "停车场第三方ID")
+    private String parkingLotThirdAppName;
+
+    @ApiModelProperty(value = "入场通知")
+    private String carInUrl;
+
+    @ApiModelProperty(value = "出场通知")
+    private String carOutUrl;
+
     @ApiModelProperty(value = "无牌车入场通知")
     private List<BlankCarURL> blankCarURLList;
 

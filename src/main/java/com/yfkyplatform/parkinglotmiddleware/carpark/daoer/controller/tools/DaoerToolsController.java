@@ -10,10 +10,9 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManage
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.request.ViewHttpApiProxy;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req.ViewHttpApiProxy;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarCheckResultResp;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarPassThoughNoticeResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
@@ -127,8 +126,11 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "全部URL地址")
     @GetMapping(value = "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName, @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay) {
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
+                                            @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay,
+                                            @ApiParam(value = "运营商ID") Integer operator) {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
+        String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + operator;
 
         return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, wechatPay, aliPay);
@@ -138,23 +140,12 @@ public class DaoerToolsController {
             allURLResultResp.setParkingLotThirdCode(cfg.getParkId());
             allURLResultResp.setBlankCarURLList(resp.getBlankCarURLList());
             allURLResultResp.setCarOutPayURLList(resp.getCarOutPayURLList());
+            allURLResultResp.setParkingLotThirdAppName(cfg.getAppName());
+            allURLResultResp.setCarInUrl(origin + "/daoer/in");
+            allURLResultResp.setCarOutUrl(origin + "/daoer/out");
 
             return allURLResultResp;
         }).collect(Collectors.toList());
-
-
-    }
-
-    @ApiOperation(value = "出入场通知地址")
-    @GetMapping(value = "/carpassthoughurl/{environment}/{operator}")
-    public CarPassThoughNoticeResultResp getCarPassThoughURL(@PathVariable String parkingLotId, @PathVariable String environment, @PathVariable @ApiParam(value = "运营商ID") Integer operator) {
-        String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + operator;
-
-        CarPassThoughNoticeResultResp result = new CarPassThoughNoticeResultResp();
-        result.setCarIn(origin + "/daoer/in");
-        result.setCarOut(origin + "/daoer/out");
-
-        return result;
     }
 
     @ApiOperation(value = "RestTemplate 代理")

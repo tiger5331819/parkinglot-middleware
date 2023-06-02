@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.request;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req;
 
 import lombok.Data;
 

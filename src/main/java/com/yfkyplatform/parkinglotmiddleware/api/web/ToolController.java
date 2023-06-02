@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.CleanCarReq;
+import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarListResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarResp;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -68,7 +69,7 @@ public class ToolController {
 
     @ApiOperation(value = "批量人工清场")
     @PostMapping("/cleanCar")
-    public List<CleanCarResp> cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
+    public CleanCarListResp cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
         Mono<String> result = WebClient.create().method(HttpMethod.POST)
                 .uri("https://mgnt-pc.q-parking.com/api/mgntpc/pc/order/page")
                 .headers(httpHeaders -> {
@@ -86,9 +87,8 @@ public class ToolController {
         Map<String, Object> data = (Map<String, Object>) resultJson.get("data");
         List<Map<String, Object>> records = (List<Map<String, Object>>) data.get("records");
         List<Long> orderId = records.stream().map(item -> (Long) item.get("orderId")).collect(Collectors.toList());
-        System.out.println(orderId);
 
-        return orderId.stream().map(item -> {
+        List<CleanCarResp> cleanCarRespList = orderId.stream().map(item -> {
             Mono<String> result2 = WebClient.create().method(HttpMethod.POST)
                     .uri("https://mgnt-pc.q-parking.com/api/mgntpc/pc/order/outsideClean")
                     .headers(httpHeaders -> {
@@ -105,5 +105,11 @@ public class ToolController {
             resp.setOrderId(item);
             return resp;
         }).collect(Collectors.toList());
+
+        CleanCarListResp resp = new CleanCarListResp();
+        resp.setData(cleanCarRespList);
+        resp.setTotal(cleanCarRespList.size());
+
+        return resp;
     }
 }
