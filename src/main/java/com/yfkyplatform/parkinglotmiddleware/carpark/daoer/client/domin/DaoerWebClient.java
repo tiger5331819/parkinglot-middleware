@@ -78,7 +78,8 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         int retryCount = 0;
         do {
             result = postBase(token, "api/index/auth/token").bodyToMono(TokenResult.class).doOnError(errFunction()).block();
-        } while (StrUtil.isBlank(result.getData()) || ++retryCount < 3);
+            retryCount++;
+        } while (StrUtil.isBlank(result.getData()) && retryCount < 3);
         token.setToken(result.getData());
         redis.set(tokenName, token, Duration.ofSeconds(7198));
         refreshToken = false;
