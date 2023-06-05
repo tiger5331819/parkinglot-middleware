@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.ObjectUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,6 +10,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.CleanCarReq;
+import com.yfkyplatform.parkinglotmiddleware.api.web.req.PayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarListResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarResp;
 import io.swagger.annotations.Api;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -41,8 +44,8 @@ public class ToolController {
 
     private final Environment env;
 
-    public ToolController(ICarPortService carPortService, ICarPortService carPortService1, Environment env) {
-        this.carPortService = carPortService1;
+    public ToolController(ICarPortService carPortService, Environment env) {
+        this.carPortService = carPortService;
         this.env = env;
     }
 
@@ -52,10 +55,12 @@ public class ToolController {
         return env.getProperty("app.version");
     }
 
-    @ApiOperation(value = "直接支付完整金额")
-    @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/{carNo}/FeeTest")
-    public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
-        CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, carNo);
+    @ApiOperation(value = "直接支付金额")
+    @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/FeeTest")
+    public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, PayAccessReq payAccess) {
+        CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, payAccess.getCarNo());
+
+        BigDecimal carFee = ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2);
 
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
         orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());
@@ -64,7 +69,7 @@ public class ToolController {
         orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
         orderPayMessageRpcReq.setPayFee(rpcResp.getPayFee());
 
-        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
+        return carPortService.payAccess(parkingLotManager, parkingLotId, payAccess.getCarNo(), orderPayMessageRpcReq);
     }
 
     @ApiOperation(value = "批量人工清场")
