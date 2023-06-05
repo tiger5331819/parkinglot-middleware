@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -60,14 +59,12 @@ public class ToolController {
     public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, PayAccessReq payAccess) {
         CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, payAccess.getCarNo());
 
-        BigDecimal carFee = ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2);
-
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
         orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());
         orderPayMessageRpcReq.setDiscountFee(rpcResp.getDiscountFee());
         orderPayMessageRpcReq.setPayType(2000);
         orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
-        orderPayMessageRpcReq.setPayFee(rpcResp.getPayFee());
+        orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
 
         return carPortService.payAccess(parkingLotManager, parkingLotId, payAccess.getCarNo(), orderPayMessageRpcReq);
     }
