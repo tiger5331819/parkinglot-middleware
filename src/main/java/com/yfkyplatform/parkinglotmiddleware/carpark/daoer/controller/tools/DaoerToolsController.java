@@ -13,10 +13,12 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.too
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req.ViewHttpApiProxy;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarCheckResultResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.SaaSPayMessageResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
@@ -31,6 +33,7 @@ import reactor.core.publisher.Mono;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -124,16 +127,48 @@ public class DaoerToolsController {
         return resp;
     }
 
+    @ApiOperation(value = "获取SaaS 租户和支付id")
+    @GetMapping(value = "/saasToken")
+    public SaaSPayMessageResultResp getSaaSToken(@ApiParam(value = "token") String token) throws JsonProcessingException {
+        SaaSWebClient saaSWebClient = new SaaSWebClient();
+        Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
+        Integer tenantId = (Integer) data.get("tenantId");
+        AtomicReference<Long> aliThirdId = new AtomicReference<>(null);
+        AtomicReference<Long> wxThirdId = new AtomicReference<>(null);
+
+
+        Map<String, Object> data2 = saaSWebClient.get("mgntpc/tenant/get-tenant-thirdparty", token);
+        List<Map<String, Object>> aliApps = (List<Map<String, Object>>) data2.get("aliApps");
+        aliApps.stream().filter(item -> !((Boolean) item.get("main")))
+                .findFirst()
+                .ifPresent(item -> aliThirdId.set((Long) item.get("thirdpartyAppId")));
+
+        List<Map<String, Object>> wxMPApps = (List<Map<String, Object>>) data2.get("wxMPApps");
+        wxMPApps.stream().filter(item -> (Boolean) item.get("main"))
+                .findFirst()
+                .ifPresent(item -> wxThirdId.set((Long) item.get("thirdpartyAppId")));
+
+        SaaSPayMessageResultResp resp = new SaaSPayMessageResultResp();
+        resp.setTenantId(tenantId);
+        resp.setAliThirdId(aliThirdId.get());
+        resp.setWxThirdId(wxThirdId.get());
+
+        return resp;
+    }
+
+
     @ApiOperation(value = "全部URL地址")
     @GetMapping(value = "/url/{environment}/all")
     public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
-                                            @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay,
-                                            @ApiParam(value = "运营商ID") Integer operator) {
+                                            @ApiParam(value = "token") String token) throws JsonProcessingException {
+        SaaSPayMessageResultResp resultResp = getSaaSToken(token);
+
+
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
-        String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + operator;
+        String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
         return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
-            URLResultResp resp = getURL(cfg.getId(), environment, wechatPay, aliPay);
+            URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));
             AllURLResultResp allURLResultResp = new AllURLResultResp();
             allURLResultResp.setParkingLotId(cfg.getId());
             allURLResultResp.setParkingLotName(cfg.getDescription());
