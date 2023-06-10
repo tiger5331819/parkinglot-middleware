@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
+import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -64,5 +65,14 @@ public class TestBox {
      */
     public Boolean checkTest() {
         return env.getProperty(prefix + ".configRepository", Boolean.class, false);
+    }
+
+    /**
+     * 获取SaaS Web API client
+     *
+     * @return
+     */
+    public SaaSWebClient saasClient() {
+        return new SaaSWebClient(env.getProperty(prefix + ".saas.baseUrl"));
     }
 }

@@ -25,7 +25,7 @@ import java.util.function.Consumer;
 public class SaaSWebClient {
     private final WebClient client;
 
-    public SaaSWebClient() {
+    public SaaSWebClient(String saasBaseUrl) {
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
                 .doOnConnected(connection ->
@@ -33,7 +33,7 @@ public class SaaSWebClient {
 
         client = WebClient
                 .builder()
-                .baseUrl("https://mgnt-pc.q-parking.com/api/")
+                .baseUrl(saasBaseUrl)
                 .defaultHeaders(headersConsumer())
                 .clientConnector(new ReactorClientHttpConnector(reactor.netty.http.client.HttpClient.from(tcpClient)))
                 .build();

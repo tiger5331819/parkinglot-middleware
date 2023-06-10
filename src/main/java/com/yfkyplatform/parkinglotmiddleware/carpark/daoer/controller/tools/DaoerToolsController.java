@@ -130,7 +130,7 @@ public class DaoerToolsController {
     @ApiOperation(value = "获取SaaS 租户和支付id")
     @GetMapping(value = "/saasToken")
     public SaaSPayMessageResultResp getSaaSToken(@ApiParam(value = "token") String token) throws JsonProcessingException {
-        SaaSWebClient saaSWebClient = new SaaSWebClient();
+        SaaSWebClient saaSWebClient = testBox.saasClient();
         Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
         Integer tenantId = (Integer) data.get("tenantId");
         AtomicReference<Long> aliThirdId = new AtomicReference<>(null);
@@ -169,13 +169,16 @@ public class DaoerToolsController {
 
         return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));
+
             AllURLResultResp allURLResultResp = new AllURLResultResp();
             allURLResultResp.setParkingLotId(cfg.getId());
             allURLResultResp.setParkingLotName(cfg.getDescription());
             allURLResultResp.setParkingLotThirdCode(cfg.getParkId());
+            allURLResultResp.setParkingLotThirdAppName(cfg.getAppName());
+
             allURLResultResp.setBlankCarURLList(resp.getBlankCarURLList());
             allURLResultResp.setCarOutPayURLList(resp.getCarOutPayURLList());
-            allURLResultResp.setParkingLotThirdAppName(cfg.getAppName());
+
             allURLResultResp.setCarInUrl(origin + "/daoer/in");
             allURLResultResp.setCarOutUrl(origin + "/daoer/out");
 
