@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carfee;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -34,6 +34,4 @@ public class CarFeePayRequest {
     private BigDecimal couponAmount;
     @ApiModelProperty(value = "通道ID", required = true)
     private String channelId;
-    @ApiModelProperty(value = "入场记录ID", required = true)
-    private String inId;
 }

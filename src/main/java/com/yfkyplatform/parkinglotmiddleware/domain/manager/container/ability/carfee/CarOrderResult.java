@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport;
+package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

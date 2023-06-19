@@ -7,7 +7,6 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.Pag
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.BlankCarRequest;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.CarFeePayRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.ControlChannelRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.LockMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
@@ -45,25 +44,6 @@ public class DaoerCarPortController {
     @GetMapping
     public DaoerBaseResp<List<CarportResult>> getCarport(@PathVariable String parkingLotId) {
         return api(parkingLotId).getCarPortInfo().block();
-    }
-
-    @ApiOperation(value = "获取临时车缴纳金额")
-    @GetMapping("/fee")
-    public DaoerBaseResp<CarFeeResult> getCarFee(@PathVariable String parkingLotId, String carNo) {
-        return api(parkingLotId).getCarFeeInfo(carNo).block();
-    }
-
-    @ApiOperation(value = "根据通道号获取缴纳金额")
-    @GetMapping("/fee/channel")
-    public DaoerBaseResp<CarFeeResult> getChannelCarFee(@PathVariable String parkingLotId, String channelId, String carNo, String openId) {
-        return api(parkingLotId).getChannelCarFee(channelId, carNo, openId).block();
-    }
-
-    @ApiOperation(value = "临停缴费支付")
-    @PostMapping("/fee")
-    public DaoerBaseResp payCarFee(@PathVariable String parkingLotId, @RequestBody CarFeePayRequest request) {
-        return api(parkingLotId).payCarFeeAccess(request.getCarNo(), request.getEntryTime(), request.getPayTime(), request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
-                request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(), request.getChannelId()).block();
     }
 
     @ApiOperation(value = "无牌车入场")

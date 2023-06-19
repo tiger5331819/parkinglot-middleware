@@ -1,7 +1,6 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carpark;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carfee;
 
 
-import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import lombok.Data;
 
@@ -55,21 +54,4 @@ public class CarFeePay extends DaoerBase {
      * 通道ID
      */
     private String dsn;
-    public void setPayTime(String payTime) {
-        if(!StrUtil.isBlank(payTime)) {
-            this.payTime = payTime;
-        }
-    }
-
-    public void setPaymentTnx(String paymentTnx) {
-        if(!StrUtil.isBlank(payTime)) {
-            this.paymentTnx = paymentTnx;
-        }
-    }
-
-    public void setDsn(String dsn) {
-        if(!StrUtil.isBlank(payTime)) {
-            this.dsn = dsn;
-        }
-    }
 }

@@ -5,7 +5,6 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import reactor.core.publisher.Mono;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -21,35 +20,14 @@ public interface IDaoerCarPort {
      * @return
      */
     Mono<DaoerBaseResp<List<CarportResult>>> getCarPortInfo();
-    /**
-     * 获取临时车缴纳金额
-     * @param carNo 车牌号码
-     * @return
-     */
-    Mono<DaoerBaseResp<CarFeeResult>> getCarFeeInfo(String carNo);
 
-    /**
-     * 临停缴费支付完成
-     *
-     * @param carNo 车牌号码
-     * @return
-     */
-    Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
-                                        int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId);
-
-    /**
-     * 根据通道号获取车辆费用信息
-     *
-     * @param carNo 车牌号码
-     * @return
-     */
-    Mono<DaoerBaseResp<CarFeeResult>> getChannelCarFee(String channelId, String carNo, String openId);
     /**
      * 无牌车入场
      *
      * @return
      */
     Mono<DaoerBaseResp<BlankCarInResult>> blankCarIn(String openId, int scanType, String channelId);
+
     /**
      * 无牌车出场
      *

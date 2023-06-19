@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request;
+package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carfee;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
  * @author Suhuyuan
  */
 @Data
-public class CarFeePayRequest {
+public class CarFeePayWithArrearRequest {
     @ApiModelProperty(value = "车牌", required = true)
     private String carNo;
     @ApiModelProperty(value = "入场时间 yyyy-MM-dd HH:mm:ss", required = true)

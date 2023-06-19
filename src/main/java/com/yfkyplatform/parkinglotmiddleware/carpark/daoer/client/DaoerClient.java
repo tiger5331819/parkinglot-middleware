@@ -3,6 +3,10 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.DaoerWebClient;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carfee.CarFeePay;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carfee.CarFeePayWithArrear;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carfee.ChannelCarFee;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carfee.ChannelCarFeeWithArrear;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.carpark.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.coupon.CouponQuery;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.coupon.CouponUse;
@@ -12,6 +16,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.mo
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.LockMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.monthlycar.RenewalMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrear;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponUseResult;
@@ -42,10 +48,10 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
+public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerCarFee, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
 
-    public DaoerClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
-        super(id, appName, parkId, baseUrl, imgUrl, redisTool, reeaTimeOutSeconds);
+    public DaoerClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int readTimeOutSeconds) {
+        super(id, appName, parkId, baseUrl, imgUrl, redisTool, readTimeOutSeconds);
     }
 
     /**
@@ -66,10 +72,24 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<CarFeeResult>> getCarFeeInfo(String carNo){
+    public Mono<DaoerBaseResp<CarFeeResult>> getCarFeeInfo(String carNo) {
         DaoerBase model = new DaoerBase();
         model.setCarNo(carNo);
         return post(model, "api/index/tempFee/getcarfee", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {
+        });
+    }
+
+    /**
+     * 获取临时车缴纳金额
+     *
+     * @param carNo 车牌号码
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<CarFeeResultWithArrear>> getCarFeeInfoWithArrear(String carNo) {
+        DaoerBase model = new DaoerBase();
+        model.setCarNo(carNo);
+        return post(model, "api/index/tempFee/ly/getcarfee", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResultWithArrear>>() {
         });
     }
 
@@ -100,20 +120,83 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     }
 
     /**
+     * 临停缴费支付完成（支持欠费）
+     *
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp> payCarFeeAccessWithArrear(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount, int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId, String inId) {
+        CarFeePayWithArrear model = new CarFeePayWithArrear();
+
+        model.setEntryTime(entryTime);
+        model.setCarNo(carNo);
+        model.setPayTime(payTime);
+        model.setDuration(duration);
+        model.setTotalAmount(totalAmount);
+        model.setDisAmount(disAmount);
+        model.setPaymentType(paymentType);
+        model.setPayType(payType);
+        model.setPaymentTnx(paymentTnx);
+        model.setCouponAmount(couponAmount);
+        model.setDsn(channelId);
+        model.setInId(inId);
+
+        return post(model, "api/index/tempFee/ly/paysuccess", DaoerBaseResp.class);
+    }
+
+    /**
      * 根据通道号获取车辆费用信息
      *
      * @param carNo 车牌号码
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<CarFeeResult>> getChannelCarFee(String channelId,String carNo, String openId){
+    public Mono<DaoerBaseResp<CarFeeResult>> getChannelCarFee(String channelId, String carNo, String openId) {
         ChannelCarFee model = new ChannelCarFee();
 
         model.setCarNo(carNo);
         model.setDsn(channelId);
         model.setOpenId(openId);
 
-        return post(model, "/api/index/tempFee/getCarBayDsn", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {
+        return post(model, "api/index/tempFee/getCarBayDsn", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResult>>() {
+        });
+    }
+
+    /**
+     * 根据通道号获取车辆费用信息（支持欠费）
+     *
+     * @param channelId
+     * @param carNo     车牌号码
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<CarFeeResultWithArrear>> getChannelCarFeeWithArrear(String channelId, String carNo) {
+        ChannelCarFeeWithArrear model = new ChannelCarFeeWithArrear();
+
+        model.setCarNo(carNo);
+        model.setDsn(channelId);
+
+        return post(model, "api/index/tempFee/ly/getCarByDsn", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResultWithArrear>>() {
+        });
+    }
+
+    /**
+     * 无牌车出场（支持欠费）
+     *
+     * @param openId
+     * @param scanType
+     * @param channelId
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp<CarFeeResultWithArrear>> blankCarOutWithArrear(String openId, int scanType, String channelId) {
+        BlankCarInOrOut model = new BlankCarInOrOut();
+
+        model.setChannelId(channelId);
+        model.setScanType(scanType);
+        model.setOpenId(openId);
+
+        return post(model, "api/index/ly/scanout", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResultWithArrear>>() {
         });
     }
 
@@ -123,7 +206,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<BlankCarInResult>> blankCarIn(String openId, int scanType, String channelId){
+    public Mono<DaoerBaseResp<BlankCarInResult>> blankCarIn(String openId, int scanType, String channelId) {
         BlankCarInOrOut model = new BlankCarInOrOut();
 
         model.setChannelId(channelId);

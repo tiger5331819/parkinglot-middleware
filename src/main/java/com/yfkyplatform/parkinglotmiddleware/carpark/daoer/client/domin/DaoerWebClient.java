@@ -42,8 +42,8 @@ public abstract class DaoerWebClient extends YfkyWebClient {
 
     private boolean refreshToken = false;
 
-    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int reeaTimeOutSeconds) {
-        super(baseUrl, reeaTimeOutSeconds);
+    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int readTimeOutSeconds) {
+        super(baseUrl, readTimeOutSeconds);
         redis = redisTool;
         this.appName = appName;
         this.parkId = parkId;

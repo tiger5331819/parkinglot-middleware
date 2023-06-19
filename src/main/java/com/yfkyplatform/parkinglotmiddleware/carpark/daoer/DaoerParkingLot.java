@@ -1,12 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
 
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.DaoerCarPortAbility;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.DaoerGuestAbility;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.DaoerMonthlyCarAbility;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.DaoerToolAbility;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.DaoerClient;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.ICouponAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.IGuestAblitity;
@@ -62,6 +60,16 @@ public class DaoerParkingLot extends ParkingLotPod{
     @Override
     public ICarPortAblitity carport() {
         return new DaoerCarPortAbility(Daoer, redis);
+    }
+
+    /**
+     * 车场缴费
+     *
+     * @return
+     */
+    @Override
+    public ICarFeeAblitity fee() {
+        return new DaoerCarFeeAbility(Daoer, redis);
     }
 
     /**

@@ -17,27 +17,6 @@ public interface ICarPortAblitity {
      * @return
      */
     CarPortSpaceResult getCarPortSpace();
-    /**
-     * 获取临时车缴纳金额
-     * @param carNo 车牌号码
-     * @return
-     */
-    CarOrderResult getCarFeeInfo(String carNo);
-    /**
-     * 临停缴费支付完成
-     *
-     * @param payMessage 订单支付信息
-     * @return
-     */
-    Boolean payCarFeeAccess(CarOrderPayMessage payMessage);
-
-    /**
-     * 根据通道号获取车辆费用信息
-     *
-     * @param carNo 车牌号码
-     * @return
-     */
-    CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId);
 
     /**
      * 无牌车入场
@@ -45,12 +24,14 @@ public interface ICarPortAblitity {
      * @return
      */
     BlankCarScanInResult blankCarIn(String openId, int scanType, String channelId);
+
     /**
      * 无牌车出场
      *
      * @return
      */
     BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId);
+
     /**
      * 获取通道列表
      *
@@ -71,6 +52,7 @@ public interface ICarPortAblitity {
      * @return
      */
     PageResult<CarInResult> getCarInInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+
     /**
      * 获取出场记录
      *
@@ -78,4 +60,5 @@ public interface ICarPortAblitity {
      * @return
      */
     PageResult<CarOutResult> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize);
+
 }

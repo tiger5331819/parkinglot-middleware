@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability;
 
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.ICouponAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.IGuestAblitity;
@@ -21,6 +22,7 @@ public interface ParkingLotAbility {
 
     /**
      * 车场
+     *
      * @return
      */
     default ICarPortAblitity carport() {
@@ -28,10 +30,20 @@ public interface ParkingLotAbility {
     }
 
     /**
-     * 优惠券
+     * 车场缴费
+     *
      * @return
      */
-    default ICouponAblitity coupon(){
+    default ICarFeeAblitity fee() {
+        throw new UnsupportedOperationException("不支持工具能力");
+    }
+
+    /**
+     * 优惠券
+     *
+     * @return
+     */
+    default ICouponAblitity coupon() {
         throw new UnsupportedOperationException("不支持工具能力");
     }
 

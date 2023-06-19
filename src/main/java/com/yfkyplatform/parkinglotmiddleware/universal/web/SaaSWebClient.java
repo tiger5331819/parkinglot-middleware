@@ -57,7 +57,8 @@ public class SaaSWebClient {
 
     protected Consumer<HttpHeaders> httpHeadersFunction(String token) {
         return (httpHeaders) -> {
-            httpHeaders.add("Authorization", token);
+            httpHeaders.add("uctoken", token);
+            httpHeaders.add("ucdevice", "pc");
             httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         };
     }

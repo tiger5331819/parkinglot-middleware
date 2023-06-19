@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport;
+package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee;
 
 import lombok.Data;
 
