@@ -83,6 +83,10 @@ public class SaaSWebClient {
         Map<String, Object> resultJson = mapper.readValue(resp, new TypeReference<Map<String, Object>>() {
         });
 
+        if ((int) resultJson.get("code") != 0) {
+            throw new RuntimeException("SaaS 接口错误：" + resultJson.get("msg"));
+        }
+
         return (Map<String, Object>) resultJson.get("data");
     }
 

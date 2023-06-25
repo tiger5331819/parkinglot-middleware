@@ -42,7 +42,6 @@ public interface IDaoerCarFee {
     /**
      * 临停缴费支付完成（支持欠费）
      *
-     * @param carNo 车牌号码
      * @return
      */
     Mono<DaoerBaseResp> payCarFeeAccessWithArrear(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,

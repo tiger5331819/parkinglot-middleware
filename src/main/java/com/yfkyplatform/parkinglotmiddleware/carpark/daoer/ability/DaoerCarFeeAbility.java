@@ -5,18 +5,20 @@ import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarFee;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrear;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrearByCharge;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.CarOrderPayMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.CarOrderResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.*;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 道尔费用能力
@@ -67,7 +69,6 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     public CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId) {
         CarFeeResult result = api.getChannelCarFee(channelId, carNo, openId).block().getBody();
 
-
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResult();
             result.setAmount(new BigDecimal(0));
@@ -80,15 +81,94 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     }
 
     /**
-     * 根据通道号获取车辆费用信息
+     * 根据通道号获取车辆费用信息（支持欠费）
      *
      * @param channelId
      * @param carNo     车牌号码
      * @return
      */
     @Override
-    public CarOrderResult getCarFeeInfo(String channelId, String carNo) {
+    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String channelId, String carNo) {
+        CarFeeResultWithArrear result = api.getChannelCarFeeWithArrear(channelId, carNo).block().getBody();
+
+       /* if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
+            result = new CarFeeResult();
+            result.setAmount(new BigDecimal(0));
+            result.setPayCharge(new BigDecimal(0));
+            result.setDiscountAmount(new BigDecimal(0));
+        } else {
+            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofHours(1));
+        }
+        return CarFeeToCarOrder(result);*/
         return null;
+    }
+
+    /**
+     * 无牌车出场（支持欠费）
+     *
+     * @param openId
+     * @param scanType
+     * @param channelId
+     * @return
+     */
+    @Override
+    public CarOrderWithArrearResult blankCarOutWithArrear(String openId, int scanType, String channelId) {
+        return null;
+    }
+
+    /**
+     * 获取临时车缴纳金额（支持欠费）
+     *
+     * @param carNo 车牌号码
+     * @return
+     */
+    @Override
+    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String carNo) {
+        return null;
+    }
+
+    /**
+     * 临停缴费支付完成（支持欠费）
+     *
+     * @param payMessage 订单支付信息
+     * @return
+     */
+    @Override
+    public Boolean payCarFeeAccessWithArrear(CarOrderPayMessageWithArrear payMessage) {
+        String key = "order:daoer:" + payMessage.getCarNo();
+        String channelId = redis.check(key) ? redis.getWithDelete(key) : "";
+
+        Mono<DaoerBaseResp<CarFeeResultWithArrear>> mono = api.getCarFeeInfoWithArrear(payMessage.getCarNo());
+        CarFeeResultWithArrear fee = mono.block().getBody();
+        /*Duration duration=Duration.between(fee.getInTime(), fee.getOutTime());
+
+        int payType=changePayType(payMessage.getPayType());
+
+        BigDecimal totalFee = payMessage.getPayFee().add(payMessage.getDiscountFee());
+
+        log.info("ToltalFee:" + totalFee);
+
+
+        DaoerBaseRespHead payState = api.payCarFeeAccessWithArrear(payMessage.getCarNo(),
+                payMessage.get,
+                payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
+                fee.getChargeDuration(),
+                totalFee.movePointLeft(2),
+                payMessage.getDiscountFee().movePointLeft(2),
+                0,
+                payType,
+                payMessage.getPaymentTransactionId(),
+                payMessage.getPayFee().movePointLeft(2),
+                channelId,
+                payMessage.getInId()).block().getHead();
+        log.info("ToltalFee:" + totalFee.movePointLeft(2));
+        if (payState.getStatus() == 1) {
+            return true;
+        } else {
+            log.error(payState.getMessage());
+            return false;
+        }*/
+        return false;
     }
 
     /**
@@ -104,19 +184,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         Mono<DaoerBaseResp<CarFeeResult>> mono = api.getCarFeeInfo(payMessage.getCarNo());
 
-        int payType;
-        switch (payMessage.getPayType()) {
-            case 2000:
-            case 2001:
-                payType = 1;
-                break;
-            case 3000:
-            case 3001:
-                payType = 2;
-                break;
-            default:
-                payType = 0;
-        }
+        int payType = changePayType(payMessage.getPayType());
 
         CarFeeResult fee = mono.block().getBody();
 
@@ -145,6 +213,19 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         }
     }
 
+    private int changePayType(int payType) {
+        switch (payType) {
+            case 2000:
+            case 2001:
+                return 1;
+            case 3000:
+            case 3001:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+
     private CarOrderResult CarFeeToCarOrder(CarFeeResult carFeeResult) {
         CarOrderResult orderResult = new CarOrderResult();
 
@@ -157,5 +238,34 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         orderResult.setServiceTime(carFeeResult.getChargeDuration());
 
         return orderResult;
+    }
+
+    private CarOrderWithArrearResult CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult, List<CarFeeResultWithArrearByCharge> arrears) {
+        CarOrderWithArrearResult orderResult = new CarOrderWithArrearResult();
+
+        Duration duration = Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
+
+        orderResult.setCarNo(carFeeResult.getCarNo());
+        orderResult.setDiscountFee(carFeeResult.getDiscountAmount().movePointRight(2));
+        orderResult.setPayFee(carFeeResult.getPayCharge().movePointRight(2));
+        orderResult.setTotalFee(carFeeResult.getAmount().movePointRight(2));
+        orderResult.setCreateTime(carFeeResult.getOutTime());
+        orderResult.setStartTime(carFeeResult.getInTime());
+        orderResult.setServiceTime(new Long(duration.toMinutes()).intValue());
+        orderResult.setOverTime(carFeeResult.getOverTime());
+
+        orderResult.setPaymentType(carFeeResult.getPaymentType());
+        orderResult.setParkingNo(carFeeResult.getParkingNo());
+        orderResult.setInId(carFeeResult.getInId());
+
+        if (checkArrearsNotNull(arrears)) {
+            orderResult.setArrearList(arrears.stream().map(item -> CarFeeToCarOrder(item, null)).collect(Collectors.toList()));
+        }
+
+        return orderResult;
+    }
+
+    private boolean checkArrearsNotNull(List<CarFeeResultWithArrearByCharge> arrears) {
+        return ObjectUtil.isNotNull(arrears) && !arrears.isEmpty();
     }
 }

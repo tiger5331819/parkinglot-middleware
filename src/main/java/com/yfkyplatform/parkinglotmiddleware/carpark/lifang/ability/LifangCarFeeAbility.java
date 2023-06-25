@@ -4,9 +4,7 @@ import cn.hutool.core.date.LocalDateTimeUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.CarOrderPayMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.CarOrderResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.format.DateTimeFormatter;
@@ -81,15 +79,51 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
     }
 
     /**
-     * 根据通道号获取车辆费用信息
+     * 根据通道号获取车辆费用信息（支持欠费）
      *
      * @param channelId
      * @param carNo     车牌号码
      * @return
      */
     @Override
-    public CarOrderResult getCarFeeInfo(String channelId, String carNo) {
+    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String channelId, String carNo) {
         return null;
     }
+
+    /**
+     * 无牌车出场（支持欠费）
+     *
+     * @param openId
+     * @param scanType
+     * @param channelId
+     * @return
+     */
+    @Override
+    public CarOrderWithArrearResult blankCarOutWithArrear(String openId, int scanType, String channelId) {
+        return null;
+    }
+
+    /**
+     * 获取临时车缴纳金额（支持欠费）
+     *
+     * @param carNo 车牌号码
+     * @return
+     */
+    @Override
+    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String carNo) {
+        return null;
+    }
+
+    /**
+     * 临停缴费支付完成（支持欠费）
+     *
+     * @param payMessage 订单支付信息
+     * @return
+     */
+    @Override
+    public Boolean payCarFeeAccessWithArrear(CarOrderPayMessageWithArrear payMessage) {
+        return null;
+    }
+
 
 }

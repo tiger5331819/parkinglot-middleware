@@ -139,14 +139,42 @@ public class DaoerToolsController {
 
         Map<String, Object> data2 = saaSWebClient.get("mgntpc/tenant/get-tenant-thirdparty", token);
         List<Map<String, Object>> aliApps = (List<Map<String, Object>>) data2.get("aliApps");
-        aliApps.stream().filter(item -> !((Boolean) item.get("main")))
-                .findFirst()
-                .ifPresent(item -> aliThirdId.set((Long) item.get("thirdpartyAppId")));
+        if (aliApps.size() == 1) {
+            aliApps.stream().findFirst().ifPresent(item -> {
+                Long thirdAppId = (Long) item.get("thirdpartyAppId");
+                String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
+                try {
+                    saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                aliThirdId.set(thirdAppId);
+            });
+        } else {
+            aliApps.stream().filter(item -> !((Boolean) item.get("main")))
+                    .findFirst()
+                    .ifPresent(item -> aliThirdId.set((Long) item.get("thirdpartyAppId")));
+        }
+
 
         List<Map<String, Object>> wxMPApps = (List<Map<String, Object>>) data2.get("wxMPApps");
-        wxMPApps.stream().filter(item -> (Boolean) item.get("main"))
-                .findFirst()
-                .ifPresent(item -> wxThirdId.set((Long) item.get("thirdpartyAppId")));
+        if (wxMPApps.size() == 1) {
+            wxMPApps.stream().findFirst().ifPresent(item -> {
+                Long thirdAppId = (Long) item.get("thirdpartyAppId");
+                String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
+                try {
+                    saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException(e);
+                }
+                wxThirdId.set(thirdAppId);
+            });
+        } else {
+            wxMPApps.stream().filter(item -> (Boolean) item.get("main"))
+                    .findFirst()
+                    .ifPresent(item -> wxThirdId.set((Long) item.get("thirdpartyAppId")));
+        }
+
 
         SaaSPayMessageResultResp resp = new SaaSPayMessageResultResp();
         resp.setTenantId(tenantId);
