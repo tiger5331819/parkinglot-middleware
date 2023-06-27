@@ -52,7 +52,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     }
 
     @Override
-    protected Consumer<HttpHeaders> httpHeadersFunction() {
+    protected Consumer<HttpHeaders> httpHeadersFunction(Object data) {
         return (httpHeaders) -> {
             if (!refreshToken && !StrUtil.isBlank(getToken())) {
                 httpHeaders.add("token", getToken());
@@ -61,15 +61,15 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     }
 
     @Override
-    protected <T> WebClient.ResponseSpec postBase(T data, String url) {
+    protected <T> WebClient.ResponseSpec postBase(T data, String url, Object headerData) {
         DaoerBase daoerBase = (DaoerBase) data;
         daoerBase.setParkId(parkId);
-        return super.postBase(daoerBase, url);
+        return super.postBase(daoerBase, url, headerData);
     }
 
     @Override
-    protected WebClient.ResponseSpec getBase(String url) {
-        return super.getBase(url);
+    protected WebClient.ResponseSpec getBase(String url, Object headerData) {
+        return super.getBase(url, headerData);
     }
 
     private String token() {
@@ -77,7 +77,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         TokenResult result;
         int retryCount = 0;
         do {
-            result = postBase(token, "api/index/auth/token").bodyToMono(TokenResult.class).doOnError(errFunction()).block();
+            result = postBase(token, "api/index/auth/token", null).bodyToMono(TokenResult.class).doOnError(errFunction()).block();
             retryCount++;
         } while (StrUtil.isBlank(result.getData()) && retryCount < 3);
         token.setToken(result.getData());

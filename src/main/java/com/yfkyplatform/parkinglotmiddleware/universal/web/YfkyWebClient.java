@@ -53,46 +53,46 @@ public abstract class YfkyWebClient {
         };
     }
 
-    protected Consumer<HttpHeaders> httpHeadersFunction() {
+    protected Consumer<HttpHeaders> httpHeadersFunction(Object data) {
         return (httpHeaders) -> {
         };
     }
 
-    protected <T> WebClient.ResponseSpec postBase(T data, String url) {
+    protected <T> WebClient.ResponseSpec postBase(T data, String url, Object headerData) {
         return client.post()
                 .uri(url)
-                .headers(httpHeadersFunction())
+                .headers(httpHeadersFunction(headerData))
                 .bodyValue(data)
                 .retrieve();
     }
 
-    protected WebClient.ResponseSpec getBase(String url) {
+    protected WebClient.ResponseSpec getBase(String url, Object headerData) {
         return client.get()
                 .uri(url)
-                .headers(httpHeadersFunction())
+                .headers(httpHeadersFunction(headerData))
                 .retrieve();
     }
 
     protected <R, T> Mono<R> post(T data, String url, ParameterizedTypeReference<R> result) {
-        return postBase(data, url)
+        return postBase(data, url, null)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
     protected <R, T> Mono<R> post(T data, String url, Class<R> result) {
-        return postBase(data, url)
+        return postBase(data, url, null)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, Class<R> result) {
-        return getBase(url)
+        return getBase(url, null)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
-        return getBase(url)
+        return getBase(url, null)
                 .bodyToMono(result)
                 .doOnError(errFunction());
     }

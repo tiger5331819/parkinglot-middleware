@@ -142,16 +142,19 @@ public class DaoerToolsController {
         if (aliApps.size() == 1) {
             aliApps.stream().findFirst().ifPresent(item -> {
                 Long thirdAppId = (Long) item.get("thirdpartyAppId");
-                String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
-                try {
-                    saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
-                }
+/*                if(!(Boolean) item.get("main")){
+                    String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
+                    try {
+                        saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
+                }*/
+
                 aliThirdId.set(thirdAppId);
             });
         } else {
-            aliApps.stream().filter(item -> !((Boolean) item.get("main")))
+            aliApps.stream().filter(item -> ((Boolean) item.get("main")))
                     .findFirst()
                     .ifPresent(item -> aliThirdId.set((Long) item.get("thirdpartyAppId")));
         }
@@ -161,11 +164,13 @@ public class DaoerToolsController {
         if (wxMPApps.size() == 1) {
             wxMPApps.stream().findFirst().ifPresent(item -> {
                 Long thirdAppId = (Long) item.get("thirdpartyAppId");
-                String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
-                try {
-                    saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
-                } catch (JsonProcessingException e) {
-                    throw new RuntimeException(e);
+                if (!(Boolean) item.get("main")) {
+                    String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
+                    try {
+                        saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
+                    } catch (JsonProcessingException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
                 wxThirdId.set(thirdAppId);
             });

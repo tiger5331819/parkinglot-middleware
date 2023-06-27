@@ -3,15 +3,9 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.netty.channel.ChannelOption;
-import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.http.client.reactive.ReactorClientHttpConnector;
-import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
-import reactor.netty.tcp.TcpClient;
 
 import java.util.Map;
 import java.util.function.Consumer;
@@ -22,27 +16,13 @@ import java.util.function.Consumer;
  * @author Suhuyuan
  */
 @Slf4j
-public class SaaSWebClient {
-    private final WebClient client;
+public class SaaSWebClient extends YfkyWebClient {
 
     public SaaSWebClient(String saasBaseUrl) {
-        TcpClient tcpClient = TcpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-                .doOnConnected(connection ->
-                        connection.addHandlerLast(new ReadTimeoutHandler(30)));
-
-        client = WebClient
-                .builder()
-                .baseUrl(saasBaseUrl)
-                .defaultHeaders(headersConsumer())
-                .clientConnector(new ReactorClientHttpConnector(reactor.netty.http.client.HttpClient.from(tcpClient)))
-                .build();
+        super(saasBaseUrl, 30);
     }
 
-    protected Consumer<HttpHeaders> headersConsumer() {
-        return (HttpHeaders httpHeaders) -> httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-    }
-
+    @Override
     protected Consumer<? super Throwable> errFunction() {
         return (Throwable err) -> {
             if (err instanceof WebClientResponseException) {
@@ -55,27 +35,12 @@ public class SaaSWebClient {
         };
     }
 
-    protected Consumer<HttpHeaders> httpHeadersFunction(String token) {
+    @Override
+    protected Consumer<HttpHeaders> httpHeadersFunction(Object token) {
         return (httpHeaders) -> {
-            httpHeaders.add("uctoken", token);
+            httpHeaders.add("uctoken", (String) token);
             httpHeaders.add("ucdevice", "pc");
-            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
         };
-    }
-
-    protected WebClient.ResponseSpec postBase(String data, String url, String token) {
-        return client.post()
-                .uri(url)
-                .headers(httpHeadersFunction(token))
-                .bodyValue(data)
-                .retrieve();
-    }
-
-    protected WebClient.ResponseSpec getBase(String url, String token) {
-        return client.get()
-                .uri(url)
-                .headers(httpHeadersFunction(token))
-                .retrieve();
     }
 
     private Map<String, Object> getData(String resp) throws JsonProcessingException {
