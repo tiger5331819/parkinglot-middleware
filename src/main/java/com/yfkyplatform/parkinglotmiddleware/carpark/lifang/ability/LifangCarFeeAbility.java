@@ -82,11 +82,10 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
      * 根据通道号获取车辆费用信息（支持欠费）
      *
      * @param channelId
-     * @param carNo     车牌号码
      * @return
      */
     @Override
-    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String channelId, String carNo) {
+    public CarOrderWithArrearResultByList getCarFeeInfoByChannelWithArrear(String channelId) {
         return null;
     }
 
@@ -99,7 +98,7 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public CarOrderWithArrearResult blankCarOutWithArrear(String openId, int scanType, String channelId) {
+    public CarOrderWithArrearResultByList blankCarOutWithArrear(String openId, int scanType, String channelId) {
         return null;
     }
 
@@ -110,7 +109,7 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String carNo) {
+    public CarOrderWithArrearResultByList getCarFeeInfoWithArrear(String carNo) {
         return null;
     }
 

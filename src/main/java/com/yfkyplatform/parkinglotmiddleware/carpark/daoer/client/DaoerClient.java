@@ -166,14 +166,12 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * 根据通道号获取车辆费用信息（支持欠费）
      *
      * @param channelId
-     * @param carNo     车牌号码
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp<CarFeeResultWithArrear>> getChannelCarFeeWithArrear(String channelId, String carNo) {
+    public Mono<DaoerBaseResp<CarFeeResultWithArrear>> getChannelCarFeeWithArrear(String channelId) {
         ChannelCarFeeWithArrear model = new ChannelCarFeeWithArrear();
 
-        model.setCarNo(carNo);
         model.setDsn(channelId);
 
         return post(model, "api/index/tempFee/ly/getCarByDsn", new ParameterizedTypeReference<DaoerBaseResp<CarFeeResultWithArrear>>() {

@@ -33,17 +33,16 @@ public interface ICarFeeAblitity {
     /**
      * 根据通道号获取车辆费用信息（支持欠费）
      *
-     * @param carNo 车牌号码
      * @return
      */
-    CarOrderWithArrearResult getCarFeeInfoWithArrear(String channelId, String carNo);
+    CarOrderWithArrearResultByList getCarFeeInfoByChannelWithArrear(String channelId);
 
     /**
      * 无牌车出场（支持欠费）
      *
      * @return
      */
-    CarOrderWithArrearResult blankCarOutWithArrear(String openId, int scanType, String channelId);
+    CarOrderWithArrearResultByList blankCarOutWithArrear(String openId, int scanType, String channelId);
 
     /**
      * 获取临时车缴纳金额（支持欠费）
@@ -51,7 +50,7 @@ public interface ICarFeeAblitity {
      * @param carNo 车牌号码
      * @return
      */
-    CarOrderWithArrearResult getCarFeeInfoWithArrear(String carNo);
+    CarOrderWithArrearResultByList getCarFeeInfoWithArrear(String carNo);
 
     /**
      * 临停缴费支付完成（支持欠费）

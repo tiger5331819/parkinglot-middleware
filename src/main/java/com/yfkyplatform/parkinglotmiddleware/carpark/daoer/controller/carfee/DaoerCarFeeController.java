@@ -56,8 +56,8 @@ public class DaoerCarFeeController {
 
     @ApiOperation(value = "根据通道号获取缴纳金额（欠费）")
     @GetMapping("/fee/arrear/channel")
-    public DaoerBaseResp<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable String parkingLotId, String channelId, String carNo) {
-        return api(parkingLotId).getChannelCarFeeWithArrear(channelId, carNo).block();
+    public DaoerBaseResp<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable String parkingLotId, String channelId) {
+        return api(parkingLotId).getChannelCarFeeWithArrear(channelId).block();
     }
 
     @ApiOperation(value = "临停缴费支付")

@@ -58,10 +58,9 @@ public interface IDaoerCarFee {
     /**
      * 根据通道号获取车辆费用信息（支持欠费）
      *
-     * @param carNo 车牌号码
      * @return
      */
-    Mono<DaoerBaseResp<CarFeeResultWithArrear>> getChannelCarFeeWithArrear(String channelId, String carNo);
+    Mono<DaoerBaseResp<CarFeeResultWithArrear>> getChannelCarFeeWithArrear(String channelId);
 
     /**
      * 无牌车出场（支持欠费）

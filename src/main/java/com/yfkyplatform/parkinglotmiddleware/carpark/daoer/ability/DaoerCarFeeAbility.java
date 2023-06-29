@@ -64,7 +64,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String carNo) {
+    public CarOrderWithArrearResultByList getCarFeeInfoWithArrear(String carNo) {
         DaoerBaseResp<CarFeeResultWithArrear> resp = api.getCarFeeInfoWithArrear(carNo).block();
         CarFeeResultWithArrearByCharge result = resp.getBody().getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
@@ -104,12 +104,11 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      * 根据通道号获取车辆费用信息（支持欠费）
      *
      * @param channelId
-     * @param carNo     车牌号码
      * @return
      */
     @Override
-    public CarOrderWithArrearResult getCarFeeInfoWithArrear(String channelId, String carNo) {
-        CarFeeResultWithArrear resp = api.getChannelCarFeeWithArrear(channelId, carNo).block().getBody();
+    public CarOrderWithArrearResultByList getCarFeeInfoByChannelWithArrear(String channelId) {
+        CarFeeResultWithArrear resp = api.getChannelCarFeeWithArrear(channelId).block().getBody();
         CarFeeResultWithArrearByCharge result = resp.getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResultWithArrearByCharge();
@@ -131,7 +130,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public CarOrderWithArrearResult blankCarOutWithArrear(String openId, int scanType, String channelId) {
+    public CarOrderWithArrearResultByList blankCarOutWithArrear(String openId, int scanType, String channelId) {
         CarFeeResultWithArrear resp = api.blankCarOutWithArrear(openId, scanType, channelId).block().getBody();
         CarFeeResultWithArrearByCharge result = resp.getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
@@ -278,8 +277,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         return orderResult;
     }
 
-    private CarOrderWithArrearResult CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult, List<CarFeeResultWithArrearByCharge> arrears) {
-        CarOrderWithArrearResult orderResult = new CarOrderWithArrearResult();
+    private CarOrderWithArrearResult CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult) {
+        CarOrderWithArrearResultByList orderResult = new CarOrderWithArrearResultByList();
 
         Duration duration = Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
 
@@ -290,14 +289,20 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         orderResult.setCreateTime(carFeeResult.getOutTime());
         orderResult.setStartTime(carFeeResult.getInTime());
         orderResult.setServiceTime(new Long(duration.toMinutes()).intValue());
-        orderResult.setOverTime(carFeeResult.getOverTime());
 
+        orderResult.setOverTime(carFeeResult.getOverTime());
         orderResult.setPaymentType(carFeeResult.getPaymentType());
         orderResult.setParkingNo(carFeeResult.getParkingNo());
         orderResult.setInId(carFeeResult.getInId());
 
+        return orderResult;
+    }
+
+    private CarOrderWithArrearResultByList CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult, List<CarFeeResultWithArrearByCharge> arrears) {
+        CarOrderWithArrearResultByList orderResult = (CarOrderWithArrearResultByList) CarFeeToCarOrder(carFeeResult);
+
         if (checkArrearsNotNull(arrears)) {
-            orderResult.setArrearList(arrears.stream().map(item -> CarFeeToCarOrder(item, null)).collect(Collectors.toList()));
+            orderResult.setArrearList(arrears.stream().map(item -> (CarOrderWithArrearResultByList) CarFeeToCarOrder(item)).collect(Collectors.toList()));
         }
 
         return orderResult;
