@@ -1,6 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
+
+import java.time.LocalDateTime;
 
 /**
  * 临时车缴费订单结果（欠费）
@@ -9,6 +12,12 @@ import lombok.Data;
  */
 @Data
 public class CarOrderWithArrearResult extends CarOrderResult {
+
+    /**
+     * 该车离场时间（计费时间） yyyy-MM-dd HH:mm:ss
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime outTime;
 
     /**
      * 超时时间  单位:分

@@ -81,6 +81,7 @@ public class CarportServiceExposer implements ICarPortService {
         result.setPaymentType(data.getPaymentType());
         result.setParkingNo(data.getParkingNo());
         result.setInId(data.getInId());
+        result.setOutTime(data.getOutTime());
 
         return result;
     }

@@ -294,6 +294,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         orderResult.setPaymentType(carFeeResult.getPaymentType());
         orderResult.setParkingNo(carFeeResult.getParkingNo());
         orderResult.setInId(carFeeResult.getInId());
+        orderResult.setOutTime(carFeeResult.getOutTime());
 
         return orderResult;
     }
