@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
-import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import lombok.Value;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;

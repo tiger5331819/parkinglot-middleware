@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,7 +21,7 @@ public class TestBoxTest {
 
     @Test
     void Test1() {
-        BigDecimal newFee = testBox.changeFee(new BigDecimal(100));
+        BigDecimal newFee = testBox.changeFee().change(new BigDecimal(100));
         System.out.println(newFee);
     }
 }

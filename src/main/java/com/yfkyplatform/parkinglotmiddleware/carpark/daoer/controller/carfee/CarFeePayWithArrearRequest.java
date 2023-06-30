@@ -36,4 +36,6 @@ public class CarFeePayWithArrearRequest {
     private String channelId;
     @ApiModelProperty(value = "入场记录ID", required = true)
     private String inId;
+    @ApiModelProperty(value = "车场ID", required = true)
+    private String parkNo;
 }

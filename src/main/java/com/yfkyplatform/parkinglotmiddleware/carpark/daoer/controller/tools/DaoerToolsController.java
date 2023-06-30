@@ -17,7 +17,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
-import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -82,7 +82,7 @@ public class DaoerToolsController {
     @GetMapping(value = "/url/{environment}")
     public URLResultResp getURL(@PathVariable String parkingLotId, @PathVariable String environment, @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay) {
         URLResult urlResult = api(parkingLotId).makeURL();
-        String webUrl = testBox.environmentWebURL(environment);
+        String webUrl = testBox.envUrl().environmentWebURL(environment);
 
         urlResult.getBlankCarURLList().forEach(item -> {
             StringBuilder stringBuilder = new StringBuilder();
@@ -198,7 +198,7 @@ public class DaoerToolsController {
 
 
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
-        String origin = testBox.environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
+        String origin = testBox.envUrl().environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
         return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));

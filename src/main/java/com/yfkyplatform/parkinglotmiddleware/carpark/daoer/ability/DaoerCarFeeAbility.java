@@ -139,7 +139,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setPayCharge(new BigDecimal(0));
             result.setDiscountAmount(new BigDecimal(0));
         } else {
-            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
+            redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(3));
         }
         return CarFeeToCarOrder(result, resp.getArrears());
     }
@@ -155,7 +155,9 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     @Override
     public Boolean payCarFeeAccessWithArrear(CarOrderPayMessageWithArrear payMessage) {
         String key = "order:daoer:" + payMessage.getCarNo();
+        String inKey = "order:daoer:" + payMessage.getInId();
         String channelId = redis.check(key) ? redis.get(key) : "";
+        String parkNo = redis.check(inKey) ? redis.getWithDelete(inKey) : "";
 
         Mono<DaoerBaseResp<CarFeeResultWithArrear>> mono = api.getCarFeeInfoWithArrear(payMessage.getCarNo());
         CarFeeResultWithArrear carFeeResultWithArrear = mono.block().getBody();
@@ -183,7 +185,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
                 payMessage.getPaymentTransactionId(),
                 payMessage.getPayFee().movePointLeft(2),
                 channelId,
-                payMessage.getInId()).block().getHead();
+                payMessage.getInId(),
+                parkNo).block().getHead();
 
         if (payState.getStatus() == 1) {
             return true;
@@ -295,6 +298,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         orderResult.setParkingNo(carFeeResult.getParkingNo());
         orderResult.setInId(carFeeResult.getInId());
         orderResult.setOutTime(carFeeResult.getOutTime());
+
+        redis.set("order:daoer:" + carFeeResult.getInId(), carFeeResult.getParkingNo());
 
         return orderResult;
     }

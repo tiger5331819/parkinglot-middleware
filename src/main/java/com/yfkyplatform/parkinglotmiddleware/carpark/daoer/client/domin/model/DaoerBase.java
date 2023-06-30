@@ -29,8 +29,8 @@ public class DaoerBase {
     }
 
     public void setParkId(String parkId){
-        if(!StrUtil.isBlank(parkId)){
-            this.parkId=parkId;
+        if (!StrUtil.isBlank(parkId) && StrUtil.isBlank(this.parkId)) {
+            this.parkId = parkId;
         }
     }
 }

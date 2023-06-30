@@ -11,7 +11,6 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Nullable;
 import java.util.List;
 
 /**
@@ -72,8 +71,8 @@ public class CarPortController {
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
-    public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, carNo, openId);
+    public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId) {
+        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId);
     }
 
     @ApiOperation(value = "获取通道列表")

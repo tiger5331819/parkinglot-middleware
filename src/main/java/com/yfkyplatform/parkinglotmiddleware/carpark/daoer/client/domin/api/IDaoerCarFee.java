@@ -45,7 +45,7 @@ public interface IDaoerCarFee {
      * @return
      */
     Mono<DaoerBaseResp> payCarFeeAccessWithArrear(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
-                                                  int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId, String inId);
+                                                  int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId, String inId, String parkNo);
 
     /**
      * 根据通道号获取车辆费用信息

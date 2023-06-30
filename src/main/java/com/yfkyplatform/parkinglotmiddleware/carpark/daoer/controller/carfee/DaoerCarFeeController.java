@@ -73,7 +73,7 @@ public class DaoerCarFeeController {
         return api(parkingLotId).payCarFeeAccessWithArrear(request.getCarNo(), request.getEntryTime(), request.getPayTime(),
                 request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
                 request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(),
-                request.getChannelId(), request.getInId()).block();
+                request.getChannelId(), request.getInId(), request.getParkNo()).block();
     }
 
     @ApiOperation(value = "无牌车出场（欠费）")

@@ -6,7 +6,6 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageWithArrearRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
@@ -16,11 +15,10 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.universal.TestBox;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -45,43 +43,42 @@ public class CarportServiceExposer implements ICarPortService {
 
     private CarOrderResultByListRpcResp makeCarOrderResultByListRpcResp(CarOrderWithArrearResultByList data) {
 
-        CarOrderResultByListRpcResp result = (CarOrderResultByListRpcResp) makeCarOrderResultRpcResp(data);
+        CarOrderResultByListRpcResp result = makeCarOrderResultRpcResp(data);
 
-        result.setArrearList(data.getArrearList().stream().map(item -> (CarOrderResultByListRpcResp) makeCarOrderResultRpcResp(item)).collect(Collectors.toList()));
+        result.setArrearList(data.getArrearList().stream().map(this::makeCarOrderResultRpcResp).collect(Collectors.toList()));
 
         return result;
     }
 
-    private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
+    private CarOrderResultByListRpcResp makeCarOrderResultByListRpcResp(CarOrderResult data) {
 
-        CarOrderResultRpcResp result = new CarOrderResultRpcResp();
+        CarOrderResultByListRpcResp result = makeCarOrderResultRpcResp(data);
+
+        result.setArrearList(null);
+
+        return result;
+    }
+
+    private CarOrderResultByListRpcResp makeCarOrderResultRpcResp(CarOrderResult data) {
+        CarOrderResultByListRpcResp result = new CarOrderResultByListRpcResp();
+
         result.setCarNo(data.getCarNo());
         result.setStartTime(data.getStartTime());
         result.setCreateTime(data.getCreateTime());
         result.setServiceTime(data.getServiceTime());
         result.setTotalFee(data.getTotalFee());
-        result.setPayFee(testBox.changeFee(data.getPayFee()));
+        result.setPayFee(testBox.changeFee().change(data.getPayFee()));
         result.setDiscountFee(data.getDiscountFee());
 
-        return result;
-    }
+        if (data instanceof CarOrderWithArrearResult) {
+            CarOrderWithArrearResult carOrderWithArrearResult = (CarOrderWithArrearResult) data;
+            result.setOverTime(carOrderWithArrearResult.getOverTime());
+            result.setPaymentType(carOrderWithArrearResult.getPaymentType());
+            result.setParkingNo(carOrderWithArrearResult.getParkingNo());
+            result.setInId(carOrderWithArrearResult.getInId());
+            result.setOutTime(carOrderWithArrearResult.getOutTime());
+        }
 
-    private CarOrderResultRpcResp makeCarOrderResultRpcResp(CarOrderWithArrearResult data) {
-        CarOrderResultRpcResp result = new CarOrderResultRpcResp();
-
-        result.setCarNo(data.getCarNo());
-        result.setStartTime(data.getStartTime());
-        result.setCreateTime(data.getCreateTime());
-        result.setServiceTime(data.getServiceTime());
-        result.setTotalFee(data.getTotalFee());
-        result.setPayFee(testBox.changeFee(data.getPayFee()));
-        result.setDiscountFee(data.getDiscountFee());
-
-        result.setOverTime(data.getOverTime());
-        result.setPaymentType(data.getPaymentType());
-        result.setParkingNo(data.getParkingNo());
-        result.setInId(data.getInId());
-        result.setOutTime(data.getOutTime());
 
         return result;
     }
@@ -205,23 +202,6 @@ public class CarportServiceExposer implements ICarPortService {
         result.setTotal(carPortSpace.getTotal());
 
         return result;
-    }
-
-    /**
-     * 根据通道号获取车辆费用信息
-     *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param channelId             通道Id
-     * @param carNo                 车牌号
-     * @param openId                微信/支付宝openId
-     * @return
-     */
-    @Override
-    public CarOrderResultRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId, @Nullable String carNo, @Nullable String openId) {
-        ICarFeeAblitity carFeeService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).fee();
-
-        return makeCarOrderResultRpcResp(carFeeService.getCarFeeInfo(channelId, carNo, openId));
     }
 
     /**
