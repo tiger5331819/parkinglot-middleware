@@ -3,7 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
 import io.swagger.annotations.Api;
@@ -38,7 +38,7 @@ public class CarPortController {
 
     @ApiOperation(value = "无牌车出场")
     @PostMapping("/blankCarOut")
-    public CarOrderResultRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
+    public CarOrderResultByListRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
         return carPortService.blankCarOut(parkingLotManager, parkingLotId, blankCar);
     }
 
@@ -50,7 +50,7 @@ public class CarPortController {
 
     @ApiOperation(value = "临时车出场（获取车辆费用）")
     @GetMapping("/{carNo}/Fee")
-    public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
+    public CarOrderResultByListRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
         return carPortService.getCarFee(parkingLotManager, parkingLotId, carNo);
     }
 
@@ -71,7 +71,7 @@ public class CarPortController {
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
-    public CarOrderResultRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId) {
+    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId) {
         return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId);
     }
 
