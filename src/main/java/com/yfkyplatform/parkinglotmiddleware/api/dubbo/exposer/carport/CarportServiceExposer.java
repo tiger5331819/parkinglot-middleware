@@ -27,8 +27,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -58,29 +56,23 @@ public class CarportServiceExposer implements ICarPortService {
             Random r = new Random();
             int randomTime = r.nextInt(600) + 10;
 
-            String regax = "[0-9]";
-            Matcher matcher = Pattern.compile(regax).matcher(data.getInId());
-            int num = matcher.find() ? matcher.start() : 1;
 
-            for (int i = 0; i < num; i++) {
-                CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
-                mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
-                mockResult.setOverTime(0);
-                mockResult.setPaymentType(1);
-                mockResult.setParkingNo(data.getParkingNo());
-                mockResult.setInId(data.getInId() + 1);
-                mockResult.setCarNo(data.getCarNo());
-                mockResult.setStartTime(LocalDateTime.now().plusMinutes(-randomTime - 10));
-                mockResult.setCreateTime(mockResult.getOutTime());
-                mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
-                mockResult.setPayFee(new BigDecimal(100));
-                mockResult.setDiscountFee(new BigDecimal(30));
-                mockResult.setTotalFee(mockResult.getPayFee().add(mockResult.getDiscountFee()));
+            CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
+            mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
+            mockResult.setOverTime(0);
+            mockResult.setPaymentType(1);
+            mockResult.setParkingNo(data.getParkingNo());
+            mockResult.setInId(data.getInId() + 1);
+            mockResult.setCarNo(data.getCarNo());
+            mockResult.setStartTime(LocalDateTime.now().plusMinutes(-randomTime - 10));
+            mockResult.setCreateTime(mockResult.getOutTime());
+            mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
+            mockResult.setPayFee(new BigDecimal(100));
+            mockResult.setDiscountFee(new BigDecimal(30));
+            mockResult.setTotalFee(mockResult.getPayFee().add(mockResult.getDiscountFee()));
 
-                mockList.add(mockResult);
+            mockList.add(mockResult);
 
-                randomTime = randomTime - 50;
-            }
             data.setArrearList(mockList);
         }
 
