@@ -22,7 +22,6 @@ import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,13 +57,13 @@ public class CarportServiceExposer implements ICarPortService {
 
 
             CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
-            mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
+            mockResult.setOutTime(data.getOutTime().plusMinutes(-randomTime));
             mockResult.setOverTime(0);
             mockResult.setPaymentType(1);
             mockResult.setParkingNo(data.getParkingNo());
             mockResult.setInId(data.getInId() + 1);
             mockResult.setCarNo(data.getCarNo());
-            mockResult.setStartTime(LocalDateTime.now().plusMinutes(-randomTime - 10));
+            mockResult.setStartTime(data.getStartTime().plusMinutes(-randomTime - 10));
             mockResult.setCreateTime(mockResult.getOutTime());
             mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
             mockResult.setPayFee(new BigDecimal(100));
