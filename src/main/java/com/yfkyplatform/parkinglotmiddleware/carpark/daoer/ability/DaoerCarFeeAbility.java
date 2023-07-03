@@ -11,6 +11,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.dao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.*;
+import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -74,7 +75,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setPayCharge(new BigDecimal(0));
             result.setDiscountAmount(new BigDecimal(0));
         }
-        return CarFeeToCarOrder(result, resp.getBody().getArrears());
+        return carFeeToCarOrder(result, resp.getBody().getArrears());
     }
 
     /**
@@ -118,7 +119,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
         }
-        return CarFeeToCarOrder(result, resp.getArrears());
+        return carFeeToCarOrder(result, resp.getArrears());
     }
 
     /**
@@ -141,7 +142,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(3));
         }
-        return CarFeeToCarOrder(result, resp.getArrears());
+        return carFeeToCarOrder(result, resp.getArrears());
     }
 
 
@@ -280,7 +281,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         return orderResult;
     }
 
-    private CarOrderWithArrearResult CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult) {
+    private CarOrderWithArrearResult carFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult) {
         CarOrderWithArrearResultByList orderResult = new CarOrderWithArrearResultByList();
 
         Duration duration = Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
@@ -304,17 +305,14 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         return orderResult;
     }
 
-    private CarOrderWithArrearResultByList CarFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult, List<CarFeeResultWithArrearByCharge> arrears) {
-        CarOrderWithArrearResultByList orderResult = (CarOrderWithArrearResultByList) CarFeeToCarOrder(carFeeResult);
+    private CarOrderWithArrearResultByList carFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult, List<CarFeeResultWithArrearByCharge> arrears) {
+        CarOrderWithArrearResultByList orderResult = (CarOrderWithArrearResultByList) carFeeToCarOrder(carFeeResult);
 
-        if (checkArrearsNotNull(arrears)) {
-            orderResult.setArrearList(arrears.stream().map(item -> (CarOrderWithArrearResultByList) CarFeeToCarOrder(item)).collect(Collectors.toList()));
+        if (AssertTool.checkCollectionNotNull(arrears)) {
+            orderResult.setArrearList(arrears.stream().map(item -> (CarOrderWithArrearResultByList) carFeeToCarOrder(item)).collect(Collectors.toList()));
         }
 
         return orderResult;
     }
 
-    private boolean checkArrearsNotNull(List<CarFeeResultWithArrearByCharge> arrears) {
-        return ObjectUtil.isNotNull(arrears) && !arrears.isEmpty();
-    }
 }

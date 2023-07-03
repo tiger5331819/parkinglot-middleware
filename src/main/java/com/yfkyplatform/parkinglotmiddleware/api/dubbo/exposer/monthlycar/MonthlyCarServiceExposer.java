@@ -14,6 +14,7 @@ import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,8 +80,14 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
                     MonthlyCarRateMessage data = new MonthlyCarRateMessage();
                     data.setDuration(item.getPackageDuration());
                     data.setRemark(item.getRemark());
-                    data.setPackageCharge(testBox.changeFee().change(item.getPackageCharge()));
+                    data.setPackageCharge(item.getPackageCharge());
                     data.setDurationMessage(item.getPackageDurationMessage());
+
+                    testBox.changeFee().ifCanChange((changeFee, discountFee) -> {
+                        if (changeFee.compareTo(new BigDecimal(0)) > 0) {
+                            data.setPackageCharge(changeFee);
+                        }
+                    });
                     return data;
                 }).collect(Collectors.toList());
 

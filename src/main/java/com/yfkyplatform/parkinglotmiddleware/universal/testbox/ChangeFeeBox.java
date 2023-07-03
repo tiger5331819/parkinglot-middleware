@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.universal.testbox;
 import org.springframework.core.env.Environment;
 
 import java.math.BigDecimal;
+import java.util.function.BiConsumer;
 
 /**
  * 修改费用
@@ -19,21 +20,21 @@ public class ChangeFeeBox {
         this.env = env;
     }
 
-    private Boolean enable() {
+    public Boolean enable() {
         return env.getProperty(prefix + "enable", Boolean.class, false);
     }
 
     /**
      * 费用修改
      *
-     * @param fee
+     * @param changeFunc 费用修改函数
      * @return
      */
-    public BigDecimal change(BigDecimal fee) {
+    public void ifCanChange(BiConsumer<BigDecimal, BigDecimal> changeFunc) {
         if (enable()) {
-            return env.getProperty(prefix + "newFee", BigDecimal.class);
-        } else {
-            return fee;
+            BigDecimal changeFee = env.getProperty(prefix + "newFee", BigDecimal.class, new BigDecimal(-1));
+            BigDecimal discountFee = env.getProperty(prefix + "discountFee", BigDecimal.class, new BigDecimal(-1));
+            changeFunc.accept(changeFee, discountFee);
         }
     }
 }

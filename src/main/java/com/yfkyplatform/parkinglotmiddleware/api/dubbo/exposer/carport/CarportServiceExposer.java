@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
+import cn.hutool.core.util.IdUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
@@ -20,8 +21,13 @@ import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
+import java.math.BigDecimal;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -45,6 +51,31 @@ public class CarportServiceExposer implements ICarPortService {
     private CarOrderResultByListRpcResp makeCarOrderResultByListRpcResp(CarOrderWithArrearResultByList data) {
 
         CarOrderResultByListRpcResp result = makeCarOrderResultRpcResp(data);
+
+        if (testBox.changeFee().enable()) {
+            List<CarOrderWithArrearResult> mockList = new LinkedList<>();
+            Random r = new Random();
+            int i1 = r.nextInt(9);
+            for (int i = 0; i < i1; i++) {
+                int randomTime = r.nextInt(60) + 10;
+                CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
+                mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
+                mockResult.setOverTime(0);
+                mockResult.setPaymentType(1);
+                mockResult.setParkingNo(data.getParkingNo());
+                mockResult.setInId(IdUtil.simpleUUID());
+                mockResult.setCarNo(data.getCarNo());
+                mockResult.setStartTime(LocalDateTime.now().plusMinutes(-randomTime - 10));
+                mockResult.setCreateTime(mockResult.getOutTime());
+                mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
+                mockResult.setPayFee(new BigDecimal(r.nextInt(10)));
+                mockResult.setDiscountFee(new BigDecimal(r.nextInt(3)));
+                mockResult.setTotalFee(mockResult.getPayFee().add(mockResult.getDiscountFee()));
+
+                mockList.add(mockResult);
+            }
+            data.setArrearList(mockList);
+        }
 
         if (AssertTool.checkCollectionNotNull(data.getArrearList())) {
             result.setArrearList(data.getArrearList().stream().map(this::makeCarOrderResultRpcResp).collect(Collectors.toList()));
@@ -70,7 +101,7 @@ public class CarportServiceExposer implements ICarPortService {
         result.setCreateTime(data.getCreateTime());
         result.setServiceTime(data.getServiceTime());
         result.setTotalFee(data.getTotalFee());
-        result.setPayFee(testBox.changeFee().change(data.getPayFee()));
+        result.setPayFee(data.getPayFee());
         result.setDiscountFee(data.getDiscountFee());
 
         if (data instanceof CarOrderWithArrearResult) {
@@ -81,6 +112,8 @@ public class CarportServiceExposer implements ICarPortService {
             result.setInId(carOrderWithArrearResult.getInId());
             result.setOutTime(carOrderWithArrearResult.getOutTime());
         }
+
+        testBox.changeFee().ifCanChange(result::setFee);
 
 
         return result;
