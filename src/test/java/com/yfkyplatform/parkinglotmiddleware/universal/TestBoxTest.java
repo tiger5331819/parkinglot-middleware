@@ -19,7 +19,10 @@ public class TestBoxTest {
 
     @Test
     void Test1() {
-        testBox.changeFee().ifCanChange(System.out::println);
+        testBox.changeFee().ifCanChange((fee, discountFee) -> {
+            System.out.println(fee);
+            System.out.println(discountFee);
+        });
 
     }
 }

@@ -57,7 +57,7 @@ public class CarportServiceExposer implements ICarPortService {
             Random r = new Random();
             int i1 = r.nextInt(9);
             for (int i = 0; i < i1; i++) {
-                int randomTime = r.nextInt(60) + 10;
+                int randomTime = r.nextInt(600) + 10;
                 CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
                 mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
                 mockResult.setOverTime(0);
@@ -68,8 +68,8 @@ public class CarportServiceExposer implements ICarPortService {
                 mockResult.setStartTime(LocalDateTime.now().plusMinutes(-randomTime - 10));
                 mockResult.setCreateTime(mockResult.getOutTime());
                 mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
-                mockResult.setPayFee(new BigDecimal(r.nextInt(10)));
-                mockResult.setDiscountFee(new BigDecimal(r.nextInt(3)));
+                mockResult.setPayFee(new BigDecimal(r.nextInt(100)));
+                mockResult.setDiscountFee(new BigDecimal(r.nextInt(30)));
                 mockResult.setTotalFee(mockResult.getPayFee().add(mockResult.getDiscountFee()));
 
                 mockList.add(mockResult);
