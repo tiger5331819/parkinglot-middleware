@@ -57,9 +57,11 @@ public class CarportServiceExposer implements ICarPortService {
             List<CarOrderWithArrearResult> mockList = new LinkedList<>();
             Random r = new Random();
             int randomTime = r.nextInt(600) + 10;
-            Matcher matcher = Pattern.compile("[0-9]]").matcher(data.getInId());
 
+            String regax = "[0-9]";
+            Matcher matcher = Pattern.compile(regax).matcher(data.getInId());
             int num = matcher.find() ? matcher.start() : 1;
+
             for (int i = 0; i < num; i++) {
                 CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
                 mockResult.setOutTime(LocalDateTime.now().plusMinutes(-randomTime));
