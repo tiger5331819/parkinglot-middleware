@@ -20,6 +20,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
@@ -130,5 +132,13 @@ public class MyTest {
         do {
             System.out.println(retryCount);
         } while (++retryCount < 3);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"b20731e16b554cbb991ac239c3ca1c32"})
+    public void ttt5(String data) {
+        String regax = "[0-9]";
+        Matcher matcher = Pattern.compile(regax).matcher(data);
+        System.out.println(matcher.start());
     }
 }
