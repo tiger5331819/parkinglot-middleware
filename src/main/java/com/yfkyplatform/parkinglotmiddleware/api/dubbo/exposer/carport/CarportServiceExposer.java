@@ -15,6 +15,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
@@ -45,7 +46,9 @@ public class CarportServiceExposer implements ICarPortService {
 
         CarOrderResultByListRpcResp result = makeCarOrderResultRpcResp(data);
 
-        result.setArrearList(data.getArrearList().stream().map(this::makeCarOrderResultRpcResp).collect(Collectors.toList()));
+        if (AssertTool.checkCollectionNotNull(data.getArrearList())) {
+            result.setArrearList(data.getArrearList().stream().map(this::makeCarOrderResultRpcResp).collect(Collectors.toList()));
+        }
 
         return result;
     }
