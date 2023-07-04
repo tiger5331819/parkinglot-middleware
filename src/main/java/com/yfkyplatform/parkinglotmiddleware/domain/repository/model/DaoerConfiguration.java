@@ -14,5 +14,6 @@ public class DaoerConfiguration implements Serializable {
     private String parkId;
     private String baseUrl;
     private String imgUrl;
+    private Boolean backTrack;
 
 }

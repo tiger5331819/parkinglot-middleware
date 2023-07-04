@@ -131,7 +131,7 @@
         <dependency>
             <groupId>com.yfkyplatform.passthrough</groupId>
             <artifactId>passthrough-api</artifactId>
-            <version>1.0.34-RELEASE</version>
+            <version>feature-backtrack-SNAPSHOT</version>
         </dependency>
 
         <!-- YfkyFramework -->

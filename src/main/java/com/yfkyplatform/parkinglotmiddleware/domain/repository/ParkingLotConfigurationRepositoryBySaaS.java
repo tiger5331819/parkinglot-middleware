@@ -62,6 +62,7 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
             daoerCfg.setParkId(resp.getThirdId());
             daoerCfg.setBaseUrl(env.getProperty(prefix + "baseUrl"));
             daoerCfg.setImgUrl(env.getProperty(prefix + "imgUrl"));
+            //daoerCfg.setBackTrack(resp.get);
             cfg.setConfig(daoerCfg);
         } else {
             cfg.setConfig(new Object());
