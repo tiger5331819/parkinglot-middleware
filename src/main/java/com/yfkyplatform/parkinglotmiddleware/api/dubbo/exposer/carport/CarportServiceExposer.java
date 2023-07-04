@@ -186,7 +186,8 @@ public class CarportServiceExposer implements ICarPortService {
         DaoerParkingLotConfiguration cfg = parkingLot.configuration();
         ICarFeeAblitity carFeeService = parkingLot.fee();
 
-        return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoWithArrear(carNo));
+        return cfg.getBackTrack() ? makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoWithArrear(carNo)) :
+                makeCarOrderResultRpcResp(carFeeService.getCarFeeInfo(carNo));
     }
 
     /**
