@@ -1,9 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
+import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
-import com.yfkyplatform.passthrough.api.mgnt.PtParkingLotServiceApi;
 import com.yfkyplatform.passthrough.api.mgnt.resp.GetPtParkingLotRpcResp;
+import com.yfkyplatform.passthrough.api.micro.PtParkingLotServiceMicroApi;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
@@ -23,7 +24,7 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
 
     private final Environment env;
     @DubboReference(check = false)
-    private PtParkingLotServiceApi ptParkingLotApi;
+    private PtParkingLotServiceMicroApi ptParkingLotServiceMicroApi;
 
     public ParkingLotConfigurationRepositoryBySaaS(Environment environment) {
         this.env = environment;
@@ -49,7 +50,8 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
      */
     @Override
     public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
-        GetPtParkingLotRpcResp resp = ptParkingLotApi.getPtParkingLot(Long.valueOf(parkingLotId));
+        Integer operatorId = AccountRpcContext.getOperatorId();
+        GetPtParkingLotRpcResp resp = ptParkingLotServiceMicroApi.getPtParkingLotMicroForOutside(Long.valueOf(parkingLotId), operatorId);
 
         String prefix = "saasParkingLotConfig." + parkingType + ".";
 

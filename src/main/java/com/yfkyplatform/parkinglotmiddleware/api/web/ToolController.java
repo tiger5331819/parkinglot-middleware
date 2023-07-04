@@ -75,9 +75,7 @@ public class ToolController {
         SaaSWebClient saaSWebClient = testBox.saasClient();
         Map<String, Object> resultJson = saaSWebClient.post("{\"parkinglotId\":\"" + req.getParkingLotId() + "\",\"orderPayState\":1000,\"chargeTimeStart\":\"" + req.getChargeTimeStart() + "\",\"chargeTimeClose\":\"" + req.getChargeTimeClose() + "\",\"plateNumberNotNull\":true,\"current\":1,\"size\":" + req.getSize() + "}", "mgntpc/pc/order/page", req.getToken());
 
-
-        Map<String, Object> data = (Map<String, Object>) resultJson.get("data");
-        List<Map<String, Object>> records = (List<Map<String, Object>>) data.get("records");
+        List<Map<String, Object>> records = (List<Map<String, Object>>) resultJson.get("records");
         List<Long> orderId = records.stream().map(item -> (Long) item.get("orderId")).collect(Collectors.toList());
 
         List<CleanCarResp> cleanCarRespList = orderId.stream().map(item -> {
