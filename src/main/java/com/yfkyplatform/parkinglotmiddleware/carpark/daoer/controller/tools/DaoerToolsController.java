@@ -88,9 +88,9 @@ public class DaoerToolsController {
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append(webUrl);
             stringBuilder.append("scanh5/daoer/scanenter/");
-            if (StrUtil.isNotBlank(wechatPay) && StrUtil.isBlank(aliPay)) {
+            if (StrUtil.isNotBlank(wechatPay) && StrUtil.isBlank(aliPay) && StrUtil.equals(aliPay, "null")) {
                 stringBuilder.append(wechatPay);
-            } else if (StrUtil.isNotBlank(aliPay) && StrUtil.isBlank(wechatPay)) {
+            } else if (StrUtil.isNotBlank(aliPay) && StrUtil.isBlank(wechatPay) && StrUtil.equals(wechatPay, "null")) {
                 stringBuilder.append(aliPay);
             } else {
                 stringBuilder.append(wechatPay);
