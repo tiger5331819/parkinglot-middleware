@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResult
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.CarPortSpaceResult;
@@ -181,7 +182,9 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarOrderResultByListRpcResp getCarFee(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
-        ICarFeeAblitity carFeeService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).fee();
+        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
+        DaoerParkingLotConfiguration cfg = parkingLot.configuration();
+        ICarFeeAblitity carFeeService = parkingLot.fee();
 
         return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoWithArrear(carNo));
     }
