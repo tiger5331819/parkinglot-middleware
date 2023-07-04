@@ -72,7 +72,7 @@ public class ToolController {
     @PostMapping("/cleanCar")
     public CleanCarListResp cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
 
-        SaaSWebClient saaSWebClient = testBox.saasClient();
+        SaaSWebClient saaSWebClient = testBox.saasClient("prod");
         Map<String, Object> resultJson = saaSWebClient.post("{\"parkinglotId\":\"" + req.getParkingLotId() + "\",\"orderPayState\":1000,\"chargeTimeStart\":\"" + req.getChargeTimeStart() + "\",\"chargeTimeClose\":\"" + req.getChargeTimeClose() + "\",\"plateNumberNotNull\":true,\"current\":1,\"size\":" + req.getSize() + "}", "mgntpc/pc/order/page", req.getToken());
 
         List<Map<String, Object>> records = (List<Map<String, Object>>) resultJson.get("records");

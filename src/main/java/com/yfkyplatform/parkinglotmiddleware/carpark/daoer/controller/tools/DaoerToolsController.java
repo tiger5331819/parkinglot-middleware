@@ -129,8 +129,8 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "获取SaaS 租户和支付id")
     @GetMapping(value = "/saasToken")
-    public SaaSPayMessageResultResp getSaaSToken(@ApiParam(value = "token") String token) throws JsonProcessingException {
-        SaaSWebClient saaSWebClient = testBox.saasClient();
+    public SaaSPayMessageResultResp getSaaSToken(@ApiParam(value = "environment") String environment, @ApiParam(value = "token") String token) throws JsonProcessingException {
+        SaaSWebClient saaSWebClient = testBox.saasClient(environment);
         Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
         Integer tenantId = (Integer) data.get("tenantId");
         AtomicReference<Long> aliThirdId = new AtomicReference<>(null);
@@ -194,7 +194,7 @@ public class DaoerToolsController {
     @GetMapping(value = "/url/{environment}/all")
     public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
                                             @ApiParam(value = "token") String token) throws JsonProcessingException {
-        SaaSPayMessageResultResp resultResp = getSaaSToken(token);
+        SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
 
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);

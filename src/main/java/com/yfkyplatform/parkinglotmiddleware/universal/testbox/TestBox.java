@@ -46,7 +46,7 @@ public class TestBox {
      *
      * @return
      */
-    public SaaSWebClient saasClient() {
-        return new SaaSWebClient(env.getProperty(prefix + ".saas.baseUrl"));
+    public SaaSWebClient saasClient(String saas) {
+        return new SaaSWebClient(env.getProperty(prefix + ".saas." + saas));
     }
 }
