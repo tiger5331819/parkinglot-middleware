@@ -187,7 +187,7 @@ public class CarportServiceExposer implements ICarPortService {
         ICarFeeAblitity carFeeService = parkingLot.fee();
 
         return cfg.getBackTrack() ? makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoWithArrear(carNo)) :
-                makeCarOrderResultRpcResp(carFeeService.getCarFeeInfo(carNo));
+                makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfo(carNo));
     }
 
     /**
