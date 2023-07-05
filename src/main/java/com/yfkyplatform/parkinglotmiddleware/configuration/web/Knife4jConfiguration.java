@@ -96,7 +96,8 @@ public class Knife4jConfiguration {
                 .description("Bearer Token")
                 .modelRef(new ModelRef("string"))
                 .parameterType("header")
-                .required(false).build();
+                .required(false)
+                .build();
         parameters.add(authorizationParameter);
         return parameters;
     }

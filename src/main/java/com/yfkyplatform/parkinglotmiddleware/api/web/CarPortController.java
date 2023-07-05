@@ -72,7 +72,7 @@ public class CarPortController {
         return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
     }
 
-    @ApiOperation(value = "车辆缴费")
+    @ApiOperation(value = "车辆缴费（欠费）")
     @PatchMapping("/{carNo}/Fee/Arrear")
     public Boolean payAccessWithArrear(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessageWithArrear payData) {
 

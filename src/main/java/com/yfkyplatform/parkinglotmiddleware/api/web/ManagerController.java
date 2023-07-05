@@ -81,7 +81,7 @@ public class ManagerController {
         return managerService.parkingManagerHealthCheck(null, parkingLotId);
     }
 
-    @ApiOperation(value = "指定停车场健康检查")
+    @ApiOperation(value = "获取指定停车场管理的指定停车场健康检查")
     @GetMapping("/{parkingLotManager}/{parkingLotId}/healthcheck")
     public Map<Integer, Map<Long, Boolean>> getManagerHealthCheck(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
         return managerService.parkingManagerHealthCheck(parkingLotManager, parkingLotId);
