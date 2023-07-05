@@ -48,6 +48,7 @@ public abstract class YfkyWebClient {
                 log.error(errResult);
                 throw new RuntimeException("网络错误");
             } else {
+                log.error(err.toString());
                 throw new RuntimeException(err.getMessage());
             }
         };
