@@ -46,7 +46,7 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
                 daoerCfg.setParkId(item.get("config." + "parkId"));
                 daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
                 daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
-                daoerCfg.setBackTrack(env.getProperty(saasParkingLotConfigPrefix + "backTrack", boolean.class, false));
+                daoerCfg.setBackTrack(Boolean.valueOf(item.get("config." + "backTrack")));
 
                 cfg.setConfig(daoerCfg);
                 cache.put(cfg.getParkingLotId(), cfg);
