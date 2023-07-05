@@ -110,8 +110,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     @Override
     public CarOrderWithArrearResultByList getCarFeeInfoByChannelWithArrear(String channelId) {
         CarFeeResultWithArrear resp = api.getChannelCarFeeWithArrear(channelId).block().getBody();
-        CarFeeResultWithArrearByCharge result = resp.getCharge();
-        if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
+        CarFeeResultWithArrearByCharge result = ObjectUtil.isNull(resp) ? new CarFeeResultWithArrearByCharge() : resp.getCharge();
+        if (StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResultWithArrearByCharge();
             result.setAmount(new BigDecimal(0));
             result.setPayCharge(new BigDecimal(0));
@@ -284,7 +284,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     private CarOrderWithArrearResult carFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult) {
         CarOrderWithArrearResultByList orderResult = new CarOrderWithArrearResultByList();
 
-        Duration duration = Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
+        Duration duration = StrUtil.isBlank(carFeeResult.getCarNo()) ? Duration.ZERO : Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
 
         orderResult.setCarNo(carFeeResult.getCarNo());
         orderResult.setDiscountFee(carFeeResult.getDiscountAmount().movePointRight(2));
