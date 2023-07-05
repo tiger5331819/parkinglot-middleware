@@ -55,7 +55,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setPayCharge(new BigDecimal(0));
             result.setDiscountAmount(new BigDecimal(0));
         }
-        return CarFeeToCarOrder(result);
+        return carFeeToCarOrder(result);
     }
 
     /**
@@ -98,7 +98,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
         }
-        return CarFeeToCarOrder(result);
+        return carFeeToCarOrder(result);
     }
 
     /**
@@ -267,7 +267,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         }
     }
 
-    private CarOrderResult CarFeeToCarOrder(CarFeeResult carFeeResult) {
+    private CarOrderResult carFeeToCarOrder(CarFeeResult carFeeResult) {
         CarOrderResult orderResult = new CarOrderResult();
 
         orderResult.setCarNo(carFeeResult.getCarNo());
