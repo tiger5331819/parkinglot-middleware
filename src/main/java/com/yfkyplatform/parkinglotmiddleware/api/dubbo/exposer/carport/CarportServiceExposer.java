@@ -252,7 +252,7 @@ public class CarportServiceExposer implements ICarPortService {
     public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId) throws ExposerException {
         ICarFeeAblitity carFeeService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).fee();
 
-        return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoWithArrear(channelId));
+        return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoByChannelWithArrear(channelId));
     }
 
     /**
