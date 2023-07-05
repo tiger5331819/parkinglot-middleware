@@ -22,11 +22,11 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +42,7 @@ public class CarportServiceExposer implements ICarPortService {
 
     private final TestBox testBox;
 
-    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) {
+    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) throws NoSuchAlgorithmException {
         this.factory = factory;
         this.testBox = testBox;
     }
@@ -53,18 +53,16 @@ public class CarportServiceExposer implements ICarPortService {
 
         if (testBox.changeFee().enable()) {
             List<CarOrderWithArrearResult> mockList = new LinkedList<>();
-            Random r = new Random();
-            int randomTime = r.nextInt(600) + 10;
 
 
             CarOrderWithArrearResult mockResult = new CarOrderWithArrearResult();
-            mockResult.setOutTime(data.getOutTime().plusMinutes(-randomTime));
+            mockResult.setOutTime(data.getOutTime().plusMinutes(-50));
             mockResult.setOverTime(0);
             mockResult.setPaymentType(1);
             mockResult.setParkingNo(data.getParkingNo());
             mockResult.setInId(data.getInId() + 1);
             mockResult.setCarNo(data.getCarNo());
-            mockResult.setStartTime(data.getStartTime().plusMinutes(-randomTime - 10));
+            mockResult.setStartTime(data.getStartTime().plusMinutes(-60));
             mockResult.setCreateTime(mockResult.getOutTime());
             mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
             mockResult.setPayFee(new BigDecimal(100));
