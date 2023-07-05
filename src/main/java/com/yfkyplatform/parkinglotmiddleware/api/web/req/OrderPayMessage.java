@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yfkyframework.common.core.domain.BaseRpcReq;
@@ -20,7 +20,7 @@ public class OrderPayMessage extends BaseRpcReq {
      */
     @ApiModelProperty(value = "支付时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
-    LocalDateTime payTime;
+    private LocalDateTime payTime;
     /**
      * 支付类型
      * 0 缺省
@@ -35,20 +35,20 @@ public class OrderPayMessage extends BaseRpcReq {
      * 5000 东莞通支付
      */
     @ApiModelProperty(value = "支付类型")
-    int payType;
+    private int payType;
     /**
      * 支付流水号
      */
     @ApiModelProperty(value = "支付流水号")
-    String paymentTransactionId;
+    private String paymentTransactionId;
     /**
      * 支付金额
      */
     @ApiModelProperty(value = "支付金额")
-    BigDecimal payFee;
+    private BigDecimal payFee;
     /**
      * 优惠金额
      */
     @ApiModelProperty(value = "优惠金额")
-    BigDecimal discountFee;
+    private BigDecimal discountFee;
 }

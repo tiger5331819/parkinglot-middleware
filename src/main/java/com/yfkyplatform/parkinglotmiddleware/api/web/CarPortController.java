@@ -3,9 +3,12 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageWithArrearRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessage;
+import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessageWithArrear;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +70,21 @@ public class CarPortController {
 
 
         return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
+    }
+
+    @ApiOperation(value = "车辆缴费")
+    @PatchMapping("/{carNo}/Fee/Arrear")
+    public Boolean payAccessWithArrear(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessageWithArrear payData) {
+
+        OrderPayMessageWithArrearRpcReq orderPayMessageWithArrearRpcReq = new OrderPayMessageWithArrearRpcReq();
+        orderPayMessageWithArrearRpcReq.setPayTime(payData.getPayTime());
+        orderPayMessageWithArrearRpcReq.setDiscountFee(payData.getDiscountFee());
+        orderPayMessageWithArrearRpcReq.setPayType(payData.getPayType());
+        orderPayMessageWithArrearRpcReq.setPaymentTransactionId(payData.getPaymentTransactionId());
+        orderPayMessageWithArrearRpcReq.setPayFee(payData.getPayFee());
+        orderPayMessageWithArrearRpcReq.setInId(payData.getInId());
+
+        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageWithArrearRpcReq);
     }
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
