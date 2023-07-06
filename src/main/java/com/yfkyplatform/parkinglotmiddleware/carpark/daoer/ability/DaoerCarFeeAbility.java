@@ -176,7 +176,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         log.info("ToltalFee:" + totalFee.movePointLeft(2));
         DaoerBaseRespHead payState = api.payCarFeeAccessWithArrear(payMessage.getCarNo(),
-                payMessage.getPayTime().toString(),
+                fee.getInTime().toString(),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 new Long(duration.toMinutes()).intValue(),
                 totalFee.movePointLeft(2),
