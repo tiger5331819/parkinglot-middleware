@@ -300,7 +300,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         orderResult.setInId(carFeeResult.getInId());
         orderResult.setOutTime(carFeeResult.getOutTime());
 
-        redis.set("order:daoer:" + carFeeResult.getInId(), carFeeResult.getParkingNo());
+        redis.set("order:daoer:" + carFeeResult.getInId(), carFeeResult.getParkingNo(), Duration.ofMinutes(3));
 
         return orderResult;
     }
