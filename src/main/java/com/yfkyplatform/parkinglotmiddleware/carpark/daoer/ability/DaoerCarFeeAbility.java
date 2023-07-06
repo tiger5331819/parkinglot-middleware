@@ -119,7 +119,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
         }
-        return carFeeToCarOrder(result, resp.getArrears());
+        return carFeeToCarOrder(result, ObjectUtil.isNull(resp) ? null : resp.getArrears());
     }
 
     /**
