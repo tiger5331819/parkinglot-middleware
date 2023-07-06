@@ -192,7 +192,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         if (payState.getStatus() == 1) {
             return true;
         } else {
-            log.error(payState.getMessage());
+            log.error(payState.toString());
             return false;
         }
     }
