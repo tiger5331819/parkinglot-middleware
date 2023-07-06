@@ -142,8 +142,6 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setInId(inId);
         model.setParkId(parkNo);
 
-        log.error("支付数据：" + model);
-
         return post(model, "api/index/tempFee/ly/paysuccess", DaoerBaseResp.class);
     }
 

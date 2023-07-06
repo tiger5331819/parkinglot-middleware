@@ -1,6 +1,5 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
-import cn.hutool.core.date.DateTime;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarFee;
@@ -176,7 +175,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         log.info("ToltalFee:" + totalFee.movePointLeft(2));
         DaoerBaseRespHead payState = api.payCarFeeAccessWithArrear(payMessage.getCarNo(),
-                fee.getInTime().toString(),
+                fee.getInTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 new Long(duration.toMinutes()).intValue(),
                 totalFee.movePointLeft(2),
@@ -192,7 +191,6 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         if (payState.getStatus() == 1) {
             return true;
         } else {
-            log.error(fee.toString());
             log.error(payState.toString());
             return false;
         }
@@ -236,7 +234,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         log.info("ToltalFee:" + totalFee.movePointLeft(2));
         DaoerBaseRespHead payState = api.payCarFeeAccess(payMessage.getCarNo(),
-                new DateTime(fee.getInTime()).toString(),
+                fee.getInTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                 fee.getChargeDuration(),
                 totalFee.movePointLeft(2),
