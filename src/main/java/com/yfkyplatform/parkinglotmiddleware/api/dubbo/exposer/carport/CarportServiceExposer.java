@@ -22,7 +22,6 @@ import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -42,7 +41,7 @@ public class CarportServiceExposer implements ICarPortService {
 
     private final TestBox testBox;
 
-    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) throws NoSuchAlgorithmException {
+    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) {
         this.factory = factory;
         this.testBox = testBox;
     }
@@ -66,7 +65,7 @@ public class CarportServiceExposer implements ICarPortService {
             mockResult.setCreateTime(mockResult.getOutTime());
             mockResult.setServiceTime(new Long(Duration.between(mockResult.getStartTime(), mockResult.getOutTime()).toMinutes()).intValue());
             mockResult.setPayFee(new BigDecimal(100));
-            mockResult.setDiscountFee(new BigDecimal(30));
+            mockResult.setDiscountFee(new BigDecimal(0));
             mockResult.setTotalFee(mockResult.getPayFee().add(mockResult.getDiscountFee()));
 
             mockList.add(mockResult);
