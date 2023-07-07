@@ -16,6 +16,7 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -112,6 +113,9 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         CarFeeResultWithArrearByCharge result = ObjectUtil.isNull(resp) ? new CarFeeResultWithArrearByCharge() : resp.getCharge();
         if (StrUtil.isBlank(result.getCarNo())) {
             result = new CarFeeResultWithArrearByCharge();
+            result.setOutTime(LocalDateTime.now());
+            result.setInTime(LocalDateTime.now());
+            result.setInId("");
             result.setAmount(new BigDecimal(0));
             result.setPayCharge(new BigDecimal(0));
             result.setDiscountAmount(new BigDecimal(0));
