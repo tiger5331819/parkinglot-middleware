@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
+import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
@@ -59,7 +60,7 @@ public class CarportServiceExposer implements ICarPortService {
             mockResult.setOverTime(0);
             mockResult.setPaymentType(1);
             mockResult.setParkingNo(data.getParkingNo());
-            mockResult.setInId(data.getInId() + 1);
+            mockResult.setInId("Mock" + data.getInId() + 1);
             mockResult.setCarNo(data.getCarNo());
             mockResult.setStartTime(data.getStartTime().plusMinutes(-60));
             mockResult.setCreateTime(mockResult.getOutTime());
@@ -165,6 +166,10 @@ public class CarportServiceExposer implements ICarPortService {
         message.setPaymentTransactionId(payMessage.getPaymentTransactionId());
         message.setDiscountFee(payMessage.getDiscountFee());
         message.setInId(payMessage.getInId());
+
+        if (testBox.changeFee().enable() && StrUtil.contains("Mock", payMessage.getInId())) {
+            return true;
+        }
 
         return carFeeService.payCarFeeAccessWithArrear(message);
     }
