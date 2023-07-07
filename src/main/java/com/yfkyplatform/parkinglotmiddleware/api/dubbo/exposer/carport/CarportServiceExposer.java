@@ -167,7 +167,7 @@ public class CarportServiceExposer implements ICarPortService {
         message.setDiscountFee(payMessage.getDiscountFee());
         message.setInId(payMessage.getInId());
 
-        if (testBox.changeFee().enable() && StrUtil.contains("Mock", payMessage.getInId())) {
+        if (testBox.changeFee().enable() && StrUtil.contains(payMessage.getInId(), "Mock")) {
             return true;
         }
 
