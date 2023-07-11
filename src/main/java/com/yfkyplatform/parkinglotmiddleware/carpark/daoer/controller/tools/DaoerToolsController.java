@@ -80,13 +80,13 @@ public class DaoerToolsController {
         return result;
     }
 
-    @ApiOperation(value = "根据通道号获取缴纳金额（欠费）")
+    @ApiOperation(value = "获取通道缴纳金额（欠费）")
     @GetMapping("/fee/arrear/channel")
-    public List<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@ApiParam(value = "车场描述") String parkingLotName) {
+    public List<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable @ApiParam(value = "车场描述") String parkingLotId) {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         List<CarFeeResultWithArrear> result = new ArrayList<>();
 
-        configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
+        configurationList.stream().filter(item -> item.getDescription().contains(parkingLotId)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
             DaoerParkingLot parkingLot = (DaoerParkingLot) manager.parkingLot(item);
             List<ChannelInfoResult> channelInfoResultList = parkingLot.carport().getChannelsInfo();
             IDaoerCarFee carFee = parkingLot.client();
@@ -219,7 +219,7 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "全部URL地址")
     @GetMapping(value = "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @PathVariable @ApiParam(value = "车场描述") String parkingLotId,
                                             @ApiParam(value = "token") String token) throws JsonProcessingException {
         SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
@@ -227,7 +227,7 @@ public class DaoerToolsController {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         String origin = testBox.envUrl().environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
-        return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
+        return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotId)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));
 
             AllURLResultResp allURLResultResp = new AllURLResultResp();
