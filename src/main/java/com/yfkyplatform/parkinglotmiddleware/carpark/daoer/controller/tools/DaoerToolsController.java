@@ -95,8 +95,8 @@ public class DaoerToolsController {
                 if (data.getHead().getStatus() == 1) {
                     CarFeeResultWithArrear fee = new CarFeeResultWithArrear();
                     fee.setChannel(channel);
-                    fee.setCharge(fee.getCharge());
-                    fee.setArrears(fee.getArrears());
+                    fee.setCharge(data.getBody().getCharge());
+                    fee.setArrears(data.getBody().getArrears());
                     result.add(fee);
                 }
             });
@@ -219,7 +219,7 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "全部URL地址")
     @GetMapping(value = "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @PathVariable @ApiParam(value = "车场描述") String parkingLotId,
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @PathVariable @ApiParam(value = "车场描述") String parkingLotName,
                                             @ApiParam(value = "token") String token) throws JsonProcessingException {
         SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
@@ -227,7 +227,7 @@ public class DaoerToolsController {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         String origin = testBox.envUrl().environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
-        return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotId)).map(cfg -> {
+        return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));
 
             AllURLResultResp allURLResultResp = new AllURLResultResp();
