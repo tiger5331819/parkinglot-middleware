@@ -37,38 +37,38 @@ public class DaoerCarFeeController {
     }
 
     @ApiOperation(value = "获取临时车缴纳金额")
-    @GetMapping("/fee")
+    @GetMapping("")
     public DaoerBaseResp<CarFeeResult> getCarFee(@PathVariable String parkingLotId, String carNo) {
         return api(parkingLotId).getCarFeeInfo(carNo).block();
     }
 
     @ApiOperation(value = "获取临时车缴纳金额（欠费）")
-    @GetMapping("/fee/arrear")
+    @GetMapping("/arrear")
     public DaoerBaseResp<CarFeeResultWithArrear> getCarFeeWithArrear(@PathVariable String parkingLotId, String carNo) {
         return api(parkingLotId).getCarFeeInfoWithArrear(carNo).block();
     }
 
     @ApiOperation(value = "根据通道号获取缴纳金额")
-    @GetMapping("/fee/channel")
+    @GetMapping("/channel")
     public DaoerBaseResp<CarFeeResult> getChannelCarFee(@PathVariable String parkingLotId, String channelId, String carNo, String openId) {
         return api(parkingLotId).getChannelCarFee(channelId, carNo, openId).block();
     }
 
     @ApiOperation(value = "根据通道号获取缴纳金额（欠费）")
-    @GetMapping("/fee/arrear/channel")
+    @GetMapping("/arrear/channel")
     public DaoerBaseResp<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable String parkingLotId, String channelId) {
         return api(parkingLotId).getChannelCarFeeWithArrear(channelId).block();
     }
 
     @ApiOperation(value = "临停缴费支付")
-    @PostMapping("/fee")
+    @PostMapping("")
     public DaoerBaseResp payCarFee(@PathVariable String parkingLotId, @RequestBody CarFeePayRequest request) {
         return api(parkingLotId).payCarFeeAccess(request.getCarNo(), request.getEntryTime(), request.getPayTime(), request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
                 request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(), request.getChannelId()).block();
     }
 
     @ApiOperation(value = "临停缴费支付（欠费）")
-    @PostMapping("/fee/arrear")
+    @PostMapping("/arrear")
     public DaoerBaseResp payCarFeeWithArrear(@PathVariable String parkingLotId, @RequestBody CarFeePayWithArrearRequest request) {
         return api(parkingLotId).payCarFeeAccessWithArrear(request.getCarNo(), request.getEntryTime(), request.getPayTime(),
                 request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
