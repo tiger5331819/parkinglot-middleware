@@ -219,7 +219,7 @@ public class DaoerToolsController {
 
     @ApiOperation(value = "全部URL地址")
     @GetMapping(value = "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @PathVariable @ApiParam(value = "车场描述") String parkingLotName,
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
                                             @ApiParam(value = "token") String token) throws JsonProcessingException {
         SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
