@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.testbox;
 
+import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.DrCloudWebClient;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -11,17 +13,20 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class TestBox {
-    private final Environment env;
+    public final Environment env;
     private final String prefix = "TestBox";
 
     private final ChangeFeeBox changeFeeBox;
 
     private final EnvUrlBox envUrlBox;
 
-    public TestBox(Environment env) {
+    private final RedisTool redis;
+
+    public TestBox(Environment env, RedisTool redis) {
         this.env = env;
         changeFeeBox = new ChangeFeeBox(env);
         envUrlBox = new EnvUrlBox(env);
+        this.redis = redis;
     }
 
     public ChangeFeeBox changeFee() {
@@ -48,5 +53,14 @@ public class TestBox {
      */
     public SaaSWebClient saasClient(String saas) {
         return new SaaSWebClient(env.getProperty(prefix + ".saas." + saas));
+    }
+
+    /**
+     * 获取道尔云 Web API client
+     *
+     * @return
+     */
+    public DrCloudWebClient drCloudClient() {
+        return new DrCloudWebClient(env.getProperty(prefix + ".drcloud"), redis);
     }
 }

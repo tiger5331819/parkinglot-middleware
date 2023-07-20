@@ -18,6 +18,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfigurat
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
+import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import io.swagger.annotations.Api;
@@ -45,7 +46,7 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Api(tags = {"基础支持（工具）"})
-@RequestMapping(value = "/Daoer/api/{parkingLotId}/tools")
+@RequestMapping(value = "/Daoer/api/tools")
 @IgnoreCommonResponse
 @RestController
 public class DaoerToolsController {
@@ -67,13 +68,13 @@ public class DaoerToolsController {
     }
 
     @ApiOperation(value = "图片")
-    @GetMapping(value = "/img", produces = MediaType.IMAGE_JPEG_VALUE)
+    @GetMapping(value = "/{parkingLotId}/img", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getImg(@PathVariable String parkingLotId, String imgPath) {
         return api(parkingLotId).getImage(imgPath).block();
     }
 
     @ApiOperation(value = "Access_Token")
-    @GetMapping(value = "/token")
+    @GetMapping(value = "/{parkingLotId}/token")
     public DaoerBaseResp<String> getToken(@PathVariable String parkingLotId) {
         DaoerBaseResp<String> result = new DaoerBaseResp<String>();
         result.setBody(api(parkingLotId).getToken());
@@ -227,6 +228,22 @@ public class DaoerToolsController {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         String origin = testBox.envUrl().environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
+        if (AssertTool.checkCollectionNotNull(configurationList)) {
+            String data = "{\"pageNum\":1,\"pageSize\":10,\"parkName\":\"" + parkingLotName + "\"}";
+            Map<String, Object> result = testBox.drCloudClient().post(data, "api/backstage/regist/findall");
+            Map<String, Object> resultData = (Map<String, Object>) result.get("data");
+            List<Map<String, Object>> list = (List<Map<String, Object>>) resultData.get("list");
+            configurationList = list.stream().map(item -> {
+                String saasParkingLotConfigPrefix = "saasParkingLotConfig.Daoer.";
+                DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration((String) item.get("parkNo"), (String) item.get("appName"),
+                        (String) item.get("parkNo"),
+                        testBox.env.getProperty(saasParkingLotConfigPrefix + "baseUrl"), (String) item.get("parkName"),
+                        testBox.env.getProperty(saasParkingLotConfigPrefix + "imgUrl"), false);
+                manager.addParkingLot(cfg);
+                return cfg;
+            }).collect(Collectors.toList());
+        }
+
         return configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(cfg -> {
             URLResultResp resp = getURL(cfg.getId(), environment, String.valueOf(resultResp.getWxThirdId()), String.valueOf(resultResp.getAliThirdId()));
 
@@ -289,7 +306,7 @@ public class DaoerToolsController {
     }
 
     @ApiOperation(value = "检查车辆是否在场")
-    @PostMapping("/checkCar")
+    @PostMapping("/{parkingLotId}/checkCar")
     public List<CarCheckResultResp> checkCar(@PathVariable String parkingLotId, @RequestBody String data) {
         String[] carNos = data.split("\r\n");
         List<CarCheckResultResp> resultResps = new LinkedList<>();

@@ -1,7 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
@@ -63,16 +62,15 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
      * @param data
      * @return
      */
-    protected abstract Boolean SaveData(Data data) throws JsonProcessingException;
+    protected abstract Boolean SaveData(Data data);
 
     /**
      * 添加停车场
      *
      * @param data 停车场配置数据
      * @return
-     * @throws JsonProcessingException
      */
-    public Boolean addParkingLot(Data data) throws JsonProcessingException {
+    public Boolean addParkingLot(Data data) {
         dataCheck(data);
         return SaveData(data);
     }

@@ -1,7 +1,6 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
+package com.yfkyplatform.parkinglotmiddleware.carpark.jieshun;
 
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.*;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.DaoerClient;
+import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.JieShunClient;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
@@ -18,24 +17,25 @@ import lombok.extern.slf4j.Slf4j;
  * @author Suhuyuan
  */
 @Slf4j
-public class DaoerParkingLot extends ParkingLotPod{
-    private final DaoerClient daoer;
+public class JieShunParkingLot extends ParkingLotPod {
+    private final JieShunClient jieShun;
 
-    public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis) {
-        super(daoerParkingLotInfo, redis);
-        daoer = new DaoerClient(daoerParkingLotInfo.getId(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), daoerParkingLotInfo.getImgUrl(), redis, 3);
+    public JieShunParkingLot(JieShunParkingLotConfiguration jieShunParkingLotInfo, RedisTool redis) {
+        super(jieShunParkingLotInfo, redis);
+        jieShun = new JieShunClient("", 3);
     }
 
     @Override
     public <T> T client() {
-        DaoerParkingLotConfiguration configuration = (DaoerParkingLotConfiguration) cfg;
-        return (T) new DaoerClient(configuration.getId(), configuration.getAppName(), configuration.getParkId(), configuration.getBaseUrl(), configuration.getImgUrl(), redis, -1);
+        JieShunParkingLotConfiguration configuration = (JieShunParkingLotConfiguration) cfg;
+        return (T) new JieShunClient("", -1);
     }
 
     @Override
     public Boolean healthCheck() {
         try {
-            return daoer.getCarPortInfo().block().getHead().getStatus() == 1;
+            return true;
+            //return jieShun.getCarPortInfo().block().getHead().getStatus() == 1;
         } catch (Exception ex) {
             log.error(cfg.getId() + "健康检查异常", ex);
             return false;
@@ -49,7 +49,8 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public IToolAblitity tool() {
-        return new DaoerToolAbility(daoer);
+        throw new UnsupportedOperationException();
+        //return new JieShunToolAbility(jieShun);
     }
 
     /**
@@ -59,7 +60,8 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public ICarPortAblitity carport() {
-        return new DaoerCarPortAbility(daoer, redis);
+        throw new UnsupportedOperationException();
+        //return new JieShunCarPortAbility(jieShun, redis);
     }
 
     /**
@@ -69,7 +71,8 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public ICarFeeAblitity fee() {
-        return new DaoerCarFeeAbility(daoer, redis);
+        throw new UnsupportedOperationException();
+        //return new JieShunCarFeeAbility(jieShun, redis);
     }
 
     /**
@@ -89,7 +92,7 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public IGuestAblitity guest() {
-        return new DaoerGuestAbility(daoer);
+        throw new UnsupportedOperationException();
     }
 
     /**
@@ -99,7 +102,8 @@ public class DaoerParkingLot extends ParkingLotPod{
      */
     @Override
     public IMonthlyAblitity monthly() {
-        return new DaoerMonthlyCarAbility(daoer);
+        throw new UnsupportedOperationException();
+        //return new JieShunMonthlyCarAbility(jieShun);
     }
 
 

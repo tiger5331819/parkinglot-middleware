@@ -34,7 +34,7 @@ public class ParkingLotManagerInfrastructure {
 
     public IParkingLotConfigurationRepository getCfgRepository() {
         if (testBox.checkTest()) {
-            Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().getSimpleName().contains("ParkingLotConfigurationRepositoryByConfiguration")).findFirst();
+            Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().getSimpleName().contains("ParkingLotConfigurationRepositoryByRedis")).findFirst();
             return cfgOptional.get();
         } else {
             Optional<IParkingLotConfigurationRepository> cfgOptional = cfgRepositoryList.stream().filter(item -> item.getClass().isAnnotationPresent(Primary.class)).findFirst();

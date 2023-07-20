@@ -1,9 +1,13 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfig;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,8 +23,42 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
 
     private final String prefix = "cfg:";
 
-    public ParkingLotConfigurationRepositoryByRedis(RedisTool redisTool){
-        redis=redisTool;
+    private final Environment env;
+
+    private final ParkingLotConfig config;
+
+    public ParkingLotConfigurationRepositoryByRedis(RedisTool redisTool, Environment env, ParkingLotConfig config) {
+        redis = redisTool;
+        this.env = env;
+        this.config = config;
+    }
+
+    private List<ParkingLotConfiguration> makeConfigurationCache(String parkingType) {
+        List<ParkingLotConfiguration> cache = new LinkedList<>();
+        if (config.getDaoer().isEmpty()) {
+            return cache;
+        }
+        String saasParkingLotConfigPrefix = "saasParkingLotConfig." + parkingType + ".";
+
+        if (parkingType.equals("Daoer")) {
+            config.getDaoer().forEach(item -> {
+                ParkingLotConfiguration cfg = new ParkingLotConfiguration();
+                cfg.setParkingLotId(item.get("parkingLotId"));
+                cfg.setParkingType("Daoer");
+                cfg.setDescription(item.get("description"));
+
+                DaoerConfiguration daoerCfg = new DaoerConfiguration();
+                daoerCfg.setAppName(item.get("config." + "appName"));
+                daoerCfg.setParkId(item.get("config." + "parkId"));
+                daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
+                daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
+                daoerCfg.setBackTrack(Boolean.valueOf(item.get("config." + "backTrack")));
+
+                cfg.setConfig(daoerCfg);
+                cache.add(cfg);
+            });
+        }
+        return cache;
     }
 
     /**
@@ -31,6 +69,10 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
      */
     @Override
     public List<ParkingLotConfiguration> findParkingLotConfigurationByParkingType(String parkingType) {
+        if (redis.hash().values(redis.MakeKey(prefix + parkingType)).isEmpty()) {
+            List<ParkingLotConfiguration> cache = makeConfigurationCache(parkingType);
+            cache.forEach(item -> save(item));
+        }
         return redis.hash().values(redis.MakeKey(prefix + parkingType));
     }
 

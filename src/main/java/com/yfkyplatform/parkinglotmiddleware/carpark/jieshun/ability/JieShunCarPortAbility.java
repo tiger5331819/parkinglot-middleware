@@ -1,10 +1,10 @@
-package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
+package com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.ability;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarPort;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.api.IJieShunCarPort;
+import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.resp.PageModel;
+import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.resp.carport.*;
+import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
@@ -23,13 +23,13 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-public class DaoerCarPortAbility implements ICarPortAblitity {
+public class JieShunCarPortAbility implements ICarPortAblitity {
 
-    private final IDaoerCarPort api;
+    private final IJieShunCarPort api;
 
     private final RedisTool redis;
 
-    public DaoerCarPortAbility(IDaoerCarPort daoerClient, RedisTool redis) {
+    public JieShunCarPortAbility(IJieShunCarPort daoerClient, RedisTool redis) {
         api = daoerClient;
         this.redis = redis;
     }

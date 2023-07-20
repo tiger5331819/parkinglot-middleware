@@ -1,7 +1,5 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager.configuration;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.configuration.IManagerConfigurationService;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
@@ -41,10 +39,6 @@ public class ManagerConfigurationServiceExposer implements IManagerConfiguration
         ParkingLotManager daoerManager = factory.manager("Daoer");
         DaoerParkingLotConfiguration cfg = new DaoerParkingLotConfiguration(id, appName, parkId, baseUrl, description, imgUrl, null);
 
-        try {
-            return daoerManager.addParkingLot(cfg);
-        } catch (JsonProcessingException ex) {
-            throw new ExposerException(-1, "道尔配置文件不正确", ex);
-        }
+        return daoerManager.addParkingLot(cfg);
     }
 }

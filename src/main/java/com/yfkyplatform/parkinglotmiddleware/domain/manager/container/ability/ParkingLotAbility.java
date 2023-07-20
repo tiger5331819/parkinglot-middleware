@@ -26,7 +26,7 @@ public interface ParkingLotAbility {
      * @return
      */
     default ICarPortAblitity carport() {
-        throw new UnsupportedOperationException("不支持工具能力");
+        throw new UnsupportedOperationException("不支持车场能力");
     }
 
     /**
@@ -35,7 +35,7 @@ public interface ParkingLotAbility {
      * @return
      */
     default ICarFeeAblitity fee() {
-        throw new UnsupportedOperationException("不支持工具能力");
+        throw new UnsupportedOperationException("不支持车场缴费能力");
     }
 
     /**
@@ -44,7 +44,7 @@ public interface ParkingLotAbility {
      * @return
      */
     default ICouponAblitity coupon() {
-        throw new UnsupportedOperationException("不支持工具能力");
+        throw new UnsupportedOperationException("不支持优惠卷能力");
     }
 
     /**
@@ -52,7 +52,7 @@ public interface ParkingLotAbility {
      * @return
      */
     default IGuestAblitity guest(){
-        throw new UnsupportedOperationException("不支持工具能力");
+        throw new UnsupportedOperationException("不支持访客能力");
     }
 
     /**
@@ -60,6 +60,6 @@ public interface ParkingLotAbility {
      * @return
      */
     default IMonthlyAblitity monthly(){
-        throw new UnsupportedOperationException("不支持工具能力");
+        throw new UnsupportedOperationException("不支持月卡能力");
     }
 }
