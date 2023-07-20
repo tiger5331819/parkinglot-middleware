@@ -42,9 +42,11 @@ public class DaoerParkingLot extends ParkingLotPod{
         try {
             DaoerBaseResp<PageModel<CarInData>> carInList = daoer.getCarInInfo(null, null, null, 1, 10).block();
             Optional<CarInData> carInDataOptional = carInList.getBody().getList().stream().findFirst();
-            return carInDataOptional.map(carInData -> daoer.getCarFeeInfoWithArrear(carInData.getCarNo()).block().getHead().getStatus() == 1)
-                    .orElseGet(() -> daoer.getCarPortInfo().block().getHead().getStatus() == 1);
-
+            if (carInDataOptional.isPresent()) {
+                return daoer.getCarFeeInfoWithArrear(carInDataOptional.get().getCarNo()).block().getHead().getStatus() == 1;
+            } else {
+                return carInList.getHead().getStatus() == 1;
+            }
         } catch (Exception ex) {
             log.error(cfg.getId() + "健康检查异常", ex);
             return false;
