@@ -2,6 +2,9 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.DaoerClient;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.CarInData;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.ICarFeeAblitity;
@@ -11,6 +14,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.gu
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.monthly.IMonthlyAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.tool.IToolAblitity;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Optional;
 
 /**
  * 道尔停车场容器
@@ -35,7 +40,11 @@ public class DaoerParkingLot extends ParkingLotPod{
     @Override
     public Boolean healthCheck() {
         try {
-            return daoer.getCarPortInfo().block().getHead().getStatus() == 1;
+            DaoerBaseResp<PageModel<CarInData>> carInList = daoer.getCarInInfo(null, null, null, 1, 10).block();
+            Optional<CarInData> carInDataOptional = carInList.getBody().getList().stream().findFirst();
+            return carInDataOptional.map(carInData -> daoer.getCarFeeInfoWithArrear(carInData.getCarNo()).block().getHead().getStatus() == 1)
+                    .orElseGet(() -> daoer.getCarPortInfo().block().getHead().getStatus() == 1);
+
         } catch (Exception ex) {
             log.error(cfg.getId() + "健康检查异常", ex);
             return false;

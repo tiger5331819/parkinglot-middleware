@@ -228,7 +228,7 @@ public class DaoerToolsController {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         String origin = testBox.envUrl().environmentGateWayURL(environment) + "outside/passthough/" + resultResp.getTenantId();
 
-        if (AssertTool.checkCollectionNotNull(configurationList)) {
+        if (!AssertTool.checkCollectionNotNull(configurationList)) {
             String data = "{\"pageNum\":1,\"pageSize\":10,\"parkName\":\"" + parkingLotName + "\"}";
             Map<String, Object> result = testBox.drCloudClient().post(data, "api/backstage/regist/findall");
             Map<String, Object> resultData = (Map<String, Object>) result.get("data");
@@ -252,6 +252,7 @@ public class DaoerToolsController {
             allURLResultResp.setParkingLotName(cfg.getDescription());
             allURLResultResp.setParkingLotThirdCode(cfg.getParkId());
             allURLResultResp.setParkingLotThirdAppName(cfg.getAppName());
+            allURLResultResp.setHealthCheck(manager.parkingLot(cfg.getId()).healthCheck());
 
             allURLResultResp.setBlankCarURLList(resp.getBlankCarURLList());
             allURLResultResp.setCarOutPayURLList(resp.getCarOutPayURLList());

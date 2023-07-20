@@ -21,6 +21,9 @@ public class AllURLResultResp {
     @ApiModelProperty(value = "停车场名称")
     private String parkingLotName;
 
+    @ApiModelProperty(value = "健康检查")
+    private Boolean healthCheck;
+
     @ApiModelProperty(value = "停车场第三方ID")
     private String parkingLotThirdCode;
 
