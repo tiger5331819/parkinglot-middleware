@@ -1,15 +1,17 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfig;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
-import org.springframework.core.env.Environment;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 停车场配置存储库实现
@@ -23,40 +25,43 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
 
     private final String prefix = "cfg:";
 
-    private final Environment env;
+    private final TestBox testBox;
 
-    private final ParkingLotConfig config;
-
-    public ParkingLotConfigurationRepositoryByRedis(RedisTool redisTool, Environment env, ParkingLotConfig config) {
+    public ParkingLotConfigurationRepositoryByRedis(RedisTool redisTool, TestBox testBox) {
         redis = redisTool;
-        this.env = env;
-        this.config = config;
+        this.testBox = testBox;
     }
 
-    private List<ParkingLotConfiguration> makeConfigurationCache(String parkingType) {
-        List<ParkingLotConfiguration> cache = new LinkedList<>();
-        if (config.getDaoer().isEmpty()) {
-            return cache;
-        }
-        String saasParkingLotConfigPrefix = "saasParkingLotConfig." + parkingType + ".";
-
+    private List<ParkingLotConfiguration<?>> makeConfigurationCache(String parkingType) {
+        List<ParkingLotConfiguration<?>> cache = new LinkedList<>();
         if (parkingType.equals("Daoer")) {
-            config.getDaoer().forEach(item -> {
-                ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-                cfg.setParkingLotId(item.get("parkingLotId"));
+            String data = "{\"pageNum\":1,\"pageSize\":1000000}";
+            Map<String, Object> result = null;
+            try {
+                result = testBox.drCloudClient().post(data, "api/backstage/regist/findall");
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+            Map<String, Object> resultData = (Map<String, Object>) result.get("data");
+            List<Map<String, Object>> list = (List<Map<String, Object>>) resultData.get("list");
+            cache = list.stream().map(item -> {
+                String saasParkingLotConfigPrefix = "saasParkingLotConfig.Daoer.";
+                ParkingLotConfiguration<DaoerConfiguration> cfg = new ParkingLotConfiguration<>();
+                cfg.setParkingLotId((String) item.get("parkNo"));
                 cfg.setParkingType("Daoer");
-                cfg.setDescription(item.get("description"));
+                cfg.setDescription((String) item.get("parkName"));
 
                 DaoerConfiguration daoerCfg = new DaoerConfiguration();
-                daoerCfg.setAppName(item.get("config." + "appName"));
-                daoerCfg.setParkId(item.get("config." + "parkId"));
-                daoerCfg.setBaseUrl(env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
-                daoerCfg.setImgUrl(env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
-                daoerCfg.setBackTrack(Boolean.valueOf(item.get("config." + "backTrack")));
+                daoerCfg.setAppName((String) item.get("appName"));
+                daoerCfg.setParkId((String) item.get("parkNo"));
+                daoerCfg.setBaseUrl(testBox.env.getProperty(saasParkingLotConfigPrefix + "baseUrl"));
+                daoerCfg.setImgUrl(testBox.env.getProperty(saasParkingLotConfigPrefix + "imgUrl"));
+                daoerCfg.setBackTrack(Boolean.valueOf(testBox.env.getProperty(saasParkingLotConfigPrefix + "backTrack")));
 
                 cfg.setConfig(daoerCfg);
-                cache.add(cfg);
-            });
+
+                return cfg;
+            }).collect(Collectors.toList());
         }
         return cache;
     }
@@ -70,8 +75,8 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
     @Override
     public List<ParkingLotConfiguration> findParkingLotConfigurationByParkingType(String parkingType) {
         if (redis.hash().values(redis.MakeKey(prefix + parkingType)).isEmpty()) {
-            List<ParkingLotConfiguration> cache = makeConfigurationCache(parkingType);
-            cache.forEach(item -> save(item));
+            List<ParkingLotConfiguration<?>> cache = makeConfigurationCache(parkingType);
+            saveAll(cache);
         }
         return redis.hash().values(redis.MakeKey(prefix + parkingType));
     }
