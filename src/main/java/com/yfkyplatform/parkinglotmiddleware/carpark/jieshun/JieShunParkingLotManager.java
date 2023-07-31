@@ -4,6 +4,7 @@ import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerInfrastructure;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.LifangConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.springframework.stereotype.Component;
 
@@ -19,7 +20,7 @@ import java.util.List;
 public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLot, JieShunParkingLotConfiguration> {
 
     public JieShunParkingLotManager(ParkingLotManagerInfrastructure infrastructure) {
-        super(infrastructure, "Daoer");
+        super(infrastructure, "JieShun");
     }
 
     /**
@@ -30,12 +31,12 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
      */
     @Override
     protected JieShunParkingLot load(String parkingLotId) {
-        ParkingLotConfiguration<DaoerConfiguration> cfg = cfgRepository().findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
+        ParkingLotConfiguration<LifangConfiguration> cfg = cfgRepository().findParkingLotConfigurationByParkingTypeAndParkingLotId(managerType, parkingLotId);
         if (ObjectUtil.isNull(cfg)) {
             return null;
         }
-        DaoerConfiguration daoerCfg = cfg.getConfig();
-        JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(cfg.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
+        LifangConfiguration jieShunCfg = cfg.getConfig();
+        JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(cfg.getParkingLotId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), cfg.getDescription());
         return new JieShunParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -49,9 +50,9 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
         List<JieShunParkingLot> dataList = new ArrayList<>();
         List<ParkingLotConfiguration> cfgList = cfgRepository().findParkingLotConfigurationByParkingType(managerType);
 
-        for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
-            DaoerConfiguration daoerCfg = item.getConfig();
-            JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(item.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
+        for (ParkingLotConfiguration<LifangConfiguration> item : cfgList) {
+            LifangConfiguration jieShunCfg = item.getConfig();
+            JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(item.getParkingLotId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), item.getDescription());
             dataList.add(new JieShunParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;
@@ -80,8 +81,6 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
     @Override
     protected Boolean SaveData(JieShunParkingLotConfiguration jieShunParkingLotConfiguration) {
         DaoerConfiguration cfg = new DaoerConfiguration();
-        cfg.setAppName(jieShunParkingLotConfiguration.getAppName());
-        cfg.setParkId(jieShunParkingLotConfiguration.getParkId());
         cfg.setBaseUrl(jieShunParkingLotConfiguration.getBaseUrl());
 
         ParkingLotConfiguration data = new ParkingLotConfiguration();

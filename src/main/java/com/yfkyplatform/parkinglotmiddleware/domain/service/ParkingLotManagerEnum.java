@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.service;
 
 import cn.hutool.core.util.ObjectUtil;
+import lombok.Getter;
 
 /**
  * 停车场管理映射
@@ -13,19 +14,28 @@ public enum ParkingLotManagerEnum {
      * 未知 code:-1
      */
     None(-1, "others"),
+
     /**
      * 道尔 code:4
      */
     Daoer(4, "Daoer"),
+
     /**
      * 立方 code:3
      */
     Lifang(3, "Lifang"),
+
     /**
      * 红门 code:8
      */
-    Hongmen(8, "Hongmen");
+    Hongmen(8, "Hongmen"),
 
+    /**
+     * 捷顺 code:9
+     */
+    JieShun(9, "JieShun");
+
+    @Getter
     private final int code;
 
     private final String message;
@@ -60,10 +70,6 @@ public enum ParkingLotManagerEnum {
         }
         return None;
 
-    }
-
-    public int getCode() {
-        return this.code;
     }
 
     public String getName() {
