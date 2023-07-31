@@ -82,12 +82,12 @@ public class DaoerToolsController {
     }
 
     @ApiOperation(value = "获取通道缴纳金额（欠费）")
-    @GetMapping("/fee/arrear/channel")
-    public List<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@ApiParam(value = "车场描述") String parkingLotId) {
+    @GetMapping("/{parkingLotName}/fee/arrear/channel")
+    public List<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable @ApiParam(value = "车场描述") String parkingLotName) {
         List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
         List<CarFeeResultWithArrear> result = new ArrayList<>();
 
-        configurationList.stream().filter(item -> item.getDescription().contains(parkingLotId)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
+        configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
             DaoerParkingLot parkingLot = (DaoerParkingLot) manager.parkingLot(item);
             List<ChannelInfoResult> channelInfoResultList = parkingLot.carport().getChannelsInfo();
             IDaoerCarFee carFee = parkingLot.client();
