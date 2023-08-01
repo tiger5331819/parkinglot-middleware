@@ -5,7 +5,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfig
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import com.yfkyplatform.passthrough.api.mgnt.resp.GetPtParkingLotRpcResp;
 import com.yfkyplatform.passthrough.api.micro.PtParkingLotServiceMicroApi;
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.env.Environment;
@@ -19,7 +19,7 @@ import java.util.Optional;
  *
  * @author Suhuyuan
  */
-@Log4j
+@Slf4j
 @Primary
 @Component
 public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfigurationRepository {
@@ -53,7 +53,7 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
     @Override
     public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
         Integer operatorId = AccountRpcContext.getOperatorId();
-        System.out.println("operatorId: " + operatorId);
+        log.info("查询SaaS车场信息，operatorId: " + operatorId);
         GetPtParkingLotRpcResp resp = ptParkingLotServiceMicroApi.getPtParkingLotMicroForOutside(Long.valueOf(parkingLotId), operatorId);
 
         String prefix = "saasParkingLotConfig." + parkingType + ".";
