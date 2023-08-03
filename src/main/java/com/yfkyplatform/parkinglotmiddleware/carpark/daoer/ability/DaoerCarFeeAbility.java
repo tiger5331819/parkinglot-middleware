@@ -183,7 +183,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         CarFeeResultWithArrear carFeeResultWithArrear = mono.block().getBody();
         CarFeeResultWithArrearByCharge fee = null;
 
-        if (ObjectUtil.isNotNull(carFeeResultWithArrear)) {
+        if (ObjectUtil.isNotNull(carFeeResultWithArrear) && ObjectUtil.isNotNull(carFeeResultWithArrear.getCharge()) && ObjectUtil.isNotNull(carFeeResultWithArrear.getArrears())) {
             fee = findCarFee(carFeeResultWithArrear, payMessage.getInId());
         }
 
