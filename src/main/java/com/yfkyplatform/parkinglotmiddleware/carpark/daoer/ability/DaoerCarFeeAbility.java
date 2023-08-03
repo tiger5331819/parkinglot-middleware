@@ -246,8 +246,13 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         CarFeeResult fee = mono.block().getBody();
 
         if (ObjectUtil.isNull(fee)) {
-            log.error("道尔订单不存在：" + payMessage);
-            return false;
+            if (redis.check("order:daoer:fee:" + payMessage.getCarNo())) {
+                String jsonStr = redis.get("order:daoer:fee:" + payMessage.getCarNo());
+                fee = JSONUtil.toBean(jsonStr, CarFeeResult.class);
+            } else {
+                log.error("道尔订单不存在：" + payMessage);
+                return false;
+            }
         }
 
         BigDecimal totalFee = payMessage.getPayFee().add(payMessage.getDiscountFee());
