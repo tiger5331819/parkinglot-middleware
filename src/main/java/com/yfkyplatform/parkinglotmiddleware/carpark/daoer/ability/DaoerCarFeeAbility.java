@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarFee;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrear;
@@ -51,12 +52,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             if (redis.check("order:daoer:fee:" + carNo)) {
 
-                CarFee fee = redis.get("order:daoer:fee:" + carNo);
-                result = new CarFeeResult();
-                result.setCarNo(carNo);
-                result.setAmount(fee.getAmount());
-                result.setPayCharge(fee.getPayCharge());
-                result.setDiscountAmount(fee.getDiscountAmount());
+                String jsonStr = redis.get("order:daoer:fee:" + carNo);
+                result = JSONUtil.toBean(jsonStr, CarFeeResult.class);
             } else {
                 result = new CarFeeResult();
                 result.setCarNo(resp.getHead().getMessage());
@@ -80,12 +77,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         CarFeeResultWithArrearByCharge result = resp.getBody().getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             if (redis.check("order:daoer:fee:" + carNo)) {
-                CarFee fee = redis.get("order:daoer:fee:" + carNo);
-                result = new CarFeeResultWithArrearByCharge();
-                result.setCarNo(carNo);
-                result.setAmount(fee.getAmount());
-                result.setPayCharge(fee.getPayCharge());
-                result.setDiscountAmount(fee.getDiscountAmount());
+                String jsonStr = redis.get("order:daoer:fee:" + carNo);
+                result = JSONUtil.toBean(jsonStr, CarFeeResultWithArrearByCharge.class);
             } else {
                 result = new CarFeeResultWithArrearByCharge();
                 result.setCarNo(resp.getHead().getMessage());
@@ -117,12 +110,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
-            CarFee fee = new CarFee();
-            fee.setPayCharge(result.getPayCharge());
-            fee.setAmount(result.getAmount());
-            fee.setDiscountAmount(result.getDiscountAmount());
-
-            redis.set("order:daoer:fee:" + result.getCarNo(), fee, Duration.ofMinutes(2));
+            redis.set("order:daoer:fee:" + result.getCarNo(), JSONUtil.toJsonStr(result), Duration.ofMinutes(2));
         }
         return carFeeToCarOrder(result);
     }
@@ -147,11 +135,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setDiscountAmount(new BigDecimal(0));
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
-            CarFee fee = new CarFee();
-            fee.setPayCharge(result.getPayCharge());
-            fee.setAmount(result.getAmount());
-            fee.setDiscountAmount(result.getDiscountAmount());
-            redis.set("order:daoer:fee:" + result.getCarNo(), fee, Duration.ofMinutes(2));
+
+            redis.set("order:daoer:fee:" + result.getCarNo(), JSONUtil.toJsonStr(result), Duration.ofMinutes(2));
         }
         return carFeeToCarOrder(result, ObjectUtil.isNull(resp) ? null : resp.getArrears());
     }
