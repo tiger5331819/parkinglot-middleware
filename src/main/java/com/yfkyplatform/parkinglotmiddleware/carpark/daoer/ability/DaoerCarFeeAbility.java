@@ -181,8 +181,12 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         Mono<DaoerBaseResp<CarFeeResultWithArrear>> mono = api.getCarFeeInfoWithArrear(payMessage.getCarNo());
         CarFeeResultWithArrear carFeeResultWithArrear = mono.block().getBody();
+        CarFeeResultWithArrearByCharge fee = null;
 
-        CarFeeResultWithArrearByCharge fee = findCarFee(carFeeResultWithArrear, payMessage.getInId());
+        if (ObjectUtil.isNotNull(carFeeResultWithArrear)) {
+            fee = findCarFee(carFeeResultWithArrear, payMessage.getInId());
+        }
+
 
         if (ObjectUtil.isNull(fee) && !redis.check("order:daoer:fee:" + payMessage.getCarNo())) {
             log.error("道尔订单不存在：" + payMessage);
