@@ -49,11 +49,15 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         DaoerBaseResp<CarFeeResult> resp = api.getCarFeeInfo(carNo).block();
         CarFeeResult result = resp.getBody();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
-            result = new CarFeeResult();
-            result.setCarNo(resp.getHead().getMessage());
-            result.setAmount(new BigDecimal(0));
-            result.setPayCharge(new BigDecimal(0));
-            result.setDiscountAmount(new BigDecimal(0));
+            if (redis.check("order:daoer:fee:" + carNo)) {
+                result = redis.get("order:daoer:fee:" + carNo);
+            } else {
+                result = new CarFeeResult();
+                result.setCarNo(resp.getHead().getMessage());
+                result.setAmount(new BigDecimal(0));
+                result.setPayCharge(new BigDecimal(0));
+                result.setDiscountAmount(new BigDecimal(0));
+            }
         }
         return carFeeToCarOrder(result);
     }
@@ -69,11 +73,15 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         DaoerBaseResp<CarFeeResultWithArrear> resp = api.getCarFeeInfoWithArrear(carNo).block();
         CarFeeResultWithArrearByCharge result = resp.getBody().getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
-            result = new CarFeeResultWithArrearByCharge();
-            result.setCarNo(resp.getHead().getMessage());
-            result.setAmount(new BigDecimal(0));
-            result.setPayCharge(new BigDecimal(0));
-            result.setDiscountAmount(new BigDecimal(0));
+            if (redis.check("order:daoer:fee:" + carNo)) {
+                result = redis.get("order:daoer:fee:" + carNo);
+            } else {
+                result = new CarFeeResultWithArrearByCharge();
+                result.setCarNo(resp.getHead().getMessage());
+                result.setAmount(new BigDecimal(0));
+                result.setPayCharge(new BigDecimal(0));
+                result.setDiscountAmount(new BigDecimal(0));
+            }
         }
         return carFeeToCarOrder(result, resp.getBody().getArrears());
     }
@@ -97,6 +105,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setDiscountAmount(new BigDecimal(0));
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
+            redis.set("order:daoer:fee:" + result.getCarNo(), result, Duration.ofMinutes(2));
         }
         return carFeeToCarOrder(result);
     }
@@ -121,6 +130,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             result.setDiscountAmount(new BigDecimal(0));
         } else {
             redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
+            redis.set("order:daoer:fee:" + result.getCarNo(), result, Duration.ofMinutes(2));
         }
         return carFeeToCarOrder(result, ObjectUtil.isNull(resp) ? null : resp.getArrears());
     }
