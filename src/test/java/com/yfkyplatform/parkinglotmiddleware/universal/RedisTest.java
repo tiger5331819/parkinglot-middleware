@@ -1,5 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
+import cn.hutool.json.JSONUtil;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
 import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
@@ -17,6 +19,17 @@ public class RedisTest {
     @Autowired
     private RedisTool redis;
 
+    @ParameterizedTest
+    @CsvSource({
+            "KR148",
+            "KR149",
+            "KR159"
+    })
+    public void ttt() {
+        String jsonStr = redis.get("order:daoer:fee:粤SP8M98");
+        CarFeeResult fee = JSONUtil.toBean(jsonStr, CarFeeResult.class);
+        System.out.println(fee);
+    }
     @ParameterizedTest
     @CsvSource({
             "KR148",
