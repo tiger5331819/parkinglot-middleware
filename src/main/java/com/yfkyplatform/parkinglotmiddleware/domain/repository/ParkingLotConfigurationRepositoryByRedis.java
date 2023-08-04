@@ -1,9 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import org.springframework.stereotype.Component;
 

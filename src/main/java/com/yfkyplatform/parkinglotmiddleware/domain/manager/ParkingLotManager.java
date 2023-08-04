@@ -1,9 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import cn.hutool.core.util.ObjectUtil;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;

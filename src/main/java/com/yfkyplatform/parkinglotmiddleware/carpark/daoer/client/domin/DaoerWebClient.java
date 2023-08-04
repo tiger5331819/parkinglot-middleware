@@ -4,7 +4,7 @@ import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.DaoerToken;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.TokenResult;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

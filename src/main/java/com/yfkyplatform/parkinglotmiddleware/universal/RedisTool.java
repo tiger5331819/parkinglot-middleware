@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.configuration.redis;
+package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.HashOperations;

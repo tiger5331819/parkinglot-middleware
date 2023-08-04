@@ -2,7 +2,6 @@ package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import cn.hutool.json.JSONUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;

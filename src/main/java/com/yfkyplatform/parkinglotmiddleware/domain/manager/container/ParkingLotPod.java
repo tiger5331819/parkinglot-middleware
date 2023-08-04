@@ -1,8 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container;
 
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ParkingLotAbility;
+import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 
 /**
  * 停车场容器

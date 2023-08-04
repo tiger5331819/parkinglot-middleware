@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.configuration.redis;
+package com.yfkyplatform.parkinglotmiddleware.configuration;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;

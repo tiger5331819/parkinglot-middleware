@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.testbox;
 
-import com.yfkyplatform.parkinglotmiddleware.configuration.redis.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.DrCloudWebClient;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import org.springframework.core.env.Environment;
