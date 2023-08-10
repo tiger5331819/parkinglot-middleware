@@ -183,15 +183,15 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         CarFeeResultWithArrear carFeeResultWithArrear = mono.block().getBody();
         CarFeeResultWithArrearByCharge fee = null;
 
-        if (ObjectUtil.isNotNull(carFeeResultWithArrear) && ObjectUtil.isNotNull(carFeeResultWithArrear.getCharge()) && ObjectUtil.isNotNull(carFeeResultWithArrear.getArrears())) {
+        if (ObjectUtil.isNotNull(carFeeResultWithArrear) || ObjectUtil.isNotNull(carFeeResultWithArrear.getCharge()) || ObjectUtil.isNotNull(carFeeResultWithArrear.getArrears())) {
             fee = findCarFee(carFeeResultWithArrear, payMessage.getInId());
         }
 
-
-        if (ObjectUtil.isNull(fee) && !redis.check("order:daoer:fee:" + payMessage.getCarNo())) {
+        boolean redisOrderCheck = redis.check("order:daoer:fee:" + payMessage.getCarNo());
+        if (ObjectUtil.isNull(fee) && !redisOrderCheck) {
             log.error("道尔订单不存在：" + payMessage);
             return false;
-        } else {
+        } else if (redisOrderCheck) {
             String jsonStr = redis.get("order:daoer:fee:" + payMessage.getCarNo());
             fee = JSONUtil.toBean(jsonStr, CarFeeResultWithArrearByCharge.class);
         }
@@ -255,10 +255,11 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         CarFeeResult fee = mono.block().getBody();
 
-        if (ObjectUtil.isNull(fee) && !redis.check("order:daoer:fee:" + payMessage.getCarNo())) {
+        boolean redisOrderCheck = redis.check("order:daoer:fee:" + payMessage.getCarNo());
+        if (ObjectUtil.isNull(fee) && !redisOrderCheck) {
             log.error("道尔订单不存在：" + payMessage);
             return false;
-        } else {
+        } else if (redisOrderCheck) {
             String jsonStr = redis.get("order:daoer:fee:" + payMessage.getCarNo());
             fee = JSONUtil.toBean(jsonStr, CarFeeResult.class);
         }
