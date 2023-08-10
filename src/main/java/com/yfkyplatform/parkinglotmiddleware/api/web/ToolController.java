@@ -69,7 +69,7 @@ public class ToolController {
         return carPortService.payAccess(parkingLotManager, parkingLotId, payAccess.getCarNo(), orderPayMessageRpcReq);
     }
 
-    @ApiOperation(value = "直接支付金额")
+    @ApiOperation(value = "直接支付金额(欠费)")
     @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/ArrearFeeTest")
     public Boolean payAccessArrearTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, PayAccessReq payAccess) {
         CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, payAccess.getCarNo());

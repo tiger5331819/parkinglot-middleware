@@ -186,6 +186,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         log.info(carFeeResultWithArrear.toString());
 
         if (ObjectUtil.isNotNull(carFeeResultWithArrear) || ObjectUtil.isNotNull(carFeeResultWithArrear.getCharge()) || ObjectUtil.isNotNull(carFeeResultWithArrear.getArrears())) {
+            log.info("inId:" + payMessage.getInId());
             fee = findCarFee(carFeeResultWithArrear, payMessage.getInId());
         }
 
