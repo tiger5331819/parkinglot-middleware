@@ -166,47 +166,11 @@ public class DaoerToolsController {
 
 
         Map<String, Object> data2 = saaSWebClient.get("mgntpc/tenant/get-tenant-thirdparty", token);
-        List<Map<String, Object>> aliApps = (List<Map<String, Object>>) data2.get("aliApps");
-        if (aliApps.size() == 1) {
-            aliApps.stream().findFirst().ifPresent(item -> {
-                Long thirdAppId = (Long) item.get("thirdpartyAppId");
-/*                if(!(Boolean) item.get("main")){
-                    String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
-                    try {
-                        saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                }*/
+        Map<String, Object> aliApp = (Map<String, Object>) data2.get("aliApp");
+        aliThirdId.set((Long) aliApp.get("thirdpartyAppId"));
 
-                aliThirdId.set(thirdAppId);
-            });
-        } else {
-            aliApps.stream().filter(item -> ((Boolean) item.get("main")))
-                    .findFirst()
-                    .ifPresent(item -> aliThirdId.set((Long) item.get("thirdpartyAppId")));
-        }
-
-
-        List<Map<String, Object>> wxMPApps = (List<Map<String, Object>>) data2.get("wxMPApps");
-        if (wxMPApps.size() == 1) {
-            wxMPApps.stream().findFirst().ifPresent(item -> {
-                Long thirdAppId = (Long) item.get("thirdpartyAppId");
-                if (!(Boolean) item.get("main")) {
-                    String postData = "{\"thirdpartyMchId\":\"" + thirdAppId + "\"}";
-                    try {
-                        saaSWebClient.post(postData, "mgntpc/tenant/set-main-mch", token);
-                    } catch (JsonProcessingException e) {
-                        throw new RuntimeException(e);
-                    }
-                }
-                wxThirdId.set(thirdAppId);
-            });
-        } else {
-            wxMPApps.stream().filter(item -> (Boolean) item.get("main"))
-                    .findFirst()
-                    .ifPresent(item -> wxThirdId.set((Long) item.get("thirdpartyAppId")));
-        }
+        Map<String, Object> wxMPApp = (Map<String, Object>) data2.get("wxMpApp");
+        wxThirdId.set((Long) wxMPApp.get("thirdpartyAppId"));
 
 
         SaaSPayMessageResultResp resp = new SaaSPayMessageResultResp();

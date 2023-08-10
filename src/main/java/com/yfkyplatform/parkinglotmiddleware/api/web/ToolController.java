@@ -6,7 +6,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageWithArrearRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.web.req.ChannelPayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.CleanCarReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.PayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarListResp;
@@ -66,6 +68,38 @@ public class ToolController {
         orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
 
         return carPortService.payAccess(parkingLotManager, parkingLotId, payAccess.getCarNo(), orderPayMessageRpcReq);
+    }
+
+    @ApiOperation(value = "直接支付金额(欠费)")
+    @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/ArrearFeeTest")
+    public Boolean payAccessArrearTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, PayAccessReq payAccess) {
+        CarOrderResultRpcResp rpcResp = carPortService.getCarFee(parkingLotManager, parkingLotId, payAccess.getCarNo());
+
+        OrderPayMessageWithArrearRpcReq orderPayMessageRpcReq = new OrderPayMessageWithArrearRpcReq();
+        orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());
+        orderPayMessageRpcReq.setDiscountFee(rpcResp.getDiscountFee());
+        orderPayMessageRpcReq.setPayType(2000);
+        orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
+        orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
+        orderPayMessageRpcReq.setInId(rpcResp.getInId());
+
+        return carPortService.payAccess(parkingLotManager, parkingLotId, payAccess.getCarNo(), orderPayMessageRpcReq);
+    }
+
+    @ApiOperation(value = "直接支付通道金额(欠费)")
+    @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/channelArrearFeeTest")
+    public Boolean payAccessChannelArrearTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, ChannelPayAccessReq payAccess) {
+        CarOrderResultRpcResp rpcResp = carPortService.getChannelCarFee(parkingLotManager, parkingLotId, payAccess.getChannelId());
+
+        OrderPayMessageWithArrearRpcReq orderPayMessageRpcReq = new OrderPayMessageWithArrearRpcReq();
+        orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());
+        orderPayMessageRpcReq.setDiscountFee(rpcResp.getDiscountFee());
+        orderPayMessageRpcReq.setPayType(2000);
+        orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
+        orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
+        orderPayMessageRpcReq.setInId(rpcResp.getInId());
+
+        return carPortService.payAccess(parkingLotManager, parkingLotId, rpcResp.getCarNo(), orderPayMessageRpcReq);
     }
 
     @ApiOperation(value = "批量人工清场")

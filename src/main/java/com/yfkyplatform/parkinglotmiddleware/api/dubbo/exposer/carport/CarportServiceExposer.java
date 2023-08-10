@@ -19,6 +19,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
  */
 @DubboService(timeout = 3000)
 @Component
+@Slf4j
 public class CarportServiceExposer implements ICarPortService {
 
     private final ParkingLotManagerFactory factory;
@@ -100,7 +102,7 @@ public class CarportServiceExposer implements ICarPortService {
         result.setTotalFee(data.getTotalFee());
         result.setPayFee(data.getPayFee());
         result.setDiscountFee(data.getDiscountFee());
-
+        log.info(data.toString());
         if (data instanceof CarOrderWithArrearResult) {
             CarOrderWithArrearResult carOrderWithArrearResult = (CarOrderWithArrearResult) data;
             result.setOverTime(carOrderWithArrearResult.getOverTime());
