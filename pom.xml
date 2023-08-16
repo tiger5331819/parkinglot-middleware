@@ -125,13 +125,13 @@
         <dependency>
             <groupId>com.yfkyplatform.parkinglot</groupId>
             <artifactId>parkinglot-middleware-api</artifactId>
-            <version>1.0.2-SNAPSHOT</version>
+            <version>1.0.2-RELEASE</version>
         </dependency>
 
         <dependency>
             <groupId>com.yfkyplatform.passthrough</groupId>
             <artifactId>passthrough-api</artifactId>
-            <version>feature-backtrack-SNAPSHOT</version>
+            <version>1.0.38-RELEASE</version>
         </dependency>
 
         <!-- YfkyFramework -->
