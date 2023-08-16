@@ -12,6 +12,10 @@ import java.util.Collection;
 
 public class AssertTool {
 
+    public static boolean checkEntityNotNull(Object object) {
+        return ObjectUtil.isNotNull(object);
+    }
+
     public static boolean checkCollectionNotNull(Collection collection) {
         return ObjectUtil.isNotNull(collection) && !collection.isEmpty();
     }
