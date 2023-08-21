@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Nullable;
 import java.math.BigDecimal;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -257,10 +258,22 @@ public class CarportServiceExposer implements ICarPortService {
      * @return
      */
     @Override
-    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId) throws ExposerException {
-        ICarFeeAblitity carFeeService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId).fee();
+    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId, @Nullable BlankCarRpcReq blankCar) throws ExposerException {
+        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
+        DaoerParkingLotConfiguration cfg = parkingLot.configuration();
+        ICarFeeAblitity carFeeService = parkingLot.fee();
 
-        return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfoByChannelWithArrear(channelId));
+        if (cfg.getBackTrack()) {
+            CarOrderWithArrearResultByList result = carFeeService.getCarFeeInfoByChannelWithArrear(channelId);
+
+            if (StrUtil.isBlank(result.getCarNo())) {
+                result = carFeeService.blankCarOutWithArrear(blankCar.getOpenId(), blankCar.getScanType(), channelId);
+            }
+
+            return makeCarOrderResultByListRpcResp(result);
+        } else {
+            return makeCarOrderResultByListRpcResp(carFeeService.getCarFeeInfo(channelId, null, blankCar.getOpenId()));
+        }
     }
 
     /**

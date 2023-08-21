@@ -222,7 +222,9 @@ public class DaoerToolsController {
             allURLResultResp.setCarOutPayURLList(resp.getCarOutPayURLList());
 
             allURLResultResp.setCarInUrl(origin + "/daoer/in");
+            allURLResultResp.setCarInListUrl(origin + "/daoer/in/list");
             allURLResultResp.setCarOutUrl(origin + "/daoer/out");
+            allURLResultResp.setCarOutListUrl(origin + "/daoer/out/list");
 
             return allURLResultResp;
         }).collect(Collectors.toList());

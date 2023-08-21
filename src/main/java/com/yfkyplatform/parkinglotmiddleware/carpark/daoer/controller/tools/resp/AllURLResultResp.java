@@ -33,8 +33,14 @@ public class AllURLResultResp {
     @ApiModelProperty(value = "入场通知")
     private String carInUrl;
 
+    @ApiModelProperty(value = "批量入场通知")
+    private String carInListUrl;
+
     @ApiModelProperty(value = "出场通知")
     private String carOutUrl;
+
+    @ApiModelProperty(value = "批量出场通知")
+    private String carOutListUrl;
 
     @ApiModelProperty(value = "无牌车入场通知")
     private List<BlankCarURL> blankCarURLList;

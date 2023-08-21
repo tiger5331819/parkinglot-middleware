@@ -89,7 +89,7 @@ public class ToolController {
     @ApiOperation(value = "直接支付通道金额(欠费)")
     @GetMapping("/{parkingLotManager}/{parkingLotId}/carport/channelArrearFeeTest")
     public Boolean payAccessChannelArrearTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, ChannelPayAccessReq payAccess) {
-        CarOrderResultRpcResp rpcResp = carPortService.getChannelCarFee(parkingLotManager, parkingLotId, payAccess.getChannelId());
+        CarOrderResultRpcResp rpcResp = carPortService.getChannelCarFee(parkingLotManager, parkingLotId, payAccess.getChannelId(), null);
 
         OrderPayMessageWithArrearRpcReq orderPayMessageRpcReq = new OrderPayMessageWithArrearRpcReq();
         orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());

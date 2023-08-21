@@ -89,8 +89,8 @@ public class CarPortController {
 
     @ApiOperation(value = "根据通道号获取车辆费用信息")
     @GetMapping("/channel/Fee")
-    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId) {
-        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId);
+    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId, @RequestBody BlankCarRpcReq rpcReq) {
+        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, rpcReq);
     }
 
     @ApiOperation(value = "获取通道列表")
