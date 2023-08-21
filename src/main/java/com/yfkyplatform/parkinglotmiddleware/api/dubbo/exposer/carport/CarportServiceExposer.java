@@ -16,8 +16,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ca
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.CarPortSpaceResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ICarPortAblitity;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;

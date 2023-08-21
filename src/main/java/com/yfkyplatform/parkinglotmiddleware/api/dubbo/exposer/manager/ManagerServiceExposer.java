@@ -10,7 +10,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfig
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.LifangParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
-import com.yfkyplatform.parkinglotmiddleware.domain.service.ParkingLotManagerEnum;
+import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 

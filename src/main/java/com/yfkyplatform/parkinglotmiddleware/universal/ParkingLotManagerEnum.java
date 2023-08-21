@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.domain.service;
+package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import cn.hutool.core.util.ObjectUtil;
 import lombok.Getter;
@@ -9,6 +9,7 @@ import lombok.Getter;
  * @author tiger
  */
 
+@Getter
 public enum ParkingLotManagerEnum {
     /**
      * 未知 code:-1
@@ -35,7 +36,6 @@ public enum ParkingLotManagerEnum {
      */
     JieShun(9, "JieShun");
 
-    @Getter
     private final int code;
 
     private final String message;
