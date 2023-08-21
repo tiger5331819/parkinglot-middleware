@@ -320,7 +320,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     private CarOrderWithArrearResult carFeeToCarOrder(CarFeeResultWithArrearByCharge carFeeResult) {
         CarOrderWithArrearResultByList orderResult = new CarOrderWithArrearResultByList();
 
-        Duration duration = StrUtil.isBlank(carFeeResult.getCarNo()) ? Duration.ZERO : Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
+        Duration duration = ObjectUtil.isNull(carFeeResult.getInTime()) || ObjectUtil.isNull(carFeeResult.getOutTime()) ?
+                Duration.ZERO : Duration.between(carFeeResult.getInTime(), carFeeResult.getOutTime());
 
         orderResult.setCarNo(carFeeResult.getCarNo());
         orderResult.setDiscountFee(carFeeResult.getDiscountAmount().movePointRight(2));
