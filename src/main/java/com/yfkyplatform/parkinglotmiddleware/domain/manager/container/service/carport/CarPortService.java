@@ -127,19 +127,19 @@ public class CarPortService {
             payMessage.setInId(arrearResultByList.getInId());
             payMessage.setOverTime(arrearResultByList.getOverTime());
 
-            log.info(arrearResultByList.toString());
-
-            car.setArrearOrder(arrearResultByList.getArrearList().stream().map(arrear -> {
-                PayMessage arrearPayMessage = new PayMessage();
-                arrearPayMessage.setCreateTime(arrear.getCreateTime());
-                arrearPayMessage.setInTime(arrear.getStartTime());
-                arrearPayMessage.setTotalFee(arrear.getTotalFee());
-                arrearPayMessage.setPayFee(arrear.getPayFee());
-                arrearPayMessage.setDiscountFee(arrear.getDiscountFee());
-                arrearPayMessage.setInId(arrear.getInId());
-                arrearPayMessage.setOverTime(arrear.getOverTime());
-                return arrearPayMessage;
-            }).collect(Collectors.toList()));
+            if (AssertTool.checkCollectionNotNull(arrearResultByList.getArrearList())) {
+                car.setArrearOrder(arrearResultByList.getArrearList().stream().map(arrear -> {
+                    PayMessage arrearPayMessage = new PayMessage();
+                    arrearPayMessage.setCreateTime(arrear.getCreateTime());
+                    arrearPayMessage.setInTime(arrear.getStartTime());
+                    arrearPayMessage.setTotalFee(arrear.getTotalFee());
+                    arrearPayMessage.setPayFee(arrear.getPayFee());
+                    arrearPayMessage.setDiscountFee(arrear.getDiscountFee());
+                    arrearPayMessage.setInId(arrear.getInId());
+                    arrearPayMessage.setOverTime(arrear.getOverTime());
+                    return arrearPayMessage;
+                }).collect(Collectors.toList()));
+            }
         }
 
         contextService.update(car);
