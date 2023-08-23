@@ -1,7 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container;
 
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.ParkingLotAbility;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.ParkingLotAbilityService;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortService;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.ContextService;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 
 /**
@@ -10,7 +12,7 @@ import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
  * @author Suhuyuan
  */
 
-public abstract class ParkingLotPod implements ParkingLotAbility {
+public abstract class ParkingLotPod {
 
     protected ParkingLotConfiguration cfg;
 
@@ -20,6 +22,12 @@ public abstract class ParkingLotPod implements ParkingLotAbility {
         this.cfg = parkingLotConfiguration;
         this.redis = redis;
     }
+
+    public CarPortService carPort() {
+        return new CarPortService(this, new ContextService(cfg.getDescription(), redis));
+    }
+
+    public abstract ParkingLotAbilityService ability();
 
     /**
      * 获取驱动

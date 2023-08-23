@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerTool;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.tool.IToolAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.tool.IToolAblitity;
 
 /**
  * 道尔工具能力
@@ -11,7 +11,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.to
 
 public class DaoerToolAbility implements IToolAblitity {
 
-    private IDaoerTool api;
+    private final IDaoerTool api;
 
     public DaoerToolAbility(IDaoerTool daoerClient){
         api=daoerClient;

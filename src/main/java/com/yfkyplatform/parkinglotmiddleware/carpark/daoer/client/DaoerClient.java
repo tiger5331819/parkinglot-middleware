@@ -116,6 +116,8 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setCouponAmount(couponAmount);
         model.setDsn(channelId);
 
+        log.info("道尔支付参数：" + model);
+
         return post(model, "api/index/tempFee/paysuccess", DaoerBaseResp.class);
     }
 
@@ -141,6 +143,8 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setDsn(channelId);
         model.setInId(inId);
         model.setParkId(parkNo);
+
+        log.info("道尔支付参数：" + model);
 
         return post(model, "api/index/tempFee/ly/paysuccess", DaoerBaseResp.class);
     }

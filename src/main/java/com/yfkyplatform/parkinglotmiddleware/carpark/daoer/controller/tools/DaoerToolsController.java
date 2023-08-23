@@ -16,8 +16,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req.
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
@@ -89,7 +89,7 @@ public class DaoerToolsController {
 
         configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
             DaoerParkingLot parkingLot = (DaoerParkingLot) manager.parkingLot(item);
-            List<ChannelInfoResult> channelInfoResultList = parkingLot.carport().getChannelsInfo();
+            List<ChannelInfoResult> channelInfoResultList = parkingLot.ability().carport().getChannelsInfo();
             IDaoerCarFee carFee = parkingLot.client();
             channelInfoResultList.forEach(channel -> {
                 DaoerBaseResp<com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrear> data = carFee.getChannelCarFeeWithArrear(channel.getChannelId()).block();
@@ -278,10 +278,10 @@ public class DaoerToolsController {
         String[] carNos = data.split("\r\n");
         List<CarCheckResultResp> resultResps = new LinkedList<>();
         for (String carNo : carNos) {
-            PageResult result = manager.parkingLot(parkingLotId).carport().getCarInInfo(carNo, "", "", 1, 10);
+            Car car = manager.parkingLot(parkingLotId).carPort().getCar(carNo);
             CarCheckResultResp resp = new CarCheckResultResp();
             resp.setCarNo(carNo);
-            resp.setIn(result.getTotal() != 0);
+            resp.setIn(StrUtil.isNotBlank(car.getInId()));
 
             resultResps.add(resp);
         }

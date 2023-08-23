@@ -5,8 +5,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.PageModel;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.PageResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.*;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.PageResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.*;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
@@ -47,6 +47,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         CarPortSpaceResult carPortSpaceResult = new CarPortSpaceResult();
         carPortSpaceResult.setTotal(carportResult.getTotal().getTotal());
         carPortSpaceResult.setRest(carportResult.getIdle().getTotal());
+        carPortSpaceResult.setCarNumber(Math.max(carPortSpaceResult.getTotal() - carPortSpaceResult.getRest(), 0));
 
         return carPortSpaceResult;
     }
@@ -179,6 +180,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
             data.setCardTypeName(carIn.getCardTypeName());
             data.setInPic(carIn.getInPic());
             data.setInTime(carIn.getInTime());
+            data.setInId(carIn.getObjectId());
             return data;
         }).collect(Collectors.toList());
 

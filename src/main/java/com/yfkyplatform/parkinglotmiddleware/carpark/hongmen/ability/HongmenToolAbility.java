@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.hongmen.ability;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.hongmen.client.domin.api.IHongmenTool;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.tool.IToolAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.tool.IToolAblitity;
 
 /**
  * 道尔工具能力

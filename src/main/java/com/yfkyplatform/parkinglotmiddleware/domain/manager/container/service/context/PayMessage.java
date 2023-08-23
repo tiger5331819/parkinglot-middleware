@@ -1,8 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context;
 
+import cn.hutool.core.util.ObjectUtil;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 /**
@@ -14,14 +16,19 @@ import java.time.LocalDateTime;
 public class PayMessage {
 
     /**
-     * 该车计费时间 yyyy-MM-dd HH:mm:ss
+     * 该车订单创建时间（计费时间） yyyy-MM-dd HH:mm:ss
      */
-    private LocalDateTime outTime;
+    private LocalDateTime createTime;
 
     /**
      * 该车入场时间 yyyy-MM-dd HH:mm:ss
      */
     private LocalDateTime inTime;
+
+    /**
+     * 超时时间  单位:分
+     */
+    private int overTime;
 
     /**
      * 应缴金额,单位分
@@ -36,5 +43,22 @@ public class PayMessage {
      */
     private BigDecimal discountFee;
 
+    /**
+     * 入场记录
+     */
     private String inId;
+
+    /**
+     * 停车时长  单位:分
+     */
+    public int serviceTime() {
+        Duration duration = null;
+        if (ObjectUtil.isNull(inTime) || ObjectUtil.isNull(createTime)) {
+            duration = Duration.ZERO;
+        } else {
+            duration = Duration.between(inTime, createTime);
+
+        }
+        return new Long(duration.toMinutes()).intValue();
+    }
 }

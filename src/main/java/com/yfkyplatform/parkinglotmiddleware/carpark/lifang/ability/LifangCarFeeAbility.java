@@ -3,7 +3,9 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.ability;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangCarPort;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.resp.carport.CarFeeResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carfee.*;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderPayMessage;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.ICarFeeAblitity;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,60 +69,15 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
 
     /**
      * 根据通道号获取车辆费用信息
+     * 支持无牌车出场
      *
      * @param channelId
-     * @param carNo     车牌号码
-     * @param openId
-     * @return
-     */
-    @Override
-    public CarOrderResult getCarFeeInfo(String channelId, String carNo, String openId) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * 根据通道号获取车辆费用信息（支持欠费）
-     *
-     * @param channelId
-     * @return
-     */
-    @Override
-    public CarOrderWithArrearResultByList getCarFeeInfoByChannelWithArrear(String channelId) {
-        return null;
-    }
-
-    /**
-     * 无牌车出场（支持欠费）
-     *
-     * @param openId
      * @param scanType
-     * @param channelId
+     * @param openId
      * @return
      */
     @Override
-    public CarOrderWithArrearResultByList blankCarOutWithArrear(String openId, int scanType, String channelId) {
-        return null;
-    }
-
-    /**
-     * 获取临时车缴纳金额（支持欠费）
-     *
-     * @param carNo 车牌号码
-     * @return
-     */
-    @Override
-    public CarOrderWithArrearResultByList getCarFeeInfoWithArrear(String carNo) {
-        return null;
-    }
-
-    /**
-     * 临停缴费支付完成（支持欠费）
-     *
-     * @param payMessage 订单支付信息
-     * @return
-     */
-    @Override
-    public Boolean payCarFeeAccessWithArrear(CarOrderPayMessageWithArrear payMessage) {
+    public CarOrderResult getCarFeeInfoByChannel(String channelId, int scanType, String openId) {
         return null;
     }
 

@@ -15,6 +15,11 @@ import java.time.ZoneId;
 @Data
 public class CarInData {
     /**
+     * 入场ID
+     */
+    private String objectId;
+
+    /**
      * 入场通道ID
      */
     private String entranceId;

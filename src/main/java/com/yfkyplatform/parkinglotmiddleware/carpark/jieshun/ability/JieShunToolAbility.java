@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.ability;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.api.IJieShunTool;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.tool.IToolAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.tool.IToolAblitity;
 
 /**
  * 道尔工具能力

@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrearByCharge;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.carport.ChannelInfoResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
 import lombok.Data;
 
 import java.util.List;

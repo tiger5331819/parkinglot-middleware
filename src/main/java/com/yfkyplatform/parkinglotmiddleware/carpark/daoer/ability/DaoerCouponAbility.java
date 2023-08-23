@@ -3,9 +3,9 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCoupon;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.coupon.CouponUseResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.CouponMessageResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.CouponUseMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.coupon.ICouponAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.coupon.CouponMessageResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.coupon.CouponUseMessage;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.coupon.ICouponAblitity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +18,7 @@ import java.util.List;
 
 public class DaoerCouponAbility implements ICouponAblitity {
 
-    private IDaoerCoupon api;
+    private final IDaoerCoupon api;
 
     public DaoerCouponAbility(IDaoerCoupon daoerClient){
         api=daoerClient;

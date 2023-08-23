@@ -2,9 +2,9 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerGuest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.guest.GuestResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.GuestMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.GuestUserResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ability.guest.IGuestAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.guest.GuestMessage;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.guest.GuestUserResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.guest.IGuestAblitity;
 
 /**
  * 道尔工具能力

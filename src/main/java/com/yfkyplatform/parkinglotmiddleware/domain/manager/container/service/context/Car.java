@@ -17,7 +17,7 @@ public class Car {
     /**
      * 车辆月租类型
      */
-    private Integer typeId = -1;
+    private int typeId = -1;
 
     /**
      * 月租开始时间 yyyy-MM-dd HH:mm:ss
@@ -30,14 +30,24 @@ public class Car {
     private LocalDateTime typeEndTime;
 
     /**
+     * 0正常,2即将过期，6过期, 7待审核，8待支付 -1注销,
+     */
+    private int typeStatus;
+
+    /**
      * 车主姓名
      */
-    private String contactName;
+    private String contactName = "临时用户";
 
     /**
      * 车主电话号码
      */
     private String contactPhone;
+
+    /**
+     * 该车入场时间 yyyy-MM-dd HH:mm:ss
+     */
+    private LocalDateTime inTime;
 
     /**
      * 入场照片

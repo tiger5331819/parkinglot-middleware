@@ -1,7 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport;
 
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
 import lombok.Data;
+
+import java.util.List;
 
 /**
  * 车场信息
@@ -25,16 +28,18 @@ public class CarPortMessage {
      * 总车位数
      */
     private int total;
+
     /**
      * 空余车位数
      */
     private int rest;
 
     /**
-     * @return
+     * 通道列表
      */
-    public int getRemainder() {
-        int remainder = total - rest;
-        return Math.max(remainder, 0);
-    }
+    List<ChannelInfoResult> channelList;
+    /**
+     * 在场内车位数
+     */
+    private int carNumber;
 }
