@@ -1,8 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web.resp;
 
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.PayMessage;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * 人工清场结果
@@ -57,6 +59,16 @@ public class CarResp {
      * 车场唯一入场记录ID
      */
     private String inId;
+
+    /**
+     * 当前订单信息
+     */
+    private PayMessage order;
+
+    /**
+     * 历史欠费订单信息
+     */
+    private List<PayMessage> arrearOrder;
 
     private String parkingLotDescription;
 }

@@ -95,7 +95,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
     private CarFeeResultWithArrearByCharge checkCarFeeWithArrearResult(DaoerBaseResp<CarFeeResultWithArrear> resp) {
         log.info("道尔费用:" + resp);
-        CarFeeResultWithArrearByCharge result = resp.getBody().getCharge();
+        CarFeeResultWithArrearByCharge result = ObjectUtil.isNull(resp.getBody()) ? null : resp.getBody().getCharge();
         if (ObjectUtil.isNull(result) || StrUtil.isBlank(result.getCarNo())) {
             log.info(resp.getHead().getMessage());
             result = new CarFeeResultWithArrearByCharge();
