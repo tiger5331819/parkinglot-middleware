@@ -164,14 +164,20 @@ public class ToolController {
     @ApiOperation(value = "获取车辆信息")
     @GetMapping("/car/{carNo}")
     public List<CarResp> getCar(@PathVariable String carNo) {
-
         List<ParkingLotConfiguration> configurationList = factory.getParkingLotConfiguration(null, null);
-        return configurationList.stream().map(configuration -> {
+
+        List<CarResp> respList = new LinkedList<>();
+        for (ParkingLotConfiguration configuration : configurationList) {
             ParkingLotPod parkingLot = factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
             Car car = parkingLot.carPort().getCar(carNo);
-            CarResp carResp = BeanUtil.copyProperties(car, CarResp.class);
-            carResp.setParkingLotDescription(parkingLot.configuration().getDescription());
-            return carResp;
-        }).collect(Collectors.toList());
+            if (StrUtil.isNotBlank(car.getInId())) {
+                CarResp carResp = BeanUtil.copyProperties(car, CarResp.class);
+                carResp.setParkingLotDescription(parkingLot.configuration().getDescription());
+                respList.add(carResp);
+            }
+
+        }
+
+        return respList;
     }
 }
