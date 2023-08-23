@@ -76,8 +76,8 @@ public class ToolController {
 
     @ApiOperation(value = "获取车辆缴纳金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
-    public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, String carNo, String openId) {
-
+    public List<CarOrderResultRpcResp> getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, String carNo, String openId) {
+        List<CarOrderResultRpcResp> respList = new LinkedList<>();
         ParkingLotPod parkingLot = findByDescription(parkingLotManager, parkingLotDescription);
         CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
         if (StrUtil.isBlank(carNo)) {
@@ -89,13 +89,13 @@ public class ToolController {
 
                 CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq);
                 if (StrUtil.isNotBlank(resp.getCarNo())) {
-                    return resp;
+                    respList.add(resp);
                 }
             }
         } else {
-            return carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo);
+            respList.add(carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo));
         }
-        return null;
+        return respList;
     }
 
     @ApiOperation(value = "直接支付金额")
