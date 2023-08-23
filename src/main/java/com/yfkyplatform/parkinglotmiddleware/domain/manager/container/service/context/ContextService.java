@@ -1,7 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context;
 
 import cn.hutool.json.JSONUtil;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.monthly.MonthlyCarMessageResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 
@@ -35,7 +34,7 @@ public class ContextService {
     }
 
     public Boolean check(Car car) {
-        if (AssertTool.checkEntityNotNull(car)) {
+        if (AssertTool.checkCarNotNull(car)) {
             return check(car.getCarNo());
         } else {
             throw new IllegalArgumentException("车辆实体不存在");
@@ -47,26 +46,6 @@ public class ContextService {
         Car car = new Car();
         car.setCarNo(carNo);
         add(car);
-        return car;
-    }
-
-    public Car addMonthlyMessage(String carNo, MonthlyCarMessageResult monthlyCarMessage) {
-        Car car = get(carNo);
-
-        if (AssertTool.checkEntityNotNull(car)) {
-            car = createCar(carNo);
-        }
-
-        if (AssertTool.checkEntityNotNull(monthlyCarMessage)) {
-            car.setTypeId(monthlyCarMessage.getCardTypeId());
-            car.setTypeStartTime(monthlyCarMessage.getStartTime());
-            car.setTypeEndTime(monthlyCarMessage.getEndTime());
-            car.setTypeStatus(monthlyCarMessage.getStatus());
-            car.setContactName(monthlyCarMessage.getContactName());
-            car.setContactPhone(monthlyCarMessage.getContactPhone());
-        }
-
-        update(car);
         return car;
     }
 

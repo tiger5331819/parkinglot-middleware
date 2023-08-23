@@ -1,6 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 
 import java.util.Collection;
 
@@ -12,8 +14,8 @@ import java.util.Collection;
 
 public class AssertTool {
 
-    public static boolean checkEntityNotNull(Object object) {
-        return ObjectUtil.isNotNull(object);
+    public static boolean checkCarNotNull(Car car) {
+        return ObjectUtil.isNotNull(car) && StrUtil.isNotBlank(car.getCarNo());
     }
 
     public static boolean checkCollectionNotNull(Collection collection) {

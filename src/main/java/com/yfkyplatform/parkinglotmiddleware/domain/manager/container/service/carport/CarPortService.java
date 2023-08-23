@@ -86,7 +86,7 @@ public class CarPortService {
     public Car getCar(String carNo) {
         Car car = contextService.get(carNo);
 
-        if (!AssertTool.checkEntityNotNull(car)) {
+        if (!AssertTool.checkCarNotNull(car)) {
             Car refreshCar = contextService.createCar(carNo);
             car = refresh(refreshCar);
         }
@@ -126,6 +126,8 @@ public class CarPortService {
             CarOrderWithArrearResultByList arrearResultByList = (CarOrderWithArrearResultByList) carOrderResult;
             payMessage.setInId(arrearResultByList.getInId());
             payMessage.setOverTime(arrearResultByList.getOverTime());
+
+            log.info(arrearResultByList.toString());
 
             car.setArrearOrder(arrearResultByList.getArrearList().stream().map(arrear -> {
                 PayMessage arrearPayMessage = new PayMessage();
