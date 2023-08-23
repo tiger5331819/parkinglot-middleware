@@ -74,6 +74,30 @@ public class ToolController {
         return env.getProperty("app.version");
     }
 
+    @ApiOperation(value = "获取车辆缴纳金额")
+    @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
+    public CarOrderResultRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, String carNo, String openId) {
+
+        ParkingLotPod parkingLot = findByDescription(parkingLotManager, parkingLotDescription);
+        CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
+        if (StrUtil.isBlank(carNo)) {
+            for (ChannelInfoResult channelInfo : carPortMessage.getChannelList()) {
+                ChannelCarRpcReq channelCarRpcReq = new ChannelCarRpcReq();
+                channelCarRpcReq.setOpenId(openId);
+                channelCarRpcReq.setScanType(1);
+                channelCarRpcReq.setChannelId(channelInfo.getChannelId());
+
+                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq);
+                if (StrUtil.isNotBlank(resp.getCarNo())) {
+                    return resp;
+                }
+            }
+        } else {
+            return carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo);
+        }
+        return null;
+    }
+
     @ApiOperation(value = "直接支付金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/carport/FeeTest")
     public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, PayAccessReq payAccess) {
@@ -85,7 +109,7 @@ public class ToolController {
             for (ChannelInfoResult channelInfo : carPortMessage.getChannelList()) {
                 ChannelCarRpcReq channelCarRpcReq = new ChannelCarRpcReq();
                 channelCarRpcReq.setOpenId(payAccess.getOpenId());
-                channelCarRpcReq.setScanType(1);
+                channelCarRpcReq.setScanType(payAccess.getScanType());
                 channelCarRpcReq.setChannelId(channelInfo.getChannelId());
 
                 CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq);
@@ -98,6 +122,10 @@ public class ToolController {
             rpcResp = carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), payAccess.getCarNo());
         }
 
+
+        if (ObjectUtil.isNull(rpcResp)) {
+            return false;
+        }
 
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
         orderPayMessageRpcReq.setPayTime(rpcResp.getCreateTime());

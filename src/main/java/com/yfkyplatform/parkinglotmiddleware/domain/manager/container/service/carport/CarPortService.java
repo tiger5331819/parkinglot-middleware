@@ -79,12 +79,7 @@ public class CarPortService {
         car.setContactName(monthlyCarInfo.getContactName());
         car.setContactPhone(monthlyCarInfo.getContactPhone());
 
-        if (StrUtil.isNotBlank(car.getInId())) {
-            contextService.update(car);
-        } else {
-            contextService.remove(car.getCarNo());
-        }
-
+        contextService.update(car);
         return car;
     }
 

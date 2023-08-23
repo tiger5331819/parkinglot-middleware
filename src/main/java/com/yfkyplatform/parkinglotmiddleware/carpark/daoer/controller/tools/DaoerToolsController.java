@@ -5,22 +5,16 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarFee;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerTool;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req.ViewHttpApiProxy;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarFeeResultWithArrear;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.SaaSPayMessageResultResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
@@ -35,7 +29,6 @@ import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -80,32 +73,6 @@ public class DaoerToolsController {
     public DaoerBaseResp<String> getToken(@PathVariable String parkingLotId) {
         DaoerBaseResp<String> result = new DaoerBaseResp<String>();
         result.setBody(api(parkingLotId).getToken());
-        return result;
-    }
-
-    @ApiOperation(value = "获取通道缴纳金额（欠费）")
-    @GetMapping("/{parkingLotName}/fee/arrear/channel")
-    public List<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable @ApiParam(value = "车场描述") String parkingLotName) {
-        List<DaoerParkingLotConfiguration> configurationList = manager.configurationList(null);
-        List<CarFeeResultWithArrear> result = new ArrayList<>();
-
-        configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
-            DaoerParkingLot parkingLot = (DaoerParkingLot) manager.parkingLot(item);
-            CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
-            List<ChannelInfoResult> channelInfoResultList = parkingLot.ability().carport().getChannelsInfo();
-            IDaoerCarFee carFee = parkingLot.client();
-            channelInfoResultList.forEach(channel -> {
-                DaoerBaseResp<com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResultWithArrear> data = carFee.getChannelCarFeeWithArrear(channel.getChannelId()).block();
-                if (data.getHead().getStatus() == 1) {
-                    CarFeeResultWithArrear fee = new CarFeeResultWithArrear();
-                    fee.setChannel(channel);
-                    fee.setCharge(data.getBody().getCharge());
-                    fee.setArrears(data.getBody().getArrears());
-                    result.add(fee);
-                }
-            });
-        });
-
         return result;
     }
 
