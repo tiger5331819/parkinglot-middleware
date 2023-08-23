@@ -18,4 +18,7 @@ public class PayAccessReq {
 
     @ApiModelProperty(value = "实缴金额,单位：元,若不填则为完整金额")
     private BigDecimal payFee;
+
+    @ApiModelProperty(value = "微信或支付宝openid")
+    private String openId;
 }

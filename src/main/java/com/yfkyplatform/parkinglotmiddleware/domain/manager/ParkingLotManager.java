@@ -78,6 +78,27 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
     /**
      * 获取停车场
      *
+     * @param parkingLotDescription 车场描述
+     * @return
+     */
+    public <T extends ParkingLotPod> T findParkingLotByDescription(String parkingLotDescription) {
+        if (ObjectUtil.isNull(parkingLotDescription)) {
+            throw new IllegalArgumentException("parkingLotDescription 不能为空");
+        }
+
+        Optional<String> parkingLotIdOptional = configurationList(null).stream()
+                .filter(item -> item.getDescription().contains(parkingLotDescription)).map(ParkingLotConfiguration::getId).findFirst();
+
+        if (parkingLotIdOptional.isPresent()) {
+            return parkingLot(parkingLotIdOptional.get());
+        } else {
+            throw new NoSuchElementException(parkingLotDescription + "不存在");
+        }
+    }
+
+    /**
+     * 获取停车场
+     *
      * @param parkingLotId
      * @return
      */

@@ -2,13 +2,12 @@ package com.yfkyplatform.parkinglotmiddleware.api.web;
 
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageWithArrearRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessage;
-import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessageWithArrear;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -39,12 +38,6 @@ public class CarPortController {
         return carPortService.getCarPortSpace(parkingLotManager, parkingLotId);
     }
 
-    @ApiOperation(value = "无牌车出场")
-    @PostMapping("/blankCarOut")
-    public CarOrderResultByListRpcResp blankCarOut(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarOut(parkingLotManager, parkingLotId, blankCar);
-    }
-
     @ApiOperation(value = "无牌车入场")
     @PostMapping("/blankCarIn")
     public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
@@ -67,30 +60,16 @@ public class CarPortController {
         orderPayMessageRpcReq.setPayType(payData.getPayType());
         orderPayMessageRpcReq.setPaymentTransactionId(payData.getPaymentTransactionId());
         orderPayMessageRpcReq.setPayFee(payData.getPayFee());
+        orderPayMessageRpcReq.setInId(payData.getInId());
 
 
         return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq);
     }
 
-    @ApiOperation(value = "车辆缴费（欠费）")
-    @PatchMapping("/{carNo}/Fee/Arrear")
-    public Boolean payAccessWithArrear(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessageWithArrear payData) {
-
-        OrderPayMessageWithArrearRpcReq orderPayMessageWithArrearRpcReq = new OrderPayMessageWithArrearRpcReq();
-        orderPayMessageWithArrearRpcReq.setPayTime(payData.getPayTime());
-        orderPayMessageWithArrearRpcReq.setDiscountFee(payData.getDiscountFee());
-        orderPayMessageWithArrearRpcReq.setPayType(payData.getPayType());
-        orderPayMessageWithArrearRpcReq.setPaymentTransactionId(payData.getPaymentTransactionId());
-        orderPayMessageWithArrearRpcReq.setPayFee(payData.getPayFee());
-        orderPayMessageWithArrearRpcReq.setInId(payData.getInId());
-
-        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageWithArrearRpcReq);
-    }
-
     @ApiOperation(value = "根据通道号获取车辆费用信息")
-    @GetMapping("/channel/Fee")
-    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String channelId, @RequestBody BlankCarRpcReq rpcReq) {
-        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, channelId, rpcReq);
+    @PostMapping("/channel/Fee")
+    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody ChannelCarRpcReq rpcReq) {
+        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, rpcReq);
     }
 
     @ApiOperation(value = "获取通道列表")

@@ -51,4 +51,10 @@ public class OrderPayMessage extends BaseRpcReq {
      */
     @ApiModelProperty(value = "优惠金额")
     private BigDecimal discountFee;
+
+    /**
+     * 入场记录ID
+     */
+    @ApiModelProperty(value = "支付类型")
+    private String inId;
 }

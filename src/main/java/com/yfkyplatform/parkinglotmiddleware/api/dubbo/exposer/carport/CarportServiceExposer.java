@@ -5,8 +5,8 @@ import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageWithArrearRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
@@ -26,7 +26,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -85,6 +84,7 @@ public class CarportServiceExposer implements ICarPortService {
 
     /**
      * 车辆缴费
+     * (支持欠费)
      *
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
@@ -94,32 +94,6 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public Boolean payAccess(Integer parkingLotManagerCode, String parkingLotId, String carNo, OrderPayMessageRpcReq payMessage) {
-
-        CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).carPort();
-
-        CarOrderPayMessage message = new CarOrderPayMessage();
-        message.setCarNo(carNo);
-        message.setPayFee(payMessage.getPayFee());
-        message.setPayTime(payMessage.getPayTime());
-        message.setPayType(payMessage.getPayType());
-        message.setPaymentTransactionId(payMessage.getPaymentTransactionId());
-        message.setDiscountFee(payMessage.getDiscountFee());
-
-        return carPortService.payFee(message);
-    }
-
-    /**
-     * 车辆缴费(支持欠费)
-     *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param carNo                 车牌号
-     * @param payMessage            缴费信息
-     * @return
-     */
-    @Override
-    public Boolean payAccess(Integer parkingLotManagerCode, String parkingLotId, String carNo, OrderPayMessageWithArrearRpcReq payMessage) {
 
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).carPort();
@@ -173,22 +147,6 @@ public class CarportServiceExposer implements ICarPortService {
     }
 
     /**
-     * 无牌车出场
-     *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param blankCar              无牌车请求信息
-     * @return
-     */
-    @Override
-    public CarOrderResultByListRpcResp blankCarOut(Integer parkingLotManagerCode, String parkingLotId, BlankCarRpcReq blankCar) {
-        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
-
-        String carNo = parkingLot.ability().carport().blankCarOut(blankCar.getOpenId(), blankCar.getScanType(), blankCar.getChannelId()).getCarNo();
-        return makeCarOrderResultByListRpcResp(parkingLot.carPort().calculatePayMessage(carNo));
-    }
-
-    /**
      * 车场余位
      *
      * @param parkingLotManagerCode 停车场管理名称
@@ -216,13 +174,14 @@ public class CarportServiceExposer implements ICarPortService {
      *
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
-     * @param channelId             通道Id
+     * @param channelCarRpcReq      通道车辆信息
      * @return
      */
     @Override
-    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, String channelId, @Nullable BlankCarRpcReq blankCar) throws ExposerException {
+    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, ChannelCarRpcReq channelCarRpcReq) throws ExposerException {
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
-        return makeCarOrderResultByListRpcResp(parkingLot.carPort().calculatePayMessage(channelId, 1, blankCar.getOpenId()));
+        return makeCarOrderResultByListRpcResp(parkingLot.carPort()
+                .calculatePayMessage(channelCarRpcReq.getChannelId(), channelCarRpcReq.getScanType(), channelCarRpcReq.getOpenId()));
 
     }
 

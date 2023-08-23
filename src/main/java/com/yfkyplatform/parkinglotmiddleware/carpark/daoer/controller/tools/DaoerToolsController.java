@@ -13,11 +13,14 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.req.ViewHttpApiProxy;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.*;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.AllURLResultResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarFeeResultWithArrear;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.SaaSPayMessageResultResp;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.URLResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
@@ -33,7 +36,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
@@ -89,6 +91,7 @@ public class DaoerToolsController {
 
         configurationList.stream().filter(item -> item.getDescription().contains(parkingLotName)).map(ParkingLotConfiguration::getId).findFirst().ifPresent(item -> {
             DaoerParkingLot parkingLot = (DaoerParkingLot) manager.parkingLot(item);
+            CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
             List<ChannelInfoResult> channelInfoResultList = parkingLot.ability().carport().getChannelsInfo();
             IDaoerCarFee carFee = parkingLot.client();
             channelInfoResultList.forEach(channel -> {
@@ -272,20 +275,5 @@ public class DaoerToolsController {
         return resultJson;
     }
 
-    @ApiOperation(value = "检查车辆是否在场")
-    @PostMapping("/{parkingLotId}/checkCar")
-    public List<CarCheckResultResp> checkCar(@PathVariable String parkingLotId, @RequestBody String data) {
-        String[] carNos = data.split("\r\n");
-        List<CarCheckResultResp> resultResps = new LinkedList<>();
-        for (String carNo : carNos) {
-            Car car = manager.parkingLot(parkingLotId).carPort().getCar(carNo);
-            CarCheckResultResp resp = new CarCheckResultResp();
-            resp.setCarNo(carNo);
-            resp.setIn(StrUtil.isNotBlank(car.getInId()));
 
-            resultResps.add(resp);
-        }
-
-        return resultResps;
-    }
 }
