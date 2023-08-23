@@ -81,6 +81,8 @@ public class CarPortService {
 
         if (StrUtil.isNotBlank(car.getInId())) {
             contextService.update(car);
+        } else {
+            contextService.remove(car.getCarNo());
         }
 
         return car;
