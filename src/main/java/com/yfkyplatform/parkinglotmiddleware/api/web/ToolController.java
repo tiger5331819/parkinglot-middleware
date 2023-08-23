@@ -81,7 +81,7 @@ public class ToolController {
         ParkingLotPod parkingLot = findByDescription(parkingLotManager, parkingLotDescription);
         CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
         if (StrUtil.isBlank(carNo)) {
-            for (ChannelInfoResult channelInfo : carPortMessage.getChannelList()) {
+            for (ChannelInfoResult channelInfo : carPortMessage.getChannelList().stream().filter(item -> item.getType() == 1).collect(Collectors.toList())) {
                 ChannelCarRpcReq channelCarRpcReq = new ChannelCarRpcReq();
                 channelCarRpcReq.setOpenId(openId);
                 channelCarRpcReq.setScanType(1);
@@ -106,7 +106,7 @@ public class ToolController {
         CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
         if (StrUtil.isBlank(payAccess.getCarNo())) {
 
-            for (ChannelInfoResult channelInfo : carPortMessage.getChannelList()) {
+            for (ChannelInfoResult channelInfo : carPortMessage.getChannelList().stream().filter(item -> item.getType() == 1).collect(Collectors.toList())) {
                 ChannelCarRpcReq channelCarRpcReq = new ChannelCarRpcReq();
                 channelCarRpcReq.setOpenId(payAccess.getOpenId());
                 channelCarRpcReq.setScanType(payAccess.getScanType());
