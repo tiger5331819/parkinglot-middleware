@@ -121,6 +121,7 @@ public class CarPortService {
         payMessage.setPayFee(carOrderResult.getPayFee());
         payMessage.setDiscountFee(carOrderResult.getDiscountFee());
 
+        car.setOrder(payMessage);
 
         if (carOrderResult instanceof CarOrderWithArrearResultByList) {
             CarOrderWithArrearResultByList arrearResultByList = (CarOrderWithArrearResultByList) carOrderResult;
