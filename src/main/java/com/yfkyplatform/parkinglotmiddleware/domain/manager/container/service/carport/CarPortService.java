@@ -48,7 +48,8 @@ public class CarPortService {
         carPortMessage.setConfiguration(configuration);
         carPortMessage.setHealthCheck(parkingLot.healthCheck());
         carPortMessage.setRest(carPortSpaceResult.getRest());
-        carPortMessage.setTotal(carPortMessage.getTotal());
+        carPortMessage.setTotal(carPortSpaceResult.getTotal());
+        carPortMessage.setCarNumber(carPortSpaceResult.getCarNumber());
         carPortMessage.setChannelList(channelInfoResults);
 
         return carPortMessage;
