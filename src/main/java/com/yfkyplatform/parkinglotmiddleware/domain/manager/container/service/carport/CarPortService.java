@@ -164,7 +164,7 @@ public class CarPortService {
 
     public Boolean payFee(CarOrderPayMessage payMessage) {
         Car car = refresh(payMessage.getCarNo());
-        PayMessage order = null;
+        PayMessage order;
         if (ObjectUtil.isNotNull(payMessage.getInId())) {
             order = findOrder(car, payMessage.getInId());
             if (ObjectUtil.isNull(order)) {

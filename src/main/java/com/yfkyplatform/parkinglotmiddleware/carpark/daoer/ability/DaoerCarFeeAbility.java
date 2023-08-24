@@ -72,7 +72,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     public CarOrderResult getCarFeeInfoByChannel(String channelId, int scanType, String openId) {
         if (configuration.getBackTrack()) {
             DaoerBaseResp<CarFeeResultWithArrear> resp = api.getChannelCarFeeWithArrear(channelId).block();
-            if (ObjectUtil.isNull(resp.getBody())) {
+            if (ObjectUtil.isNull(resp.getBody()) || StrUtil.isBlank(resp.getBody().getCharge().getCarNo())) {
                 resp = api.blankCarOutWithArrear(openId, scanType, channelId).block();
             }
             CarFeeResultWithArrearByCharge result = checkCarFeeWithArrearResult(resp);
