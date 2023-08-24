@@ -13,9 +13,9 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoRes
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderPayMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.CarPortSpaceResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ICarPortAblitity;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortService;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.PayMessage;
@@ -155,16 +155,15 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public CarPortSpaceRpcResp getCarPortSpace(Integer parkingLotManagerCode, String parkingLotId) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().carport();
+        CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
+                .parkingLot(parkingLotId).carPort();
 
-        CarPortSpaceResult carPortSpace = carPortService.getCarPortSpace();
+        CarPortMessage carPortMessage = carPortService.parkingLotMessage();
 
         CarPortSpaceRpcResp result = new CarPortSpaceRpcResp();
-        result.setRest(carPortSpace.getRest());
-
-
-        result.setTotal(carPortSpace.getTotal());
+        result.setRest(carPortMessage.getRest());
+        result.setCarNumber(carPortMessage.getCarNumber());
+        result.setTotal(carPortMessage.getTotal());
 
         return result;
     }
@@ -194,10 +193,12 @@ public class CarportServiceExposer implements ICarPortService {
      */
     @Override
     public List<ChannelInfoResultRpcResp> getChannelsInfo(Integer parkingLotManagerCode, String parkingLotId) {
-        ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().carport();
+        CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
+                .parkingLot(parkingLotId).carPort();
 
-        List<ChannelInfoResult> channelInfoResultList = carPortService.getChannelsInfo();
+        CarPortMessage carPortMessage = carPortService.parkingLotMessage();
+
+        List<ChannelInfoResult> channelInfoResultList = carPortMessage.getChannelList();
         List<ChannelInfoResultRpcResp> resultList = new ArrayList<>();
 
         channelInfoResultList.forEach(item -> {
