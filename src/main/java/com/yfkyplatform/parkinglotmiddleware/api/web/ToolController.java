@@ -135,7 +135,7 @@ public class ToolController {
         orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
         orderPayMessageRpcReq.setInId(rpcResp.getInId());
 
-        return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), payAccess.getCarNo(), orderPayMessageRpcReq);
+        return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq);
     }
 
     @ApiOperation(value = "批量人工清场")
