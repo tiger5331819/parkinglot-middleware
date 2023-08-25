@@ -180,6 +180,8 @@ public class CarPortService {
         }
 
         if (ObjectUtil.isNull(order)) {
+            log.error(parkingLot.carPort().parkingLotMessage().toString());
+            log.error(car.toString());
             log.error("找不到订单，支付信息： " + payMessage);
             return false;
         }
