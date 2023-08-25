@@ -165,14 +165,15 @@ public class CarPortService {
 
     public Boolean payFee(CarOrderPayMessage payMessage) {
         Car car = refresh(payMessage.getCarNo());
-        PayMessage order;
+        PayMessage order = null;
         if (ObjectUtil.isNotNull(payMessage.getInId())) {
             order = findOrder(car, payMessage.getInId());
             if (ObjectUtil.isNull(order)) {
                 car = calculatePayMessage(payMessage.getCarNo());
                 order = findOrder(car, payMessage.getInId());
             }
-        } else {
+        }
+        if (ObjectUtil.isNull(order)) {
             order = car.getOrder();
             if (ObjectUtil.isNull(order)) {
                 order = calculatePayMessage(payMessage.getCarNo()).getOrder();
