@@ -35,7 +35,7 @@ public class CarPortController {
     @ApiOperation(value = "车场余位")
     @GetMapping("/space")
     public CarPortSpaceRpcResp getCarPortSpace(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
-        return carPortService.getCarPortSpace(parkingLotManager, parkingLotId);
+        return carPortService.getCarPortSpace(parkingLotManager, parkingLotId, null);
     }
 
     @ApiOperation(value = "无牌车入场")

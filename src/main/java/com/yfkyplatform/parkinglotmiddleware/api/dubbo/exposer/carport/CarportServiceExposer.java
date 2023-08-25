@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
+import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
@@ -154,7 +155,8 @@ public class CarportServiceExposer implements ICarPortService {
      * @return
      */
     @Override
-    public CarPortSpaceRpcResp getCarPortSpace(Integer parkingLotManagerCode, String parkingLotId) {
+    public CarPortSpaceRpcResp getCarPortSpace(Integer parkingLotManagerCode, String parkingLotId, Integer operatorId) {
+        AccountRpcContext.setOperatorId(operatorId);
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).carPort();
 

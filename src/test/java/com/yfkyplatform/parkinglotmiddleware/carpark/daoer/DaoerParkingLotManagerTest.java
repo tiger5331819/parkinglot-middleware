@@ -53,6 +53,6 @@ class DaoerParkingLotManagerTest {
     @ParameterizedTest
     @CsvSource({"铜陵", "科盈测试"})
     void carPortTest(String parkingLotId) {
-        assertThrows(RuntimeException.class, () -> daoerManager.parkingLot(parkingLotId).carport().getCarPortSpace());
+        assertThrows(RuntimeException.class, () -> daoerManager.parkingLot(parkingLotId).ability().carport().getCarPortSpace());
     }
 }
