@@ -21,8 +21,8 @@ public class CarPortSpaceResult {
     private int rest;
 
     /**
-     * 在场内车位数
+     * 已停车位数
      */
-    private int carNumber;
+    private int use;
 
 }

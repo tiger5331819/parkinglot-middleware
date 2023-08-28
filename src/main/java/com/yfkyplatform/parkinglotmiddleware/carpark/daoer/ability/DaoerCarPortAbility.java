@@ -47,7 +47,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         CarPortSpaceResult carPortSpaceResult = new CarPortSpaceResult();
         carPortSpaceResult.setTotal(carportResult.getTotal().getTotal());
         carPortSpaceResult.setRest(carportResult.getIdle().getTotal());
-        carPortSpaceResult.setCarNumber(Math.max(carPortSpaceResult.getTotal() - carPortSpaceResult.getRest(), 0));
+        carPortSpaceResult.setUse(Math.max(carPortSpaceResult.getTotal() - carPortSpaceResult.getRest(), 0));
 
         return carPortSpaceResult;
     }

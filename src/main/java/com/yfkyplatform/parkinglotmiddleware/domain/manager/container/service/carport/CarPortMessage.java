@@ -35,11 +35,14 @@ public class CarPortMessage {
     private int rest;
 
     /**
+     * 已停车位数
+     */
+    private int use;
+
+    /**
      * 通道列表
      */
     List<ChannelInfoResult> channelList;
-    /**
-     * 在场内车位数
-     */
-    private int carNumber;
+
+
 }

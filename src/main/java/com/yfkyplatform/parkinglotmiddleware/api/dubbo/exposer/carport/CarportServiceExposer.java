@@ -164,7 +164,7 @@ public class CarportServiceExposer implements ICarPortService {
 
         CarPortSpaceRpcResp result = new CarPortSpaceRpcResp();
         result.setRest(carPortMessage.getRest());
-        result.setCarNumber(carPortMessage.getCarNumber());
+        result.setUse(carPortMessage.getUse());
         result.setTotal(carPortMessage.getTotal());
 
         return result;
