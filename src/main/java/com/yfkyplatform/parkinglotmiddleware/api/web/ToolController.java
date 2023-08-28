@@ -57,7 +57,7 @@ public class ToolController {
     }
 
     @ApiOperation(value = "获取车场信息")
-    @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
+    @GetMapping("/{parkingLotManager}/{parkingLotDescription}/message")
     public List<CarPortMessage> getParkingLotMessage(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription) {
 
         List<ParkingLotPod> parkingLotList = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription);
