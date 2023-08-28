@@ -3,11 +3,13 @@ package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 停车场管理
@@ -81,16 +83,18 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
      * @param parkingLotDescription 车场描述
      * @return
      */
-    public <T extends ParkingLotPod> T findParkingLotByDescription(String parkingLotDescription) {
+    public <T extends ParkingLotPod> List<T> findParkingLotByDescription(String parkingLotDescription) {
         if (ObjectUtil.isNull(parkingLotDescription)) {
             throw new IllegalArgumentException("parkingLotDescription 不能为空");
         }
 
-        Optional<String> parkingLotIdOptional = configurationList(null).stream()
-                .filter(item -> item.getDescription().contains(parkingLotDescription)).map(ParkingLotConfiguration::getId).findFirst();
+        List<String> parkingLotIdList = configurationList(null).stream()
+                .filter(item -> item.getDescription().contains(parkingLotDescription)).map(ParkingLotConfiguration::getId).collect(Collectors.toList());
 
-        if (parkingLotIdOptional.isPresent()) {
-            return parkingLot(parkingLotIdOptional.get());
+        if (AssertTool.checkCollectionNotNull(parkingLotIdList)) {
+            List<T> parkingLotList = new LinkedList<>();
+            parkingLotIdList.forEach(item -> parkingLotList.add(parkingLot(item)));
+            return parkingLotList;
         } else {
             throw new NoSuchElementException(parkingLotDescription + "不存在");
         }

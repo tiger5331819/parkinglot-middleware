@@ -4,19 +4,14 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.req.CleanCarReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.PayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CarResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarListResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarResp;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarCheckResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
@@ -24,17 +19,16 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ab
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.core.env.Environment;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -51,27 +45,23 @@ public class ToolController {
 
     private final ICarPortService carPortService;
 
-    private final Environment env;
-
-    private final TestBox testBox;
-
     private final ParkingLotManagerFactory factory;
 
-    public ToolController(ICarPortService carPortService, Environment env, TestBox testBox, ParkingLotManagerFactory factory) {
+    public ToolController(ICarPortService carPortService, ParkingLotManagerFactory factory) {
         this.carPortService = carPortService;
-        this.env = env;
-        this.testBox = testBox;
         this.factory = factory;
     }
 
     private ParkingLotPod findByDescription(Integer parkingLotManager, String parkingLotDescription) {
-        return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription);
+        return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription).stream().findFirst().get();
     }
 
-    @ApiOperation(value = "获取版本信息")
-    @GetMapping("/version")
-    public String getVersion() {
-        return env.getProperty("app.version");
+    @ApiOperation(value = "获取车场信息")
+    @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
+    public List<CarPortMessage> getParkingLotMessage(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription) {
+
+        List<ParkingLotPod> parkingLotList = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription);
+        return parkingLotList.stream().map(item -> item.carPort().parkingLotMessage()).collect(Collectors.toList());
     }
 
     @ApiOperation(value = "获取车辆缴纳金额")
@@ -136,57 +126,6 @@ public class ToolController {
         orderPayMessageRpcReq.setInId(rpcResp.getInId());
 
         return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq);
-    }
-
-    @ApiOperation(value = "批量人工清场")
-    @PostMapping("/cleanCar")
-    public CleanCarListResp cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
-
-        SaaSWebClient saaSWebClient = testBox.saasClient("prod");
-        Map<String, Object> resultJson = saaSWebClient.post("{\"parkinglotId\":\"" + req.getParkingLotId() + "\",\"orderPayState\":1000,\"chargeTimeStart\":\"" + req.getChargeTimeStart() + "\",\"chargeTimeClose\":\"" + req.getChargeTimeClose() + "\",\"plateNumberNotNull\":true,\"current\":1,\"size\":" + req.getSize() + "}", "mgntpc/pc/order/page", req.getToken());
-
-        List<Map<String, Object>> records = (List<Map<String, Object>>) resultJson.get("records");
-        List<Long> orderId = records.stream().map(item -> (Long) item.get("orderId")).collect(Collectors.toList());
-
-        List<CleanCarResp> cleanCarRespList = orderId.stream().map(item -> {
-
-            try {
-                saaSWebClient.post("{\"explain\":\"人工清场，取消订单\",\"orderId\":" + item + "}", "mgntpc/pc/order/outsideClean", req.getToken());
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-
-            CleanCarResp resp = new CleanCarResp();
-            resp.setSuccess(true);
-            resp.setOrderId(item);
-            return resp;
-        }).collect(Collectors.toList());
-
-        CleanCarListResp resp = new CleanCarListResp();
-        resp.setData(cleanCarRespList);
-        resp.setTotal(cleanCarRespList.size());
-
-        return resp;
-    }
-
-    @ApiOperation(value = "检查车辆是否在场")
-    @PostMapping("/{parkingLotManager}/{parkingLotDescription}/checkCar")
-    public List<CarCheckResultResp> checkCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, @RequestBody String data) {
-        String[] carNos = data.split("\r\n");
-        ParkingLotPod parkingLot = findByDescription(parkingLotManager, parkingLotDescription);
-        List<CarCheckResultResp> resultResps = new LinkedList<>();
-
-        for (String carNo : carNos) {
-
-            Car car = parkingLot.carPort().getCar(carNo);
-            CarCheckResultResp resp = new CarCheckResultResp();
-            resp.setCarNo(carNo);
-            resp.setIn(StrUtil.isNotBlank(car.getInId()));
-
-            resultResps.add(resp);
-        }
-
-        return resultResps;
     }
 
     @ApiOperation(value = "获取车辆信息")

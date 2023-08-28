@@ -64,12 +64,8 @@ public abstract class DaoerWebClient extends YfkyWebClient {
     protected <T> WebClient.ResponseSpec postBase(T data, String url, Object headerData) {
         DaoerBase daoerBase = (DaoerBase) data;
         daoerBase.setParkId(parkId);
+        log.debug("道尔请求参数：" + data);
         return super.postBase(daoerBase, url, headerData);
-    }
-
-    @Override
-    protected WebClient.ResponseSpec getBase(String url, Object headerData) {
-        return super.getBase(url, headerData);
     }
 
     private String token() {
