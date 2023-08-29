@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
@@ -8,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarMessageRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
@@ -217,5 +219,20 @@ public class CarportServiceExposer implements ICarPortService {
         });
 
         return resultList;
+    }
+
+    /**
+     * 获取车辆信息
+     *
+     * @param parkingLotManagerCode 停车场管理名称
+     * @param parkingLotId          停车场Id
+     * @param carNo                 车牌号
+     * @return
+     */
+    @Override
+    public CarMessageRpcResp getCarInfo(Integer parkingLotManagerCode, String parkingLotId, String carNo) throws ExposerException {
+        CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
+                .parkingLot(parkingLotId).carPort();
+        return BeanUtil.copyProperties(carPortService.getCar(carNo), CarMessageRpcResp.class);
     }
 }
