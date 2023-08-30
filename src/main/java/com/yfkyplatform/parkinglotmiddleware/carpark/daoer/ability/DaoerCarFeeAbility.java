@@ -71,10 +71,10 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     @Override
     public CarOrderResult getCarFeeInfoByChannel(String channelId, int scanType, String openId) {
         if (configuration.getBackTrack()) {
-            DaoerBaseResp<CarFeeResultWithArrear> resp = api.getChannelCarFeeWithArrear(channelId).block();
-            if (ObjectUtil.isNull(resp.getBody()) || StrUtil.isBlank(resp.getBody().getCharge().getCarNo())) {
+            DaoerBaseResp<CarFeeResultWithArrear> resp = api.blankCarOutWithArrear(openId, scanType, channelId).block();
+/*            if (ObjectUtil.isNull(resp.getBody()) || StrUtil.isBlank(resp.getBody().getCharge().getCarNo())) {
                 resp = api.blankCarOutWithArrear(openId, scanType, channelId).block();
-            }
+            }*/
             CarFeeResultWithArrearByCharge result = checkCarFeeWithArrearResult(resp);
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
@@ -143,7 +143,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         Duration duration = Duration.between(payMessage.getInTime(), payMessage.getCreateTime());
         int payType = changePayType(payMessage.getPayType());
         BigDecimal totalFee = payMessage.getPayFee().add(payMessage.getDiscountFee()).movePointLeft(2);
-        log.info("ToltalFee:" + totalFee);
+        log.info("TotalFee:" + totalFee);
 
         DaoerBaseRespHead payState;
         if (configuration.getBackTrack()) {
