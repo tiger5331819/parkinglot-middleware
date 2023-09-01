@@ -12,11 +12,9 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessage
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarMessageRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.ChannelInfoResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderPayMessage;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortService;
@@ -29,8 +27,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -93,10 +89,12 @@ public class CarportServiceExposer implements ICarPortService {
      * @param parkingLotId          停车场Id
      * @param carNo                 车牌号
      * @param payMessage            缴费信息
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
-    public Boolean payAccess(Integer parkingLotManagerCode, String parkingLotId, String carNo, OrderPayMessageRpcReq payMessage) {
+    public Boolean payAccess(Integer parkingLotManagerCode, String parkingLotId, String carNo, OrderPayMessageRpcReq payMessage, Integer operatorId) {
+        AccountRpcContext.setOperatorId(operatorId);
 
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).carPort();
@@ -124,10 +122,13 @@ public class CarportServiceExposer implements ICarPortService {
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @param carNo                 车牌号
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
-    public CarOrderResultByListRpcResp getCarFee(Integer parkingLotManagerCode, String parkingLotId, String carNo) {
+    public CarOrderResultByListRpcResp getCarFee(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) {
+        AccountRpcContext.setOperatorId(operatorId);
+
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
 
         return makeCarOrderResultByListRpcResp(parkingLot.carPort().calculatePayMessage(carNo));
@@ -139,10 +140,13 @@ public class CarportServiceExposer implements ICarPortService {
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @param blankCar              无牌车请求信息
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
-    public String blankCarIn(Integer parkingLotManagerCode, String parkingLotId, BlankCarRpcReq blankCar) {
+    public String blankCarIn(Integer parkingLotManagerCode, String parkingLotId, BlankCarRpcReq blankCar, Integer operatorId) {
+        AccountRpcContext.setOperatorId(operatorId);
+
         ICarPortAblitity carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).ability().carport();
 
@@ -154,10 +158,13 @@ public class CarportServiceExposer implements ICarPortService {
      *
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
     public CarPortSpaceRpcResp getCarPortSpace(Integer parkingLotManagerCode, String parkingLotId, Integer operatorId) {
+        AccountRpcContext.setOperatorId(operatorId);
+
         AccountRpcContext.setOperatorId(operatorId);
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).carPort();
@@ -178,47 +185,17 @@ public class CarportServiceExposer implements ICarPortService {
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @param channelCarRpcReq      通道车辆信息
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
-    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, ChannelCarRpcReq channelCarRpcReq) throws ExposerException {
+    public CarOrderResultByListRpcResp getChannelCarFee(Integer parkingLotManagerCode, String parkingLotId, ChannelCarRpcReq channelCarRpcReq, Integer operatorId) throws ExposerException {
+        AccountRpcContext.setOperatorId(operatorId);
+
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName()).parkingLot(parkingLotId);
         return makeCarOrderResultByListRpcResp(parkingLot.carPort()
                 .calculatePayMessage(channelCarRpcReq.getChannelId(), channelCarRpcReq.getScanType(), channelCarRpcReq.getOpenId()));
 
-    }
-
-    /**
-     * 获取通道列表
-     *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @return
-     */
-    @Override
-    public List<ChannelInfoResultRpcResp> getChannelsInfo(Integer parkingLotManagerCode, String parkingLotId) {
-        CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).carPort();
-
-        CarPortMessage carPortMessage = carPortService.parkingLotMessage();
-
-        List<ChannelInfoResult> channelInfoResultList = carPortMessage.getChannelList();
-        List<ChannelInfoResultRpcResp> resultList = new ArrayList<>();
-
-        channelInfoResultList.forEach(item -> {
-            ChannelInfoResultRpcResp result = new ChannelInfoResultRpcResp();
-            result.setChannelId(item.getChannelId());
-            result.setChannelName(item.getChannelName());
-            result.setType(item.getType());
-            result.setDoor(item.getDoor());
-            result.setSense(item.getSense());
-            result.setCamera(item.getCamera());
-            result.setBoard(item.getBoard());
-
-            resultList.add(result);
-        });
-
-        return resultList;
     }
 
     /**
@@ -227,10 +204,13 @@ public class CarportServiceExposer implements ICarPortService {
      * @param parkingLotManagerCode 停车场管理名称
      * @param parkingLotId          停车场Id
      * @param carNo                 车牌号
+     * @param operatorId            运营商Id
      * @return
      */
     @Override
-    public CarMessageRpcResp getCarInfo(Integer parkingLotManagerCode, String parkingLotId, String carNo) throws ExposerException {
+    public CarMessageRpcResp getCarInfo(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) throws ExposerException {
+        AccountRpcContext.setOperatorId(operatorId);
+
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
                 .parkingLot(parkingLotId).carPort();
         return BeanUtil.copyProperties(carPortService.getCar(carNo), CarMessageRpcResp.class);
