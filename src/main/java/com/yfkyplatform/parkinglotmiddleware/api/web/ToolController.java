@@ -77,13 +77,13 @@ public class ToolController {
                 channelCarRpcReq.setScanType(1);
                 channelCarRpcReq.setChannelId(channelInfo.getChannelId());
 
-                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq);
+                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq, null);
                 if (StrUtil.isNotBlank(resp.getCarNo())) {
                     respList.add(resp);
                 }
             }
         } else {
-            respList.add(carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo));
+            respList.add(carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo, null));
         }
         return respList;
     }
@@ -102,14 +102,14 @@ public class ToolController {
                 channelCarRpcReq.setScanType(payAccess.getScanType());
                 channelCarRpcReq.setChannelId(channelInfo.getChannelId());
 
-                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq);
+                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq, null);
                 if (StrUtil.isNotBlank(resp.getCarNo())) {
                     rpcResp = resp;
                     break;
                 }
             }
         } else {
-            rpcResp = carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), payAccess.getCarNo());
+            rpcResp = carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), payAccess.getCarNo(), null);
         }
 
 
@@ -125,7 +125,7 @@ public class ToolController {
         orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
         orderPayMessageRpcReq.setInId(rpcResp.getInId());
 
-        return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq);
+        return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq, null);
     }
 
     @ApiOperation(value = "获取车辆信息")
