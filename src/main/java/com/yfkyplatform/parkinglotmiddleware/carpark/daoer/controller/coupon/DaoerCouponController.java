@@ -40,7 +40,7 @@ public class DaoerCouponController {
 
     @Operation(summary =  "查询优惠券")
     @GetMapping
-    public DaoerBaseResp<List<CouponResult>> getCoupon(@PathVariable String parkingLotId, @Parameter(name =  "微信openId") String openId) {
+    public DaoerBaseResp<List<CouponResult>> getCoupon(@PathVariable String parkingLotId, @Parameter(description =  "微信openId") String openId) {
         return api(parkingLotId).getCoupon(openId).block();
     }
 

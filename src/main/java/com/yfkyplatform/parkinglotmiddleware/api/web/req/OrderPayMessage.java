@@ -18,7 +18,7 @@ public class OrderPayMessage extends BaseRpcReq {
     /**
      * 支付时间
      */
-    @Schema(name =  "支付时间")
+    @Schema(title =  "支付时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime payTime;
     /**
@@ -34,27 +34,27 @@ public class OrderPayMessage extends BaseRpcReq {
      * 4000 云闪付支付
      * 5000 东莞通支付
      */
-    @Schema(name =  "支付类型")
+    @Schema(title =  "支付类型")
     private int payType;
     /**
      * 支付流水号
      */
-    @Schema(name =  "支付流水号")
+    @Schema(title =  "支付流水号")
     private String paymentTransactionId;
     /**
      * 支付金额
      */
-    @Schema(name =  "支付金额")
+    @Schema(title =  "支付金额")
     private BigDecimal payFee;
     /**
      * 优惠金额
      */
-    @Schema(name =  "优惠金额")
+    @Schema(title =  "优惠金额")
     private BigDecimal discountFee;
 
     /**
      * 入场记录ID
      */
-    @Schema(name =  "支付类型")
+    @Schema(title =  "支付类型")
     private String inId;
 }

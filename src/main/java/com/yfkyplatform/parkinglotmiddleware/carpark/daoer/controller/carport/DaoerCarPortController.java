@@ -61,11 +61,11 @@ public class DaoerCarPortController {
     @Operation(summary =  "获取入场记录")
     @GetMapping("/in")
     public DaoerBaseResp<PageModel<CarInData>> getCarIn(@PathVariable String parkingLotId,
-                                                        @Parameter(name =  "车牌") String carNo,
-                                                        @Parameter(name =  "开始时间 yyyy-MM-dd HH:mm:ss") String startTime,
-                                                        @Parameter(name =  "结束时间 yyyy-MM-dd HH:mm:ss") String endTime,
-                                                        @Parameter(name =  "页码", required = true) int pageNum,
-                                                        @Parameter(name =  "页大小", required = true) int pageSize) {
+                                                        @Parameter(description =  "车牌") String carNo,
+                                                        @Parameter(description =  "开始时间 yyyy-MM-dd HH:mm:ss") String startTime,
+                                                        @Parameter(description =  "结束时间 yyyy-MM-dd HH:mm:ss") String endTime,
+                                                        @Parameter(description =  "页码", required = true) int pageNum,
+                                                        @Parameter(description =  "页大小", required = true) int pageSize) {
         return api(parkingLotId).getCarInInfo(carNo, startTime, endTime, pageNum, pageSize).block();
     }
 
@@ -95,13 +95,13 @@ public class DaoerCarPortController {
 
     @Operation(summary =  "锁车/解锁")
     @PatchMapping(value= "/{carNo}/lock")
-    public DaoerBaseResp<CarLockResult> lockCar(@PathVariable String parkingLotId, @Parameter(name =  "车牌号码") @PathVariable String carNo, @RequestBody LockMonthlyCarRequest request) {
+    public DaoerBaseResp<CarLockResult> lockCar(@PathVariable String parkingLotId, @Parameter(description =  "车牌号码") @PathVariable String carNo, @RequestBody LockMonthlyCarRequest request) {
         return api(parkingLotId).lockMonthlyCar(carNo, request.getStatus()).block();
     }
 
     @Operation(summary =  "锁车状态")
     @GetMapping(value= "/{carNo}/lock")
-    public DaoerBaseResp<CarLockResult> carLockInfo(@PathVariable String parkingLotId, @Parameter(name =  "车牌号码") @PathVariable String carNo) {
+    public DaoerBaseResp<CarLockResult> carLockInfo(@PathVariable String parkingLotId, @Parameter(description =  "车牌号码") @PathVariable String carNo) {
         return api(parkingLotId).monthlyCarLockInfo(carNo).block();
     }
 }

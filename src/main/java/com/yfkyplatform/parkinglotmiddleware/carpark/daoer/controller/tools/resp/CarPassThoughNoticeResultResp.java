@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class CarPassThoughNoticeResultResp {
 
-    @Schema(name =  "入场通知")
+    @Schema(title =  "入场通知")
     private String carIn;
 
-    @Schema(name =  "出场通知")
+    @Schema(title =  "出场通知")
     private String carOut;
 }

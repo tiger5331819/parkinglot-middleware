@@ -10,12 +10,12 @@ import lombok.Data;
  */
 @Data
 public class SpecialCarRequest {
-    @Schema(name =  "1黑名单/2特殊车辆", required = true)
+    @Schema(title =  "1黑名单/2特殊车辆", required = true)
     private int carNoType;
-    @Schema(name =  "通行类型 类型(1禁止通行,2通行免费,3自由通行)", required = true)
+    @Schema(title =  "通行类型 类型(1禁止通行,2通行免费,3自由通行)", required = true)
     private int isStop;
-    @Schema(name =  "收费金额")
+    @Schema(title =  "收费金额")
     private String description;
-    @Schema(name =  "唯一表示，修改必传")
+    @Schema(title =  "唯一表示，修改必传")
     private String objectId;
 }

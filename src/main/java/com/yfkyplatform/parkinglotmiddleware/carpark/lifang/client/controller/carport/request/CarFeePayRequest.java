@@ -12,14 +12,14 @@ import java.math.BigDecimal;
  */
 @Data
 public class CarFeePayRequest {
-    @Schema(name =  "车牌", required = true)
+    @Schema(title =  "车牌", required = true)
     private String carNo;
-    @Schema(name =  "支付时间 yyyy-MM-dd HH:mm:ss", required = true)
+    @Schema(title =  "支付时间 yyyy-MM-dd HH:mm:ss", required = true)
     private String payTime;
-    @Schema(name =  "应收金额 单位：元", required = true)
+    @Schema(title =  "应收金额 单位：元", required = true)
     private BigDecimal totalAmount;
-    @Schema(name =  "优惠金额 单位：元", required = true)
+    @Schema(title =  "优惠金额 单位：元", required = true)
     private BigDecimal disAmount;
-    @Schema(name =  "实收金额,单位：元", required = true)
+    @Schema(title =  "实收金额,单位：元", required = true)
     private BigDecimal couponAmount;
 }

@@ -10,10 +10,10 @@ import lombok.Data;
  */
 @Data
 public class BlankCarRequest {
-    @Schema(name =  "微信或支付宝openid",required = true)
+    @Schema(title =  "微信或支付宝openid",required = true)
     private String openId;
-    @Schema(name =  "1微信2支付宝",required = true)
+    @Schema(title =  "1微信2支付宝",required = true)
     private int scanType;
-    @Schema(name =  "通道号",required = true)
+    @Schema(title =  "通道号",required = true)
     private String channelId;
 }

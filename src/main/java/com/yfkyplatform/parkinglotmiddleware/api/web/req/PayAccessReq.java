@@ -13,15 +13,15 @@ import java.math.BigDecimal;
 @Data
 public class PayAccessReq {
 
-    @Schema(name =  "车牌号")
+    @Schema(title =  "车牌号")
     private String carNo;
 
-    @Schema(name =  "实缴金额,单位：元,若不填则为完整金额")
+    @Schema(title =  "实缴金额,单位：元,若不填则为完整金额")
     private BigDecimal payFee;
 
-    @Schema(name =  "1微信2支付宝")
+    @Schema(title =  "1微信2支付宝")
     private int scanType;
 
-    @Schema(name =  "微信或支付宝openid")
+    @Schema(title =  "微信或支付宝openid")
     private String openId;
 }

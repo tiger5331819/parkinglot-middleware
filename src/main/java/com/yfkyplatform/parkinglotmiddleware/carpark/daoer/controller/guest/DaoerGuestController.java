@@ -51,7 +51,7 @@ public class DaoerGuestController {
 
     @Operation(summary =  "取消访客")
     @DeleteMapping(value= "/guest")
-    public DaoerBaseResp removeGuest(@PathVariable String parkingLotId, @Parameter(name =  "唯一记录标识", required = true) @NotNull(message = "唯一记录标识不能为空") String objectId) {
+    public DaoerBaseResp removeGuest(@PathVariable String parkingLotId, @Parameter(description =  "唯一记录标识", required = true) @NotNull(message = "唯一记录标识不能为空") String objectId) {
         return api(parkingLotId).removeGuestMessage(objectId).block();
     }
 }

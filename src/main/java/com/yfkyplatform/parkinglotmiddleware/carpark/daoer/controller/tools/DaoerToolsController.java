@@ -78,7 +78,7 @@ public class DaoerToolsController {
 
     @Operation(summary =  "URL地址")
     @GetMapping(value= "/url/{environment}")
-    public URLResultResp getURL(@PathVariable String parkingLotId, @PathVariable String environment, @Parameter(name =  "微信配置ID") String wechatPay, @Parameter(name =  "支付宝配置ID") String aliPay) {
+    public URLResultResp getURL(@PathVariable String parkingLotId, @PathVariable String environment, @Parameter(description =  "微信配置ID") String wechatPay, @Parameter(description =  "支付宝配置ID") String aliPay) {
         URLResult urlResult = api(parkingLotId).makeURL();
         String webUrl = testBox.envUrl().environmentWebURL(environment);
 
@@ -127,7 +127,7 @@ public class DaoerToolsController {
 
     @Operation(summary =  "获取SaaS 租户和支付id")
     @GetMapping(value= "/saasToken")
-    public SaaSPayMessageResultResp getSaaSToken(@Parameter(name =  "environment") String environment, @Parameter(name =  "token") String token) throws JsonProcessingException {
+    public SaaSPayMessageResultResp getSaaSToken(@Parameter(description =  "environment") String environment, @Parameter(description =  "token") String token) throws JsonProcessingException {
         SaaSWebClient saaSWebClient = testBox.saasClient(environment);
         Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
         Integer tenantId = (Integer) data.get("tenantId");
@@ -154,8 +154,8 @@ public class DaoerToolsController {
 
     @Operation(summary =  "全部URL地址")
     @GetMapping(value= "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @Parameter(name =  "车场描述") String parkingLotName,
-                                            @Parameter(name =  "token") String token) throws JsonProcessingException {
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @Parameter(description =  "车场描述") String parkingLotName,
+                                            @Parameter(description =  "token") String token) throws JsonProcessingException {
         SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
 
