@@ -24,7 +24,7 @@ public class OpenAPIConfiguration {
                         .contact(new Contact()
                                 .name("苏琥元")
                                 .email("suhuyuan@outlook.com"))
-                        .description("上下文感知的物联网服务")
+                        .description("上下文感知的停车场物联网服务")
                         .version(version));
     }
 }
