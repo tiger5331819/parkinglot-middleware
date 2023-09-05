@@ -10,12 +10,12 @@ import lombok.Data;
  */
 @Data
 public class RenewalMonthlyCarRequest {
-    @Schema(title =  "月租开始时间 yyyy-MM-dd HH:mm:ss",required = true)
+    @Schema(description =  "月租开始时间 yyyy-MM-dd HH:mm:ss",required = true)
     private String newStartTime;
-    @Schema(title =  "月租结束时间 yyyy-MM-dd HH:mm:ss",required = true)
+    @Schema(description =  "月租结束时间 yyyy-MM-dd HH:mm:ss",required = true)
     private String newEndTime;
-    @Schema(title =  "收费金额",required = true)
+    @Schema(description =  "收费金额",required = true)
     private String balanceMoney;
-    @Schema(title =  "0 现金 1微信 2支付宝",required = true)
+    @Schema(description =  "0 现金 1微信 2支付宝",required = true)
     private int payType;
 }

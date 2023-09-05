@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class CarCheckResultResp {
 
-    @Schema(title =  "车牌号码")
+    @Schema(description =  "车牌号码")
     private String carNo;
 
-    @Schema(title =  "车辆是否在场")
+    @Schema(description =  "车辆是否在场")
     private Boolean in;
 }

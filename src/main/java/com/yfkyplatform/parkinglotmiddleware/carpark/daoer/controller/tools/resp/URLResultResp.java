@@ -15,9 +15,9 @@ import java.util.List;
 @Data
 public class URLResultResp {
 
-    @Schema(title =  "无牌车入场通知")
+    @Schema(description =  "无牌车入场通知")
     private List<BlankCarURL> blankCarURLList;
 
-    @Schema(title =  "通道出场缴费信息")
+    @Schema(description =  "通道出场缴费信息")
     private List<CarOutPayURL> carOutPayURLList;
 }

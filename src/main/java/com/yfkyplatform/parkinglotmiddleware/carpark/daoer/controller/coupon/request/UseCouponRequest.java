@@ -10,8 +10,8 @@ import lombok.Data;
  */
 @Data
 public class UseCouponRequest {
-    @Schema(title =  "优惠券领用后唯一ID",required = true)
+    @Schema(description =  "优惠券领用后唯一ID",required = true)
     private String objectId;
-    @Schema(title =  "使用车牌号码",required = true)
+    @Schema(description =  "使用车牌号码",required = true)
     private String carNo;
 }

@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 @Data
 public class ChannelPayAccessReq {
 
-    @Schema(title =  "通道Id")
+    @Schema(description =  "通道Id")
     private String channelId;
 
-    @Schema(title =  "实缴金额,单位：元,若不填则为完整金额")
+    @Schema(description =  "实缴金额,单位：元,若不填则为完整金额")
     private BigDecimal payFee;
 }

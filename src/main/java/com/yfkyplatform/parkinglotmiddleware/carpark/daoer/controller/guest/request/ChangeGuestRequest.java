@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ChangeGuestRequest {
-    @Schema(title =  "访客名称")
+    @Schema(description =  "访客名称")
     private String guestName;
 
-    @Schema(title =  "唯一记录标识", required = true)
+    @Schema(description =  "唯一记录标识", required = true)
     private String objectId;
 
-    @Schema(title =  "手机号")
+    @Schema(description =  "手机号")
     private String phone;
 
-    @Schema(title =  "访问时间")
+    @Schema(description =  "访问时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime visitTime;
 
-    @Schema(title =  "访问理由")
+    @Schema(description =  "访问理由")
     private String description;
 }

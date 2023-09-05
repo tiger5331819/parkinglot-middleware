@@ -10,8 +10,8 @@ import lombok.Data;
  */
 @Data
 public class ControlChannelRequest {
-    @Schema(title =  "通道ID",required = true)
+    @Schema(description =  "通道ID",required = true)
     private String channelId;
-    @Schema(title =  "1开启 2 关闭",required = true)
+    @Schema(description =  "1开启 2 关闭",required = true)
     private int channelIdStatus;
 }

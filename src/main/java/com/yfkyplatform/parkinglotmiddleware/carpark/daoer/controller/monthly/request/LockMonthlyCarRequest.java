@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class LockMonthlyCarRequest {
 
-    @Schema(title =  "默认为1, 1锁定，0解锁", required = false)
+    @Schema(description =  "默认为1, 1锁定，0解锁", required = false)
     private Integer status;
 }

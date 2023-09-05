@@ -11,12 +11,12 @@ import lombok.Data;
 @Data
 public class SaaSPayMessageResultResp {
 
-    @Schema(title =  "车牌号码")
+    @Schema(description =  "车牌号码")
     private Integer tenantId;
 
-    @Schema(title =  "支付宝配置ID")
+    @Schema(description =  "支付宝配置ID")
     private Long aliThirdId;
 
-    @Schema(title =  "微信配置ID")
+    @Schema(description =  "微信配置ID")
     private Long wxThirdId;
 }
