@@ -1,6 +1,23 @@
 server:
   port: 9000
 
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /api-docs
+  group-configs:
+    - group: '停车场业务'
+      display-name: '停车场API'
+      paths-to-match: '/**'
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web
+    - group: '道尔云API代理'
+      display-name: '道尔云API'
+      paths-to-match: '/**'
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.carpark.daoer
+
 dubbo:
   protocol:
     name: dubbo

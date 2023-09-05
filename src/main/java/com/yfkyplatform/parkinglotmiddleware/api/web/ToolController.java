@@ -19,8 +19,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ab
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,8 +37,8 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"工具控制器"})
-@RequestMapping(value = "api/tool")
+@Tag(name = "工具控制器")
+@RequestMapping(value= "api/tool")
 @IgnoreCommonResponse
 @RestController
 public class ToolController {
@@ -56,7 +56,7 @@ public class ToolController {
         return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription).stream().findFirst().get();
     }
 
-    @ApiOperation(value = "获取车场信息")
+    @Operation(summary =  "获取车场信息")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/message")
     public List<CarPortMessage> getParkingLotMessage(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription) {
 
@@ -64,7 +64,7 @@ public class ToolController {
         return parkingLotList.stream().map(item -> item.carPort().parkingLotMessage()).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "获取车辆缴纳金额")
+    @Operation(summary =  "获取车辆缴纳金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
     public List<CarOrderResultRpcResp> getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, String carNo, String openId) {
         List<CarOrderResultRpcResp> respList = new LinkedList<>();
@@ -88,7 +88,7 @@ public class ToolController {
         return respList;
     }
 
-    @ApiOperation(value = "直接支付金额")
+    @Operation(summary =  "直接支付金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/carport/FeeTest")
     public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, PayAccessReq payAccess) {
         CarOrderResultRpcResp rpcResp = null;
@@ -128,7 +128,7 @@ public class ToolController {
         return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq, null);
     }
 
-    @ApiOperation(value = "获取车辆信息")
+    @Operation(summary =  "获取车辆信息")
     @GetMapping("/car/{carNo}")
     public List<CarResp> getCar(@PathVariable String carNo) {
         List<ParkingLotConfiguration> configurationList = factory.getParkingLotConfiguration(null, null);

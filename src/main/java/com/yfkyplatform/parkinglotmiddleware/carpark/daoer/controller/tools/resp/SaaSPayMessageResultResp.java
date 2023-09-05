@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,12 +11,12 @@ import lombok.Data;
 @Data
 public class SaaSPayMessageResultResp {
 
-    @ApiModelProperty(value = "车牌号码")
+    @Schema(name =  "车牌号码")
     private Integer tenantId;
 
-    @ApiModelProperty(value = "支付宝配置ID")
+    @Schema(name =  "支付宝配置ID")
     private Long aliThirdId;
 
-    @ApiModelProperty(value = "微信配置ID")
+    @Schema(name =  "微信配置ID")
     private Long wxThirdId;
 }

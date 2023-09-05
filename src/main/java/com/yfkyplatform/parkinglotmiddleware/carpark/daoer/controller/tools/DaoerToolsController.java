@@ -18,9 +18,9 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
@@ -40,8 +40,8 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"基础支持（工具）"})
-@RequestMapping(value = "/Daoer/api/tools")
+@Tag(name = "基础支持（工具）")
+@RequestMapping(value= "/Daoer/api/tools")
 @IgnoreCommonResponse
 @RestController
 public class DaoerToolsController {
@@ -62,23 +62,23 @@ public class DaoerToolsController {
         this.testBox = testBox;
     }
 
-    @ApiOperation(value = "图片")
-    @GetMapping(value = "/{parkingLotId}/img", produces = MediaType.IMAGE_JPEG_VALUE)
+    @Operation(summary =  "图片")
+    @GetMapping(value= "/{parkingLotId}/img", produces = MediaType.IMAGE_JPEG_VALUE)
     public byte[] getImg(@PathVariable String parkingLotId, String imgPath) {
         return api(parkingLotId).getImage(imgPath).block();
     }
 
-    @ApiOperation(value = "Access_Token")
-    @GetMapping(value = "/{parkingLotId}/token")
+    @Operation(summary =  "Access_Token")
+    @GetMapping(value= "/{parkingLotId}/token")
     public DaoerBaseResp<String> getToken(@PathVariable String parkingLotId) {
         DaoerBaseResp<String> result = new DaoerBaseResp<String>();
         result.setBody(api(parkingLotId).getToken());
         return result;
     }
 
-    @ApiOperation(value = "URL地址")
-    @GetMapping(value = "/url/{environment}")
-    public URLResultResp getURL(@PathVariable String parkingLotId, @PathVariable String environment, @ApiParam(value = "微信配置ID") String wechatPay, @ApiParam(value = "支付宝配置ID") String aliPay) {
+    @Operation(summary =  "URL地址")
+    @GetMapping(value= "/url/{environment}")
+    public URLResultResp getURL(@PathVariable String parkingLotId, @PathVariable String environment, @Parameter(name =  "微信配置ID") String wechatPay, @Parameter(name =  "支付宝配置ID") String aliPay) {
         URLResult urlResult = api(parkingLotId).makeURL();
         String webUrl = testBox.envUrl().environmentWebURL(environment);
 
@@ -125,9 +125,9 @@ public class DaoerToolsController {
         return resp;
     }
 
-    @ApiOperation(value = "获取SaaS 租户和支付id")
-    @GetMapping(value = "/saasToken")
-    public SaaSPayMessageResultResp getSaaSToken(@ApiParam(value = "environment") String environment, @ApiParam(value = "token") String token) throws JsonProcessingException {
+    @Operation(summary =  "获取SaaS 租户和支付id")
+    @GetMapping(value= "/saasToken")
+    public SaaSPayMessageResultResp getSaaSToken(@Parameter(name =  "environment") String environment, @Parameter(name =  "token") String token) throws JsonProcessingException {
         SaaSWebClient saaSWebClient = testBox.saasClient(environment);
         Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
         Integer tenantId = (Integer) data.get("tenantId");
@@ -152,10 +152,10 @@ public class DaoerToolsController {
     }
 
 
-    @ApiOperation(value = "全部URL地址")
-    @GetMapping(value = "/url/{environment}/all")
-    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @ApiParam(value = "车场描述") String parkingLotName,
-                                            @ApiParam(value = "token") String token) throws JsonProcessingException {
+    @Operation(summary =  "全部URL地址")
+    @GetMapping(value= "/url/{environment}/all")
+    public List<AllURLResultResp> getAllURL(@PathVariable String environment, @Parameter(name =  "车场描述") String parkingLotName,
+                                            @Parameter(name =  "token") String token) throws JsonProcessingException {
         SaaSPayMessageResultResp resultResp = getSaaSToken(environment, token);
 
 
@@ -200,7 +200,7 @@ public class DaoerToolsController {
         }).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "RestTemplate 代理")
+    @Operation(summary =  "RestTemplate 代理")
     @PostMapping("/resttemplateproxy")
     public Map<String, Object> restTemplateProxy(@RequestBody ViewHttpApiProxy apiProxy) throws JsonProcessingException {
         HttpHeaders headers = new HttpHeaders();
@@ -218,7 +218,7 @@ public class DaoerToolsController {
         return resultJson;
     }
 
-    @ApiOperation(value = "WebClient 代理")
+    @Operation(summary =  "WebClient 代理")
     @PostMapping("/webclientproxy")
     public Map<String,Object> webClientProxy(@RequestBody ViewHttpApiProxy apiProxy) throws JsonProcessingException,RuntimeException {
         Mono<String> result=WebClient.create().method(HttpMethod.resolve(apiProxy.getMethod()))

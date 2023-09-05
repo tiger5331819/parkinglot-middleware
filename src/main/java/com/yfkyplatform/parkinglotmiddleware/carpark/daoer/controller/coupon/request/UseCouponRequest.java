@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.coupon.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,8 +10,8 @@ import lombok.Data;
  */
 @Data
 public class UseCouponRequest {
-    @ApiModelProperty(value = "优惠券领用后唯一ID",required = true)
+    @Schema(name =  "优惠券领用后唯一ID",required = true)
     private String objectId;
-    @ApiModelProperty(value = "使用车牌号码",required = true)
+    @Schema(name =  "使用车牌号码",required = true)
     private String carNo;
 }

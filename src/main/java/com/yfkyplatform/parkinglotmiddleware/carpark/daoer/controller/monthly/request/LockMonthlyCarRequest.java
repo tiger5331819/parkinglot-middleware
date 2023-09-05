@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,6 +11,6 @@ import lombok.Data;
 @Data
 public class LockMonthlyCarRequest {
 
-    @ApiModelProperty(value = "默认为1, 1锁定，0解锁", required = false)
+    @Schema(name =  "默认为1, 1锁定，0解锁", required = false)
     private Integer status;
 }

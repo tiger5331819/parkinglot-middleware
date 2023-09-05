@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.guest.request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,19 +13,19 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ChangeGuestRequest {
-    @ApiModelProperty(value = "访客名称")
+    @Schema(name =  "访客名称")
     private String guestName;
 
-    @ApiModelProperty(value = "唯一记录标识", required = true)
+    @Schema(name =  "唯一记录标识", required = true)
     private String objectId;
 
-    @ApiModelProperty(value = "手机号")
+    @Schema(name =  "手机号")
     private String phone;
 
-    @ApiModelProperty(value = "访问时间")
+    @Schema(name =  "访问时间")
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern="yyyy-MM-dd HH:mm:ss")
     private LocalDateTime visitTime;
 
-    @ApiModelProperty(value = "访问理由")
+    @Schema(name =  "访问理由")
     private String description;
 }

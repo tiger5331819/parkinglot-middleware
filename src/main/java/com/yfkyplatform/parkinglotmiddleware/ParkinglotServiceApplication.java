@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Bean;
 
 @EnableDubbo
 @SpringBootApplication
-@EnableConfigurationProperties(value = ParkingLotConfig.class)
+@EnableConfigurationProperties(value= ParkingLotConfig.class)
 public class ParkinglotServiceApplication {
 
     public static void main(String[] args) {

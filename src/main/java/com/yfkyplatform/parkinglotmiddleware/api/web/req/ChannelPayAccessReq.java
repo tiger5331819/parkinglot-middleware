@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web.req;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,9 +13,9 @@ import java.math.BigDecimal;
 @Data
 public class ChannelPayAccessReq {
 
-    @ApiModelProperty(value = "通道Id")
+    @Schema(name =  "通道Id")
     private String channelId;
 
-    @ApiModelProperty(value = "实缴金额,单位：元,若不填则为完整金额")
+    @Schema(name =  "实缴金额,单位：元,若不填则为完整金额")
     private BigDecimal payFee;
 }

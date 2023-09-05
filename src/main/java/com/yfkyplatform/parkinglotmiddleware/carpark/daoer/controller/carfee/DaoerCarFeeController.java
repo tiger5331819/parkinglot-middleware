@@ -9,8 +9,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.dao
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.BlankCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.CarFeePayRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,8 +20,8 @@ import org.springframework.web.bind.annotation.*;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"车场费用"})
-@RequestMapping(value = "/Daoer/api/{parkingLotId}/carfee")
+@Tag(name = "车场费用")
+@RequestMapping(value= "/Daoer/api/{parkingLotId}/carfee")
 @IgnoreCommonResponse
 @RestController
 public class DaoerCarFeeController {
@@ -36,38 +36,38 @@ public class DaoerCarFeeController {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    @ApiOperation(value = "获取临时车缴纳金额")
+    @Operation(summary =  "获取临时车缴纳金额")
     @GetMapping("")
     public DaoerBaseResp<CarFeeResult> getCarFee(@PathVariable String parkingLotId, String carNo) {
         return api(parkingLotId).getCarFeeInfo(carNo).block();
     }
 
-    @ApiOperation(value = "获取临时车缴纳金额（欠费）")
+    @Operation(summary =  "获取临时车缴纳金额（欠费）")
     @GetMapping("/arrear")
     public DaoerBaseResp<CarFeeResultWithArrear> getCarFeeWithArrear(@PathVariable String parkingLotId, String carNo) {
         return api(parkingLotId).getCarFeeInfoWithArrear(carNo).block();
     }
 
-    @ApiOperation(value = "根据通道号获取缴纳金额")
+    @Operation(summary =  "根据通道号获取缴纳金额")
     @GetMapping("/channel")
     public DaoerBaseResp<CarFeeResult> getChannelCarFee(@PathVariable String parkingLotId, String channelId, String carNo, String openId) {
         return api(parkingLotId).getChannelCarFee(channelId, carNo, openId).block();
     }
 
-    @ApiOperation(value = "根据通道号获取缴纳金额（欠费）")
+    @Operation(summary =  "根据通道号获取缴纳金额（欠费）")
     @GetMapping("/arrear/channel")
     public DaoerBaseResp<CarFeeResultWithArrear> getChannelCarFeeWithArrea(@PathVariable String parkingLotId, String channelId) {
         return api(parkingLotId).getChannelCarFeeWithArrear(channelId).block();
     }
 
-    @ApiOperation(value = "临停缴费支付")
+    @Operation(summary =  "临停缴费支付")
     @PostMapping("")
     public DaoerBaseResp payCarFee(@PathVariable String parkingLotId, @RequestBody CarFeePayRequest request) {
         return api(parkingLotId).payCarFeeAccess(request.getCarNo(), request.getEntryTime(), request.getPayTime(), request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
                 request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(), request.getChannelId()).block();
     }
 
-    @ApiOperation(value = "临停缴费支付（欠费）")
+    @Operation(summary =  "临停缴费支付（欠费）")
     @PostMapping("/arrear")
     public DaoerBaseResp payCarFeeWithArrear(@PathVariable String parkingLotId, @RequestBody CarFeePayWithArrearRequest request) {
         return api(parkingLotId).payCarFeeAccessWithArrear(request.getCarNo(), request.getEntryTime(), request.getPayTime(),
@@ -76,7 +76,7 @@ public class DaoerCarFeeController {
                 request.getChannelId(), request.getInId(), request.getParkNo()).block();
     }
 
-    @ApiOperation(value = "无牌车出场（欠费）")
+    @Operation(summary =  "无牌车出场（欠费）")
     @PostMapping("/blankcar/out/arrear")
     public DaoerBaseResp<CarFeeResultWithArrear> blankCarOutWithArrear(@PathVariable String parkingLotId, @RequestBody BlankCarRequest request) {
         return api(parkingLotId).blankCarOutWithArrear(request.getOpenId(), request.getScanType(), request.getChannelId()).block();

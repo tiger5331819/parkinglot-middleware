@@ -1,3 +1,4 @@
+/*
 package com.yfkyplatform.parkinglotmiddleware.configuration.web;
 
 import org.springframework.context.annotation.Bean;
@@ -15,14 +16,16 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 import java.util.ArrayList;
 import java.util.List;
 
+*/
 /**
  * @author suhuyuan
- */
+ *//*
+
 @Configuration
 @EnableSwagger2WebMvc
 public class Knife4jConfiguration {
 
-    @Bean(value = "daoerProxyAPI")
+    @Bean(summary =  "daoerProxyAPI")
     public Docket daoerProxyAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
@@ -44,7 +47,7 @@ public class Knife4jConfiguration {
                 .build();
     }
 
-    @Bean(value = "lifangProxyAPI")
+    @Bean(summary =  "lifangProxyAPI")
     public Docket lifangProxyAPI() {
         return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
@@ -66,7 +69,7 @@ public class Knife4jConfiguration {
                 .build();
     }
 
-    @Bean(value = "middlewareApi")
+    @Bean(summary =  "middlewareApi")
     public Docket middlewareApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 // Api文档基础信息
@@ -103,3 +106,4 @@ public class Knife4jConfiguration {
     }
 }
 
+*/
