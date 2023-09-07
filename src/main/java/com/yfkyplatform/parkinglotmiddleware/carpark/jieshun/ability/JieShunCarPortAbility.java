@@ -79,24 +79,6 @@ public class JieShunCarPortAbility implements ICarPortAblitity {
     }
 
     /**
-     * 无牌车出场
-     *
-     * @param openId
-     * @param scanType
-     * @param channelId
-     * @return
-     */
-    @Override
-    public BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId) {
-        BlankCarOutResult result = api.blankCarOut(openId, scanType, channelId).block().getBody();
-
-        BlankCarScanOutResult scanOutResult = new BlankCarScanOutResult();
-        scanOutResult.setCarNo(result.getCarNo());
-
-        return scanOutResult;
-    }
-
-    /**
      * 获取通道列表
      *
      * @return
