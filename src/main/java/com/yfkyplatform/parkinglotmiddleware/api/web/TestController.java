@@ -48,12 +48,6 @@ public class TestController {
         return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription).stream().findFirst().get();
     }
 
-    @Operation(summary =  "获取版本信息")
-    @GetMapping("/version")
-    public String getVersion() {
-        return testBox.env.getProperty("app.version");
-    }
-
     @Operation(summary =  "批量人工清场")
     @PostMapping("/cleanCar")
     public CleanCarListResp cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {

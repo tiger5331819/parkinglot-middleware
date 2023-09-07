@@ -10,6 +10,15 @@ import lombok.Data;
 @Data
 public class JieShunBase {
 
+    /**
+     * 开放平台分配的应用id
+     */
+    private String appId;
+
+    /**
+     * 签名类型
+     */
+    private String signType = "md5";
 
     /**
      * 项目编号

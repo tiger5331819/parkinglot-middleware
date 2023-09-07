@@ -103,6 +103,16 @@ public class JieShunCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public List<ChannelInfoResult> getChannelsInfo() {
+        throw new UnsupportedOperationException();
+    }
+
+    /**
+     * 获取通道列表与状态
+     *
+     * @return
+     */
+    @Override
+    public List<ChannelInfoWithStateResult> getChannelsInfoWithState() {
         Mono<DaoerBaseResp<List<ChannelResult>>> channelMono = api.getChannelsInfo();
         Mono<DaoerBaseResp<List<ChannelStateResult>>> channelStatesMono = api.getChannelStates();
 
@@ -116,7 +126,7 @@ public class JieShunCarPortAbility implements ICarPortAblitity {
                         .findFirst()
                         .get();
                 if (ObjectUtil.isNotNull(channelStateResult)) {
-                    ChannelInfoResult data = new ChannelInfoResult();
+                    ChannelInfoWithStateResult data = new ChannelInfoWithStateResult();
                     data.setChannelId(channelResult.getChannelId());
                     data.setChannelName(channelResult.getChannelName());
                     data.setType(channelResult.getType());
