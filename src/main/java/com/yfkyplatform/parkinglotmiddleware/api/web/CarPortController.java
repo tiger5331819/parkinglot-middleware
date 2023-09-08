@@ -1,20 +1,18 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web;
 
+import com.yfkyplatform.parkinglotmiddleware.api.ParkingLotRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carport.request.CarInfoRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarMessageRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 测试控制器
+ * 车场控制器
  *
  * @author Suhuyuan
  */
@@ -33,47 +31,31 @@ public class CarPortController {
     @Operation(summary = "车场余位")
     @GetMapping("/space")
     public CarPortSpaceRpcResp getCarPortSpace(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId) {
-        return carPortService.getCarPortSpace(parkingLotManager, parkingLotId, null);
+        ParkingLotRpcReq parkingLotRpcReq=new ParkingLotRpcReq();
+        parkingLotRpcReq.setParkingLotManagerCode(parkingLotManager);
+        parkingLotRpcReq.setParkingLotId(parkingLotId);
+
+        return carPortService.getCarPortSpace(parkingLotRpcReq);
     }
 
     @Operation(summary =  "无牌车入场")
     @PostMapping("/blankCarIn")
-    public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCar) {
-        return carPortService.blankCarIn(parkingLotManager, parkingLotId, blankCar, null);
-    }
+    public String blankCarIn(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody BlankCarRpcReq blankCarRpcReq) {
+        blankCarRpcReq.setParkingLotManagerCode(parkingLotManager);
+        blankCarRpcReq.setParkingLotId(parkingLotId);
 
-    @Operation(summary =  "临时车出场（获取车辆费用）")
-    @GetMapping("/{carNo}/Fee")
-    public CarOrderResultByListRpcResp getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo) {
-        return carPortService.getCarFee(parkingLotManager, parkingLotId, carNo, null);
-    }
-
-    @Operation(summary =  "车辆缴费")
-    @PatchMapping("/{carNo}/Fee")
-    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @PathVariable String carNo, @RequestBody OrderPayMessage payData) {
-
-        OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
-        orderPayMessageRpcReq.setPayTime(payData.getPayTime());
-        orderPayMessageRpcReq.setDiscountFee(payData.getDiscountFee());
-        orderPayMessageRpcReq.setPayType(payData.getPayType());
-        orderPayMessageRpcReq.setPaymentTransactionId(payData.getPaymentTransactionId());
-        orderPayMessageRpcReq.setPayFee(payData.getPayFee());
-        orderPayMessageRpcReq.setInId(payData.getInId());
-
-
-        return carPortService.payAccess(parkingLotManager, parkingLotId, carNo, orderPayMessageRpcReq, null);
-    }
-
-    @Operation(summary =  "根据通道号获取车辆费用信息")
-    @PostMapping("/channel/Fee")
-    public CarOrderResultByListRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody ChannelCarRpcReq rpcReq) {
-        return carPortService.getChannelCarFee(parkingLotManager, parkingLotId, rpcReq, null);
+        return carPortService.blankCarIn(blankCarRpcReq);
     }
 
     @Operation(summary =  "获取车辆信息")
     @GetMapping("/{carNo}")
     public CarMessageRpcResp getChannelCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, String carNo) {
-        return carPortService.getCarInfo(parkingLotManager, parkingLotId, carNo, null);
+        CarInfoRpcReq carInfoRpcReq=new CarInfoRpcReq();
+        carInfoRpcReq.setCarNo(carNo);
+        carInfoRpcReq.setParkingLotManagerCode(parkingLotManager);
+        carInfoRpcReq.setParkingLotId(parkingLotId);
+
+        return carPortService.getCarInfo(carInfoRpcReq);
     }
 
 

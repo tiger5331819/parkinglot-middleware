@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * 测试控制器
+ * 停车场管理配置控制器
  *
  * @author Suhuyuan
  */
