@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
+import cn.hutool.json.JSONUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerCarFee;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.carfee.CarFeeResult;
@@ -52,7 +53,8 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
         if (configuration.getBackTrack()) {
             DaoerBaseResp<CarFeeResultWithArrear> resp;
             if(redis.check("order:daoer:backTrack" + carNo)){
-                resp=redis.get("order:daoer:backTrack" + carNo);
+                resp=new DaoerBaseResp<>();
+                resp.setBody(JSONUtil.toBean((String) redis.get("order:daoer:backTrack" + carNo),CarFeeResultWithArrear.class));
                 log.info("通过通道获取订单金额："+resp);
             }else{
                 resp = api.getCarFeeInfoWithArrear(carNo).block();
@@ -85,7 +87,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
                 redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
-                redis.set("order:daoer:backTrack" + result.getCarNo(), resp, Duration.ofMinutes(2));
+                redis.set("order:daoer:backTrack" + result.getCarNo(), JSONUtil.toJsonStr(resp.getBody()), Duration.ofMinutes(2));
             }
 
             return carFeeToCarOrder(result, ObjectUtil.isNull(resp.getBody()) ? null : resp.getBody().getArrears());
