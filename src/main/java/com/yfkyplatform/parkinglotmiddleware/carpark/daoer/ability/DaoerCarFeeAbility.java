@@ -50,7 +50,12 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     @Override
     public CarOrderResult getCarFeeInfo(String carNo) {
         if (configuration.getBackTrack()) {
-            DaoerBaseResp<CarFeeResultWithArrear> resp = api.getCarFeeInfoWithArrear(carNo).block();
+            DaoerBaseResp<CarFeeResultWithArrear> resp;
+            if(redis.check("order:daoer:backTrack" + carNo)){
+                resp=redis.get("order:daoer:backTrack" + carNo);
+            }else{
+                resp = api.getCarFeeInfoWithArrear(carNo).block();
+            }
             CarFeeResultWithArrearByCharge result = checkCarFeeWithArrearResult(resp);
             return carFeeToCarOrder(result, resp.getBody().getArrears());
         } else {
@@ -79,6 +84,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
                 redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
+                redis.set("order:daoer:backTrack" + result.getCarNo(), resp, Duration.ofMinutes(2));
             }
 
             return carFeeToCarOrder(result, ObjectUtil.isNull(resp.getBody()) ? null : resp.getBody().getArrears());
