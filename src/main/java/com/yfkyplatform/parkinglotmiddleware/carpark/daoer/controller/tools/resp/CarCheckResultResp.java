@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -11,9 +11,9 @@ import lombok.Data;
 @Data
 public class CarCheckResultResp {
 
-    @ApiModelProperty(value = "车牌号码")
+    @Schema(description =  "车牌号码")
     private String carNo;
 
-    @ApiModelProperty(value = "车辆是否在场")
+    @Schema(description =  "车辆是否在场")
     private Boolean in;
 }

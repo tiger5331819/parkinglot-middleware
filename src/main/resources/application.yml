@@ -1,6 +1,24 @@
 server:
   port: 9000
 
+app:
+  version: @project.version@
+
+springdoc:
+  swagger-ui:
+    path: /swagger
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: '停车场业务'
+      display-name: '停车场API'
+      paths-to-match: '/**'
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web
+    - group: '道尔云API代理'
+      display-name: '道尔云API'
+      paths-to-match: '/**'
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.carpark.daoer
+
 dubbo:
   protocol:
     name: dubbo
@@ -33,5 +51,3 @@ rocketmq:
   # Producer 配置项
   producer:
     group: parkinglot-middleware-producer-group # 生产者分组
-
-app.version: @project.version@

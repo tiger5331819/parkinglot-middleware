@@ -8,8 +8,8 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.LifangParkingLotMana
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.controller.tools.request.ViewHttpApiProxy;
 import com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.api.ILifangTool;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
@@ -27,8 +27,8 @@ import java.util.Map;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"基础支持（工具）"})
-@RequestMapping(value = "/Lifang/api/{parkingLotId}/tools")
+@Tag(name = "基础支持（工具）")
+@RequestMapping(value= "/Lifang/api/{parkingLotId}/tools")
 @IgnoreCommonResponse
 @RestController
 public class LifangToolsController {
@@ -47,13 +47,13 @@ public class LifangToolsController {
         return manager.parkingLot(parkingLotId).client();
     }
 
-    @ApiOperation(value = "AES_Secret")
-    @GetMapping(value = "/secret")
+    @Operation(summary =  "AES_Secret")
+    @GetMapping(value= "/secret")
     public String getSecret(@PathVariable String parkingLotId) {
         return api(parkingLotId).getSecret();
     }
 
-    @ApiOperation(value = "WebClient 代理")
+    @Operation(summary =  "WebClient 代理")
     @PostMapping("/webclientproxy")
     public Map<String, Object> webClientProxy(@RequestBody ViewHttpApiProxy apiProxy) throws JsonProcessingException, RuntimeException {
         Mono<String> result = WebClient.create().method(HttpMethod.resolve(apiProxy.getMethod()))

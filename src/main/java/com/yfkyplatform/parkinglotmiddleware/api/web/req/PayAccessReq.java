@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.web.req;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -13,15 +13,15 @@ import java.math.BigDecimal;
 @Data
 public class PayAccessReq {
 
-    @ApiModelProperty(value = "车牌号")
+    @Schema(description =  "车牌号")
     private String carNo;
 
-    @ApiModelProperty(value = "实缴金额,单位：元,若不填则为完整金额")
+    @Schema(description =  "实缴金额,单位：元,若不填则为完整金额")
     private BigDecimal payFee;
 
-    @ApiModelProperty(value = "1微信2支付宝")
+    @Schema(description =  "1微信2支付宝")
     private int scanType;
 
-    @ApiModelProperty(value = "微信或支付宝openid")
+    @Schema(description =  "微信或支付宝openid")
     private String openId;
 }

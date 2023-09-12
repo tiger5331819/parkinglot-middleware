@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,8 +10,8 @@ import lombok.Data;
  */
 @Data
 public class ControlChannelRequest {
-    @ApiModelProperty(value = "通道ID",required = true)
+    @Schema(description =  "通道ID",required = true)
     private String channelId;
-    @ApiModelProperty(value = "1开启 2 关闭",required = true)
+    @Schema(description =  "1开启 2 关闭",required = true)
     private int channelIdStatus;
 }

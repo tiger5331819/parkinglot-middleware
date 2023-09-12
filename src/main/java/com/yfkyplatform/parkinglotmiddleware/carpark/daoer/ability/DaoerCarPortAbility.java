@@ -80,30 +80,30 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
     }
 
     /**
-     * 无牌车出场
-     *
-     * @param openId
-     * @param scanType
-     * @param channelId
-     * @return
-     */
-    @Override
-    public BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId) {
-        BlankCarOutResult result = api.blankCarOut(openId, scanType, channelId).block().getBody();
-
-        BlankCarScanOutResult scanOutResult = new BlankCarScanOutResult();
-        scanOutResult.setCarNo(result.getCarNo());
-
-        return scanOutResult;
-    }
-
-    /**
      * 获取通道列表
      *
      * @return
      */
     @Override
     public List<ChannelInfoResult> getChannelsInfo() {
+        List<ChannelResult> channelList = api.getChannelsInfo().block().getBody();
+
+        return channelList.stream().map(item->{
+            ChannelInfoResult data = new ChannelInfoResult();
+            data.setChannelId(item.getChannelId());
+            data.setChannelName(item.getChannelName());
+            data.setType(item.getType());
+            return data;
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * 获取通道列表与状态
+     *
+     * @return
+     */
+    @Override
+    public List<ChannelInfoWithStateResult> getChannelsInfoWithState() {
         Mono<DaoerBaseResp<List<ChannelResult>>> channelMono = api.getChannelsInfo();
         Mono<DaoerBaseResp<List<ChannelStateResult>>> channelStatesMono = api.getChannelStates();
 
@@ -117,7 +117,7 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
                         .findFirst()
                         .get();
                 if (ObjectUtil.isNotNull(channelStateResult)) {
-                    ChannelInfoResult data = new ChannelInfoResult();
+                    ChannelInfoWithStateResult data = new ChannelInfoWithStateResult();
                     data.setChannelId(channelResult.getChannelId());
                     data.setChannelName(channelResult.getChannelName());
                     data.setType(channelResult.getType());

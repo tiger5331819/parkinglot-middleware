@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.res
 
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.BlankCarURL;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.CarOutPayURL;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.util.List;
@@ -15,9 +15,9 @@ import java.util.List;
 @Data
 public class URLResultResp {
 
-    @ApiModelProperty(value = "无牌车入场通知")
+    @Schema(description =  "无牌车入场通知")
     private List<BlankCarURL> blankCarURLList;
 
-    @ApiModelProperty(value = "通道出场缴费信息")
+    @Schema(description =  "通道出场缴费信息")
     private List<CarOutPayURL> carOutPayURLList;
 }

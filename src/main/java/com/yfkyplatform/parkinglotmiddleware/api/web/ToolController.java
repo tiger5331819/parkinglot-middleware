@@ -5,11 +5,13 @@ import cn.hutool.core.util.IdUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.ICarFeeService;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.CarFeeRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.ChannelCarRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.OrderPayMessageRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultByListRpcResp;
+import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.ChannelCarRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.request.OrderPayMessageRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.web.req.PayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CarResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
@@ -19,8 +21,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ab
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -37,18 +39,21 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"工具控制器"})
-@RequestMapping(value = "api/tool")
+@Tag(name = "工具控制器")
+@RequestMapping(value= "api/tool")
 @IgnoreCommonResponse
 @RestController
 public class ToolController {
 
     private final ICarPortService carPortService;
 
+    private final ICarFeeService carFeeService;
+
     private final ParkingLotManagerFactory factory;
 
-    public ToolController(ICarPortService carPortService, ParkingLotManagerFactory factory) {
+    public ToolController(ICarPortService carPortService, ICarFeeService carFeeService, ParkingLotManagerFactory factory) {
         this.carPortService = carPortService;
+        this.carFeeService = carFeeService;
         this.factory = factory;
     }
 
@@ -56,7 +61,7 @@ public class ToolController {
         return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription).stream().findFirst().get();
     }
 
-    @ApiOperation(value = "获取车场信息")
+    @Operation(summary =  "获取车场信息")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/message")
     public List<CarPortMessage> getParkingLotMessage(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription) {
 
@@ -64,7 +69,7 @@ public class ToolController {
         return parkingLotList.stream().map(item -> item.carPort().parkingLotMessage()).collect(Collectors.toList());
     }
 
-    @ApiOperation(value = "获取车辆缴纳金额")
+    @Operation(summary =  "获取车辆缴纳金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/fee")
     public List<CarOrderResultRpcResp> getCarFee(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, String carNo, String openId) {
         List<CarOrderResultRpcResp> respList = new LinkedList<>();
@@ -76,19 +81,26 @@ public class ToolController {
                 channelCarRpcReq.setOpenId(openId);
                 channelCarRpcReq.setScanType(1);
                 channelCarRpcReq.setChannelId(channelInfo.getChannelId());
+                channelCarRpcReq.setParkingLotId(parkingLot.configuration().getId());
+                channelCarRpcReq.setParkingLotManagerCode(parkingLotManager);
 
-                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq, null);
+                CarOrderResultByListRpcResp resp = carFeeService.getChannelCarFee(channelCarRpcReq);
                 if (StrUtil.isNotBlank(resp.getCarNo())) {
                     respList.add(resp);
                 }
             }
         } else {
-            respList.add(carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), carNo, null));
+            CarFeeRpcReq carFeeRpcReq=new CarFeeRpcReq();
+            carFeeRpcReq.setCarNo(carNo);
+            carFeeRpcReq.setParkingLotManagerCode(parkingLotManager);
+            carFeeRpcReq.setParkingLotId(carPortMessage.getConfiguration().getId());
+
+            respList.add(carFeeService.getCarFee(carFeeRpcReq));
         }
         return respList;
     }
 
-    @ApiOperation(value = "直接支付金额")
+    @Operation(summary =  "直接支付金额")
     @GetMapping("/{parkingLotManager}/{parkingLotDescription}/carport/FeeTest")
     public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, PayAccessReq payAccess) {
         CarOrderResultRpcResp rpcResp = null;
@@ -101,15 +113,22 @@ public class ToolController {
                 channelCarRpcReq.setOpenId(payAccess.getOpenId());
                 channelCarRpcReq.setScanType(payAccess.getScanType());
                 channelCarRpcReq.setChannelId(channelInfo.getChannelId());
+                channelCarRpcReq.setParkingLotId(parkingLot.configuration().getId());
+                channelCarRpcReq.setParkingLotManagerCode(parkingLotManager);
 
-                CarOrderResultByListRpcResp resp = carPortService.getChannelCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), channelCarRpcReq, null);
+                CarOrderResultByListRpcResp resp = carFeeService.getChannelCarFee(channelCarRpcReq);
                 if (StrUtil.isNotBlank(resp.getCarNo())) {
                     rpcResp = resp;
                     break;
                 }
             }
         } else {
-            rpcResp = carPortService.getCarFee(parkingLotManager, carPortMessage.getConfiguration().getId(), payAccess.getCarNo(), null);
+            CarFeeRpcReq carFeeRpcReq=new CarFeeRpcReq();
+            carFeeRpcReq.setCarNo(payAccess.getCarNo());
+            carFeeRpcReq.setParkingLotManagerCode(parkingLotManager);
+            carFeeRpcReq.setParkingLotId(carPortMessage.getConfiguration().getId());
+
+            rpcResp = carFeeService.getCarFee(carFeeRpcReq);
         }
 
 
@@ -124,11 +143,14 @@ public class ToolController {
         orderPayMessageRpcReq.setPaymentTransactionId(String.valueOf(IdUtil.getSnowflake().nextId()));
         orderPayMessageRpcReq.setPayFee(ObjectUtil.isNull(payAccess.getPayFee()) ? rpcResp.getPayFee() : payAccess.getPayFee().movePointRight(2));
         orderPayMessageRpcReq.setInId(rpcResp.getInId());
+        orderPayMessageRpcReq.setParkingLotId(carPortMessage.getConfiguration().getId());
+        orderPayMessageRpcReq.setParkingLotManagerCode(parkingLotManager);
+        orderPayMessageRpcReq.setCarNo(rpcResp.getCarNo());
 
-        return carPortService.payAccess(parkingLotManager, carPortMessage.getConfiguration().getId(), rpcResp.getCarNo(), orderPayMessageRpcReq, null);
+        return carFeeService.payAccess(orderPayMessageRpcReq);
     }
 
-    @ApiOperation(value = "获取车辆信息")
+    @Operation(summary =  "获取车辆信息")
     @GetMapping("/car/{carNo}")
     public List<CarResp> getCar(@PathVariable String carNo) {
         List<ParkingLotConfiguration> configurationList = factory.getParkingLotConfiguration(null, null);

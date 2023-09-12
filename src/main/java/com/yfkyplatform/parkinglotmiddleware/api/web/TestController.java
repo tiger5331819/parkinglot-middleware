@@ -13,8 +13,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.co
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,8 +29,8 @@ import java.util.stream.Collectors;
  * @author Suhuyuan
  */
 @Slf4j
-@Api(tags = {"测试控制器"})
-@RequestMapping(value = "api/test")
+@Tag(name = "测试控制器")
+@RequestMapping(value= "api/test")
 @IgnoreCommonResponse
 @RestController
 public class TestController {
@@ -48,13 +48,7 @@ public class TestController {
         return factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManager).getName()).findParkingLotByDescription(parkingLotDescription).stream().findFirst().get();
     }
 
-    @ApiOperation(value = "获取版本信息")
-    @GetMapping("/version")
-    public String getVersion() {
-        return testBox.env.getProperty("app.version");
-    }
-
-    @ApiOperation(value = "批量人工清场")
+    @Operation(summary =  "批量人工清场")
     @PostMapping("/cleanCar")
     public CleanCarListResp cleanCar(@RequestBody CleanCarReq req) throws JsonProcessingException {
 
@@ -85,7 +79,7 @@ public class TestController {
         return resp;
     }
 
-    @ApiOperation(value = "检查车辆是否在场")
+    @Operation(summary =  "检查车辆是否在场")
     @PostMapping("/{parkingLotManager}/{parkingLotDescription}/checkCar")
     public List<CarCheckResultResp> checkCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription, @RequestBody String data) {
         String[] carNos = data.split("\r\n");

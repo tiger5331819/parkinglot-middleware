@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.api.web.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yfkyframework.common.core.domain.BaseRpcReq;
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -18,7 +18,7 @@ public class OrderPayMessage extends BaseRpcReq {
     /**
      * 支付时间
      */
-    @ApiModelProperty(value = "支付时间")
+    @Schema(description =  "支付时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime payTime;
     /**
@@ -34,27 +34,27 @@ public class OrderPayMessage extends BaseRpcReq {
      * 4000 云闪付支付
      * 5000 东莞通支付
      */
-    @ApiModelProperty(value = "支付类型")
+    @Schema(description =  "支付类型")
     private int payType;
     /**
      * 支付流水号
      */
-    @ApiModelProperty(value = "支付流水号")
+    @Schema(description =  "支付流水号")
     private String paymentTransactionId;
     /**
      * 支付金额
      */
-    @ApiModelProperty(value = "支付金额")
+    @Schema(description =  "支付金额")
     private BigDecimal payFee;
     /**
      * 优惠金额
      */
-    @ApiModelProperty(value = "优惠金额")
+    @Schema(description =  "优惠金额")
     private BigDecimal discountFee;
 
     /**
      * 入场记录ID
      */
-    @ApiModelProperty(value = "支付类型")
+    @Schema(description =  "支付类型")
     private String inId;
 }

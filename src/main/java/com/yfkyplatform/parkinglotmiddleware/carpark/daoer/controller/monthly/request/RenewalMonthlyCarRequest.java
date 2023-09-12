@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -10,12 +10,12 @@ import lombok.Data;
  */
 @Data
 public class RenewalMonthlyCarRequest {
-    @ApiModelProperty(value = "月租开始时间 yyyy-MM-dd HH:mm:ss",required = true)
+    @Schema(description =  "月租开始时间 yyyy-MM-dd HH:mm:ss",required = true)
     private String newStartTime;
-    @ApiModelProperty(value = "月租结束时间 yyyy-MM-dd HH:mm:ss",required = true)
+    @Schema(description =  "月租结束时间 yyyy-MM-dd HH:mm:ss",required = true)
     private String newEndTime;
-    @ApiModelProperty(value = "收费金额",required = true)
+    @Schema(description =  "收费金额",required = true)
     private String balanceMoney;
-    @ApiModelProperty(value = "0 现金 1微信 2支付宝",required = true)
+    @Schema(description =  "0 现金 1微信 2支付宝",required = true)
     private int payType;
 }

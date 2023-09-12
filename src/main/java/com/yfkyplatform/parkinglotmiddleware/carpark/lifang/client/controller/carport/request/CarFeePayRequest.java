@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.controller.carport.request;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 import java.math.BigDecimal;
@@ -12,14 +12,14 @@ import java.math.BigDecimal;
  */
 @Data
 public class CarFeePayRequest {
-    @ApiModelProperty(value = "车牌", required = true)
+    @Schema(description =  "车牌", required = true)
     private String carNo;
-    @ApiModelProperty(value = "支付时间 yyyy-MM-dd HH:mm:ss", required = true)
+    @Schema(description =  "支付时间 yyyy-MM-dd HH:mm:ss", required = true)
     private String payTime;
-    @ApiModelProperty(value = "应收金额 单位：元", required = true)
+    @Schema(description =  "应收金额 单位：元", required = true)
     private BigDecimal totalAmount;
-    @ApiModelProperty(value = "优惠金额 单位：元", required = true)
+    @Schema(description =  "优惠金额 单位：元", required = true)
     private BigDecimal disAmount;
-    @ApiModelProperty(value = "实收金额,单位：元", required = true)
+    @Schema(description =  "实收金额,单位：元", required = true)
     private BigDecimal couponAmount;
 }

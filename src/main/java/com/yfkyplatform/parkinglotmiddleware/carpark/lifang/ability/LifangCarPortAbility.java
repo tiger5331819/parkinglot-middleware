@@ -56,17 +56,15 @@ public class LifangCarPortAbility implements ICarPortAblitity {
     }
 
     /**
-     * 无牌车出场
+     * 获取通道列表与状态
      *
-     * @param openId
-     * @param scanType
-     * @param channelId
      * @return
      */
     @Override
-    public BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId) {
+    public List<ChannelInfoWithStateResult> getChannelsInfoWithState() {
         throw new UnsupportedOperationException();
     }
+
 
     /**
      * 获取通道列表

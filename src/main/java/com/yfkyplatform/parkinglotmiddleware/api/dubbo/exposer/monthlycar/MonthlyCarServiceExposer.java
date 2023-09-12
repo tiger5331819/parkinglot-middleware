@@ -1,9 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.monthlycar;
 
+import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyframework.util.context.AccountRpcContext;
+import com.yfkyplatform.parkinglotmiddleware.api.ParkingLotRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.CreateMonthlyCarRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.MonthlyCarRenewalRpcReq;
+import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.request.*;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.response.*;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.monthly.CreateMonthlyCar;
@@ -37,21 +38,18 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         this.testBox = testBox;
     }
 
-
     /**
      * 获取停车场下的月卡费率
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param operatorId            运营商Id
+     * @param parkingLotRpcReq 停车场信息
      * @return
      */
     @Override
-    public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(Integer parkingLotManagerCode, String parkingLotId, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
+    public List<MonthlyCarRateResultRpcResp> monthlyCarLongRentalRate(ParkingLotRpcReq parkingLotRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(parkingLotRpcReq.getOperatorId());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(parkingLotRpcReq.getParkingLotId()).ability().monthly();
         List<MonthlyCarRateResultRpcResp> result = new ArrayList<>();
         monthlyAblitity.getMonthlyCarLongRentalRate().forEach(item -> {
             MonthlyCarRateResultRpcResp data = new MonthlyCarRateResultRpcResp();
@@ -69,19 +67,16 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 获取月租车续费信息
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param carNo                 车牌号
-     * @param operatorId            运营商Id
+     * @param monthlyCarFeeRpcReq 获取月租车续费请求
      * @return
      */
     @Override
-    public MonthlyCarFeeResultRpcResp monthlyCarFee(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
+    public MonthlyCarFeeResultRpcResp monthlyCarFee(MonthlyCarFeeRpcReq monthlyCarFeeRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(monthlyCarFeeRpcReq.getOperatorId());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
-        MonthlyCarMessageResult carInfo = monthlyAblitity.getMonthlyCarInfo(carNo);
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(monthlyCarFeeRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(monthlyCarFeeRpcReq.getParkingLotId()).ability().monthly();
+        MonthlyCarMessageResult carInfo = monthlyAblitity.getMonthlyCarInfo(monthlyCarFeeRpcReq.getCarNo());
         List<MonthlyCarRateMessage> monthlyCarRateList = monthlyAblitity.getMonthlyCarLongRentalRate()
                 .stream().filter(item -> item.getPackageType() == carInfo.getCardTypeId()).map(item -> {
                     MonthlyCarRateMessage data = new MonthlyCarRateMessage();
@@ -115,19 +110,16 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 获取月租车基本信息
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param carNo                 车牌号
-     * @param operatorId            运营商Id
+     * @param monthlyCarRpcReq 获取月租车基本信息请求
      * @return
      */
     @Override
-    public MonthlyCarMessageResultRpcResp monthlyCarInfo(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
+    public MonthlyCarMessageResultRpcResp monthlyCarInfo(MonthlyCarRpcReq monthlyCarRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(monthlyCarRpcReq.getOperatorId());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
-        MonthlyCarMessageResult monthlyCar = monthlyAblitity.getMonthlyCarInfo(carNo);
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(monthlyCarRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(monthlyCarRpcReq.getParkingLotId()).ability().monthly();
+        MonthlyCarMessageResult monthlyCar = monthlyAblitity.getMonthlyCarInfo(monthlyCarRpcReq.getCarNo());
 
         MonthlyCarMessageResultRpcResp result = new MonthlyCarMessageResultRpcResp();
         result.setCarNo(monthlyCar.getCarNo());
@@ -145,20 +137,17 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 获取月租车缴费历史
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param carNo                 车牌号
-     * @param operatorId            运营商Id
+     * @param monthlyCarHistoryMessageRpcReq 获取月租车缴费历史请求
      * @return
      */
     @Override
-    public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
+    public List<MonthlyCarHistoryMessageResultRpcResp> monthlyCarHistory(MonthlyCarHistoryMessageRpcReq monthlyCarHistoryMessageRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(monthlyCarHistoryMessageRpcReq.getOperatorId());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(monthlyCarHistoryMessageRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(monthlyCarHistoryMessageRpcReq.getParkingLotId()).ability().monthly();
         List<MonthlyCarHistoryMessageResultRpcResp> result = new ArrayList<>();
-        monthlyAblitity.getMonthlyCarHistory(carNo).forEach(item -> {
+        monthlyAblitity.getMonthlyCarHistory(monthlyCarHistoryMessageRpcReq.getCarNo()).forEach(item -> {
             MonthlyCarHistoryMessageResultRpcResp data = new MonthlyCarHistoryMessageResultRpcResp();
             data.setCarNo(item.getCarNo());
             data.setAmount(item.getAmount());
@@ -176,28 +165,25 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 创建月租车
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param createMonthlyCar      月租车创建信息
-     * @param operatorId            运营商Id
+     * @param createMonthlyCarRpcReq 月租车创建请求
      * @return
      */
     @Override
-    public Boolean createMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, CreateMonthlyCarRpcReq createMonthlyCar, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
-        MonthlyCarAssert.startTimeLessThanEndTimeCheck(createMonthlyCar.getStartTime(), createMonthlyCar.getEndTime());
+    public Boolean createMonthlyCar(CreateMonthlyCarRpcReq createMonthlyCarRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(createMonthlyCarRpcReq.getOperatorId());
+        MonthlyCarAssert.startTimeLessThanEndTimeCheck(createMonthlyCarRpcReq.getStartTime(), createMonthlyCarRpcReq.getEndTime());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(createMonthlyCarRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(createMonthlyCarRpcReq.getParkingLotId()).ability().monthly();
         CreateMonthlyCar create = new CreateMonthlyCar();
-        create.setCarNo(createMonthlyCar.getCarNo());
-        create.setStartTime(createMonthlyCar.getStartTime());
-        create.setEndTime(createMonthlyCar.getEndTime());
-        create.setCardTypeId(createMonthlyCar.getCardTypeId());
-        create.setMoney(createMonthlyCar.getMoney());
-        create.setPayType(createMonthlyCar.getPayType());
-        create.setContactName(createMonthlyCar.getContactName());
-        create.setContactPhone(createMonthlyCar.getContactPhone());
+        create.setCarNo(createMonthlyCarRpcReq.getCarNo());
+        create.setStartTime(createMonthlyCarRpcReq.getStartTime());
+        create.setEndTime(createMonthlyCarRpcReq.getEndTime());
+        create.setCardTypeId(createMonthlyCarRpcReq.getCardTypeId());
+        create.setMoney(createMonthlyCarRpcReq.getMoney());
+        create.setPayType(createMonthlyCarRpcReq.getPayType());
+        create.setContactName(createMonthlyCarRpcReq.getContactName());
+        create.setContactPhone(createMonthlyCarRpcReq.getContactPhone());
 
         return monthlyAblitity.createMonthlyCar(create);
     }
@@ -205,25 +191,22 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 月租车续期
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param monthlyCarRenewal     月租车续期信息
-     * @param operatorId            运营商Id
+     * @param monthlyCarRenewalRpcReq 月租车续期请求
      * @return
      */
     @Override
-    public Boolean renewalMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, MonthlyCarRenewalRpcReq monthlyCarRenewal, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
-        MonthlyCarAssert.startTimeLessThanEndTimeCheck(monthlyCarRenewal.getNewStartTime(), monthlyCarRenewal.getNewEndTime());
+    public Boolean renewalMonthlyCar(MonthlyCarRenewalRpcReq monthlyCarRenewalRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(monthlyCarRenewalRpcReq.getOperatorId());
+        MonthlyCarAssert.startTimeLessThanEndTimeCheck(monthlyCarRenewalRpcReq.getNewStartTime(), monthlyCarRenewalRpcReq.getNewEndTime());
 
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(monthlyCarRenewalRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(monthlyCarRenewalRpcReq.getParkingLotId()).ability().monthly();
         MonthlyCarRenewal renewal = new MonthlyCarRenewal();
-        renewal.setCarNo(monthlyCarRenewal.getCarNo());
-        renewal.setNewStartTime(monthlyCarRenewal.getNewStartTime());
-        renewal.setNewEndTime(monthlyCarRenewal.getNewEndTime());
-        renewal.setMoney(monthlyCarRenewal.getMoney());
-        renewal.setPayType(monthlyCarRenewal.getPayType());
+        renewal.setCarNo(monthlyCarRenewalRpcReq.getCarNo());
+        renewal.setNewStartTime(monthlyCarRenewalRpcReq.getNewStartTime());
+        renewal.setNewEndTime(monthlyCarRenewalRpcReq.getNewEndTime());
+        renewal.setMoney(monthlyCarRenewalRpcReq.getMoney());
+        renewal.setPayType(monthlyCarRenewalRpcReq.getPayType());
 
 
         return monthlyAblitity.renewalMonthlyCar(renewal);
@@ -232,18 +215,15 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
     /**
      * 月租车销户
      *
-     * @param parkingLotManagerCode 停车场管理名称
-     * @param parkingLotId          停车场Id
-     * @param carNo                 车牌号
-     * @param operatorId            运营商Id
+     * @param removeMonthlyCarRpcReq 月租车销户请求
      * @return
      */
     @Override
-    public Boolean removeMonthlyCar(Integer parkingLotManagerCode, String parkingLotId, String carNo, Integer operatorId) {
-        AccountRpcContext.setOperatorId(operatorId);
-        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(parkingLotManagerCode).getName())
-                .parkingLot(parkingLotId).ability().monthly();
+    public Boolean removeMonthlyCar(RemoveMonthlyCarRpcReq removeMonthlyCarRpcReq) throws ExposerException {
+        AccountRpcContext.setOperatorId(removeMonthlyCarRpcReq.getOperatorId());
+        IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(removeMonthlyCarRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(removeMonthlyCarRpcReq.getParkingLotId()).ability().monthly();
 
-        return monthlyAblitity.removeMonthlyCar(carNo);
+        return monthlyAblitity.removeMonthlyCar(removeMonthlyCarRpcReq.getCarNo());
     }
 }

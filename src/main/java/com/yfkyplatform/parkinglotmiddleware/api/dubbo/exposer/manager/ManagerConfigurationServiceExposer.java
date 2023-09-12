@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager.configuration;
+package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.manager;
 
 import com.yfkyplatform.parkinglotmiddleware.api.manager.configuration.IManagerConfigurationService;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;

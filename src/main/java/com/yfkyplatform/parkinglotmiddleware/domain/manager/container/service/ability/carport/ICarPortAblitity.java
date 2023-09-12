@@ -26,14 +26,14 @@ public interface ICarPortAblitity {
     BlankCarScanInResult blankCarIn(String openId, int scanType, String channelId);
 
     /**
-     * 无牌车出场
+     * 获取通道列表与状态
      *
      * @return
      */
-    BlankCarScanOutResult blankCarOut(String openId, int scanType, String channelId);
+    List<ChannelInfoWithStateResult> getChannelsInfoWithState();
 
     /**
-     * 获取通道列表
+     * 获取通道列表与状态
      *
      * @return
      */
