@@ -53,6 +53,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
             DaoerBaseResp<CarFeeResultWithArrear> resp;
             if(redis.check("order:daoer:backTrack" + carNo)){
                 resp=redis.get("order:daoer:backTrack" + carNo);
+                log.info("通过通道获取订单金额："+resp);
             }else{
                 resp = api.getCarFeeInfoWithArrear(carNo).block();
             }
