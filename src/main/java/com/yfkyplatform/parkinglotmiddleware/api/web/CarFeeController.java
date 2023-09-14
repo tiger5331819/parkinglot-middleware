@@ -43,9 +43,10 @@ public class CarFeeController {
 
     @Operation(summary =  "车辆缴费")
     @PatchMapping("/{carNo}/Fee")
-    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@RequestBody OrderPayMessage payData) {
+    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@PathVariable String carNo,@RequestBody OrderPayMessage payData) {
 
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
+        orderPayMessageRpcReq.setCarNo(carNo);
         orderPayMessageRpcReq.setPayTime(payData.getPayTime());
         orderPayMessageRpcReq.setDiscountFee(payData.getDiscountFee());
         orderPayMessageRpcReq.setPayType(payData.getPayType());
