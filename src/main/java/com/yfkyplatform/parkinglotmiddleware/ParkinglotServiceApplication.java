@@ -27,7 +27,6 @@ public class ParkinglotServiceApplication {
     @Bean
     public ApplicationRunner runner(ApplicationContext ctx) {
         return args -> {
-
             ParkingLotManagerFactory factory = ctx.getBean(ParkingLotManagerFactory.class);
             factory.getManagerSupport();
         };
