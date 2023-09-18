@@ -87,7 +87,9 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
                 redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
-                redis.set("order:daoer:backTrack" + result.getCarNo(), JSONUtil.toJsonStr(resp.getBody()), Duration.ofMinutes(2));
+                String backTrackFee=JSONUtil.toJsonStr(resp.getBody());
+                redis.set("order:daoer:backTrack" + result.getCarNo(),backTrackFee , Duration.ofMinutes(2));
+                log.info("防折返通道查费："+backTrackFee);
             }
 
             return carFeeToCarOrder(result, ObjectUtil.isNull(resp.getBody()) ? null : resp.getBody().getArrears());
