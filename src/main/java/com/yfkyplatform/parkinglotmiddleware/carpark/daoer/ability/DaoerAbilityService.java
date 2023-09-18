@@ -48,7 +48,7 @@ public class DaoerAbilityService extends ParkingLotAbilityService {
      */
     @Override
     public ICarPortAblitity carport() {
-        return new DaoerCarPortAbility(daoer, redis);
+        return new DaoerCarPortAbility(daoer);
     }
 
     /**

@@ -7,12 +7,12 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.*;
-import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,11 +27,8 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
 
     private final IDaoerCarPort api;
 
-    private final RedisTool redis;
-
-    public DaoerCarPortAbility(IDaoerCarPort daoerClient, RedisTool redis) {
+    public DaoerCarPortAbility(IDaoerCarPort daoerClient) {
         api = daoerClient;
-        this.redis = redis;
     }
 
     /**
@@ -213,5 +210,31 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
         }).collect(Collectors.toList());
 
         return new PageResult(carOutData.getPageNum(), carOutData.getPageSize(), carOutData.getTotal(), dataList);
+    }
+
+    /**
+     * 补缴成功通知
+     *
+     * @param channelId 通道Id
+     * @param carNo     车牌号码
+     * @return
+     */
+    @Override
+    public Boolean dueCarAccess(String channelId, String carNo) {
+        return api.dueCarSuccess(channelId, carNo).block().getHead().getStatus()==1;
+    }
+
+    /**
+     * 补缴成功通知
+     *
+     * @param notIn     是否不可进 0不可进，1可进
+     * @param notOut    是否不可出 0不可出，1可出
+     * @param startTime 生效开始时间 HH:mm:ss
+     * @param closeTime 生效结束时间 HH:mm:ss
+     * @return
+     */
+    @Override
+    public Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
+        return api.configDueCar(notIn, notOut, startTime, closeTime).block().getHead().getStatus()==1;
     }
 }

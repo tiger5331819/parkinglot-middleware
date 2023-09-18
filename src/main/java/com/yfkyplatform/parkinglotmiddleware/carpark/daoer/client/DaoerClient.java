@@ -39,6 +39,7 @@ import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -100,7 +101,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp> payCarFeeAccess(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
+    public Mono<DaoerBaseResp> payCarFee(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount,
                                                int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId) {
         CarFeePay model = new CarFeePay();
 
@@ -127,7 +128,7 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
      * @return
      */
     @Override
-    public Mono<DaoerBaseResp> payCarFeeAccessWithArrear(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount, int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId, String inId, String parkNo) {
+    public Mono<DaoerBaseResp> payCarFeeWithArrear(String carNo, String entryTime, String payTime, int duration, BigDecimal totalAmount, BigDecimal disAmount, int paymentType, int payType, String paymentTnx, BigDecimal couponAmount, String channelId, String inId, String parkNo) {
         CarFeePayWithArrear model = new CarFeePayWithArrear();
 
         model.setEntryTime(entryTime);
@@ -536,6 +537,42 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         model.setCarNo(carNo);
         return post(model, "api/index/lockCar/getCarInfo", new ParameterizedTypeReference<DaoerBaseResp<CarLockResult>>() {
         });
+    }
+
+    /**
+     * 补缴回调
+     *
+     * @param channelId
+     * @param carNo
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp> dueCarSuccess(String channelId, String carNo) {
+        DueCarSuccess model = new DueCarSuccess();
+        model.setCarNo(carNo);
+        model.setDsn(channelId);
+
+        return post(model, "api/index/arrears/payCallBack", DaoerBaseResp.class);
+    }
+
+    /**
+     * 同步补缴配置信息
+     *
+     * @param notIn     是否不可进
+     * @param notOut    是否不可出
+     * @param startTime 生效开始时间
+     * @param closeTime 生效结束时间
+     * @return
+     */
+    @Override
+    public Mono<DaoerBaseResp> configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
+        DueCarConfiguration model = new DueCarConfiguration();
+        model.setUrgepayNotIn(notIn);
+        model.setUrgepayNotOut(notOut);
+        model.setStartTime(startTime);
+        model.setCloseTime(closeTime);
+
+        return post(model, "api/index/arrears/configuration", DaoerBaseResp.class);
     }
 
     /**

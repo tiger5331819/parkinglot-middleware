@@ -5,6 +5,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -88,4 +89,22 @@ public interface IDaoerCarPort {
      * @return
      */
     Mono<DaoerBaseResp<CarLockResult>> monthlyCarLockInfo(String carNo);
+
+    /**
+     * 补缴回调
+     *
+     * @return
+     */
+    Mono<DaoerBaseResp> dueCarSuccess(String channelId,String carNo);
+
+    /**
+     * 同步补缴配置信息
+     *
+     * @param notIn 是否不可进
+     * @param notOut 是否不可出
+     * @param startTime 生效开始时间
+     * @param closeTime 生效结束时间
+     * @return
+     */
+    Mono<DaoerBaseResp> configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime);
 }

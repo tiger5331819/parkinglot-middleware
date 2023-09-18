@@ -7,6 +7,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ab
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.LocalTime;
 import java.util.List;
 
 /**
@@ -116,5 +117,31 @@ public class LifangCarPortAbility implements ICarPortAblitity {
     @Override
     public PageResult<CarOutResult> getCarOutInfo(String carNo, String startTime, String endTime, int pageNum, int pageSize) {
         throw new UnsupportedOperationException();
+    }
+
+    /**
+     * 补缴成功通知
+     *
+     * @param channelId 通道Id
+     * @param carNo     车牌号码
+     * @return
+     */
+    @Override
+    public Boolean dueCarAccess(String channelId, String carNo) {
+        return null;
+    }
+
+    /**
+     * 补缴成功通知
+     *
+     * @param notIn     是否不可进
+     * @param notOut    是否不可出
+     * @param startTime 生效开始时间
+     * @param closeTime 生效结束时间
+     * @return
+     */
+    @Override
+    public Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
+        return null;
     }
 }

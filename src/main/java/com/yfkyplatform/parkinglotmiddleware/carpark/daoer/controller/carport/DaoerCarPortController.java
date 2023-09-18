@@ -8,6 +8,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.BlankCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.ControlChannelRequest;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.DueCarSuccessRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.LockMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import io.swagger.v3.oas.annotations.Operation;
@@ -103,5 +104,17 @@ public class DaoerCarPortController {
     @GetMapping(value= "/{carNo}/lock")
     public DaoerBaseResp<CarLockResult> carLockInfo(@PathVariable String parkingLotId, @Parameter(description =  "车牌号码") @PathVariable String carNo) {
         return api(parkingLotId).monthlyCarLockInfo(carNo).block();
+    }
+
+    @Operation(summary =  "补缴成功")
+    @PostMapping("/duecar/success")
+    public DaoerBaseResp dueCarSuccess(@PathVariable String parkingLotId, @RequestBody DueCarSuccessRequest request) {
+        return api(parkingLotId).dueCarSuccess(request.getChannelId(), request.getCarNo()).block();
+    }
+
+    @Operation(summary =  "同步联动催缴配置信息")
+    @PostMapping("/duecar/configuration")
+    public DaoerBaseResp configDueCar(@PathVariable String parkingLotId, @RequestBody DueCarSuccessRequest request) {
+        return api(parkingLotId).dueCarSuccess(request.getChannelId(), request.getCarNo()).block();
     }
 }

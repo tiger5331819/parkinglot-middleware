@@ -58,7 +58,7 @@ public class LifangCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
+    public Boolean payCarFee(CarOrderPayMessage payMessage) {
         CarFeeResult carFee = api.getCarFeeInfo(payMessage.getCarNo());
 
         int payState = api.payCarFeeAccess(payMessage.getCarNo(), payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),

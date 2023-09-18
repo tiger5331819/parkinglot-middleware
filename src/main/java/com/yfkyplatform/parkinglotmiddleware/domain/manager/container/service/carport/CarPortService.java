@@ -191,7 +191,7 @@ public class CarPortService {
         payMessage.setCreateTime(order.getCreateTime());
         payMessage.setInId(order.getInId());
 
-        Boolean success = parkingLot.ability().fee().payCarFeeAccess(payMessage);
+        Boolean success = parkingLot.ability().fee().payCarFee(payMessage);
         if (success) {
             contextService.remove(payMessage.getCarNo());
         }

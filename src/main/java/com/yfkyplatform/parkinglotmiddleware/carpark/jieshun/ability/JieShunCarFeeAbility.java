@@ -42,7 +42,7 @@ public class JieShunCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
+    public Boolean payCarFee(CarOrderPayMessage payMessage) {
         return null;
     }
 

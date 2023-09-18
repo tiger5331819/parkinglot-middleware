@@ -20,7 +20,7 @@ public interface ICarFeeAblitity {
      * @param payMessage 订单支付信息
      * @return
      */
-    Boolean payCarFeeAccess(CarOrderPayMessage payMessage);
+    Boolean payCarFee(CarOrderPayMessage payMessage);
 
     /**
      * 根据通道号获取车辆费用信息

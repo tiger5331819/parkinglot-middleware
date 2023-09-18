@@ -63,14 +63,14 @@ public class DaoerCarFeeController {
     @Operation(summary =  "临停缴费支付")
     @PostMapping("")
     public DaoerBaseResp payCarFee(@PathVariable String parkingLotId, @RequestBody CarFeePayRequest request) {
-        return api(parkingLotId).payCarFeeAccess(request.getCarNo(), request.getEntryTime(), request.getPayTime(), request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
+        return api(parkingLotId).payCarFee(request.getCarNo(), request.getEntryTime(), request.getPayTime(), request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
                 request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(), request.getChannelId()).block();
     }
 
     @Operation(summary =  "临停缴费支付（欠费）")
     @PostMapping("/arrear")
     public DaoerBaseResp payCarFeeWithArrear(@PathVariable String parkingLotId, @RequestBody CarFeePayWithArrearRequest request) {
-        return api(parkingLotId).payCarFeeAccessWithArrear(request.getCarNo(), request.getEntryTime(), request.getPayTime(),
+        return api(parkingLotId).payCarFeeWithArrear(request.getCarNo(), request.getEntryTime(), request.getPayTime(),
                 request.getDuration(), request.getTotalAmount(), request.getDisAmount(),
                 request.getPaymentType(), request.getPayType(), request.getPaymentTnx(), request.getCouponAmount(),
                 request.getChannelId(), request.getInId(), request.getParkNo()).block();

@@ -87,7 +87,9 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
                 redis.set("order:daoer:" + result.getCarNo(), channelId, Duration.ofMinutes(1));
-                redis.set("order:daoer:backTrack" + result.getCarNo(), JSONUtil.toJsonStr(resp.getBody()), Duration.ofMinutes(2));
+                String backTrackFee=JSONUtil.toJsonStr(resp.getBody());
+                redis.set("order:daoer:backTrack" + result.getCarNo(),backTrackFee , Duration.ofMinutes(2));
+                log.info("防折返通道查费："+backTrackFee);
             }
 
             return carFeeToCarOrder(result, ObjectUtil.isNull(resp.getBody()) ? null : resp.getBody().getArrears());
@@ -142,7 +144,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      * @return
      */
     @Override
-    public Boolean payCarFeeAccess(CarOrderPayMessage payMessage) {
+    public Boolean payCarFee(CarOrderPayMessage payMessage) {
         String key = "order:daoer:" + payMessage.getCarNo();
         String channelId = redis.check(key) ? redis.get(key) : "";
 
@@ -156,7 +158,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
 
         DaoerBaseRespHead payState;
         if (configuration.getBackTrack()) {
-            payState = api.payCarFeeAccessWithArrear(payMessage.getCarNo(),
+            payState = api.payCarFeeWithArrear(payMessage.getCarNo(),
                     payMessage.getInTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     new Long(duration.toMinutes()).intValue(),
@@ -170,7 +172,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
                     payMessage.getInId(),
                     parkNo).block().getHead();
         } else {
-            payState = api.payCarFeeAccess(payMessage.getCarNo(),
+            payState = api.payCarFee(payMessage.getCarNo(),
                     payMessage.getInTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     payMessage.getPayTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")),
                     new Long(duration.toMinutes()).intValue(),
