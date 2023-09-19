@@ -567,8 +567,8 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
     @Override
     public Mono<DaoerBaseResp> configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
         DueCarConfiguration model = new DueCarConfiguration();
-        model.setUrgepayNotIn(notIn);
-        model.setUrgepayNotOut(notOut);
+        model.setUrgepayNotIn(notIn == 1 ? 0:1);
+        model.setUrgepayNotOut(notOut == 1 ? 0:1);
         model.setStartTime(startTime);
         model.setCloseTime(closeTime);
 
