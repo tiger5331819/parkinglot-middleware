@@ -72,7 +72,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      * 根据通道号获取车辆费用信息
      *
      * @param channelId 通道Id
-     * @param scanType  1微信2支付宝
+     * @param scanType  1 微信 2支付宝
      * @param openId    openId
      * @return
      */
