@@ -166,6 +166,7 @@ public class CarPortService {
     public Boolean payFee(CarOrderPayMessage payMessage) {
         Car car = refresh(payMessage.getCarNo());
         PayMessage order = null;
+        //根据inId查询订单
         if (ObjectUtil.isNotNull(payMessage.getInId())) {
             order = findOrder(car, payMessage.getInId());
             if (ObjectUtil.isNull(order)) {
@@ -173,6 +174,7 @@ public class CarPortService {
                 order = findOrder(car, payMessage.getInId());
             }
         }
+        //获取当前订单
         if (ObjectUtil.isNull(order)) {
             order = car.getOrder();
             if (ObjectUtil.isNull(order)) {
