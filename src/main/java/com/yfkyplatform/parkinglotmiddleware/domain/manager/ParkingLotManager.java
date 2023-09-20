@@ -154,7 +154,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
             } catch (Exception ex) {
             }
         } else {
-            load().forEach(item -> healthCheckMap.put(item.id(), item.healthCheck()));
+            load().forEach(item -> healthCheckMap.put(item.id()+":"+item.configuration().getDescription(), item.healthCheck()));
         }
         return healthCheckMap;
     }
