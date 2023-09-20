@@ -150,7 +150,7 @@ public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends Pa
         if (ObjectUtil.isNotNull(parkingLotId)) {
             try {
                 T parkingLot = parkingLot(parkingLotId);
-                healthCheckMap.put(parkingLot.id(), parkingLot.healthCheck());
+                healthCheckMap.put(parkingLot.id()+":"+parkingLot.configuration().getDescription(), parkingLot.healthCheck());
             } catch (Exception ex) {
             }
         } else {
