@@ -36,7 +36,7 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
             return null;
         }
         LifangConfiguration jieShunCfg = cfg.getConfig();
-        JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(cfg.getParkingLotId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), cfg.getDescription());
+        JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(cfg.getId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), cfg.getDescription());
         return new JieShunParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -52,7 +52,7 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
 
         for (ParkingLotConfiguration<LifangConfiguration> item : cfgList) {
             LifangConfiguration jieShunCfg = item.getConfig();
-            JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(item.getParkingLotId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), item.getDescription());
+            JieShunParkingLotConfiguration parkingLotConfiguration = new JieShunParkingLotConfiguration(item.getId(), jieShunCfg.getSecret(), jieShunCfg.getBaseUrl(), item.getDescription());
             dataList.add(new JieShunParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;
@@ -84,8 +84,8 @@ public class JieShunParkingLotManager extends ParkingLotManager<JieShunParkingLo
         cfg.setBaseUrl(jieShunParkingLotConfiguration.getBaseUrl());
 
         ParkingLotConfiguration data = new ParkingLotConfiguration();
-        data.setParkingLotId(jieShunParkingLotConfiguration.getId());
-        data.setParkingType("Daoer");
+        data.setId(jieShunParkingLotConfiguration.getId());
+        data.setManagerType("Daoer");
         data.setDescription(jieShunParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 

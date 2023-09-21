@@ -18,6 +18,10 @@ springdoc:
       display-name: '道尔云API'
       paths-to-match: '/**'
       packages-to-scan: com.yfkyplatform.parkinglotmiddleware.carpark.daoer
+    - group: '联合催缴业务'
+      display-name: '联合催缴API'
+      paths-to-match: '/**'
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar
 
 dubbo:
   protocol:
@@ -26,7 +30,7 @@ dubbo:
   consumer:
     check: false
   cloud:
-    subscribed-services: ${spring.application.name},passthrough-service
+    subscribed-services: ${spring.application.name},passthrough-service,presspay-service
 
 spring:
   main:

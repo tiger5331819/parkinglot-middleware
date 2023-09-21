@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 public interface IParkingLotConfigurationRepository extends CrudRepository<ParkingLotConfiguration, String> {
+
     /**
      * 通过停车场类型来获取停车场配置
      *
@@ -28,4 +29,13 @@ public interface IParkingLotConfigurationRepository extends CrudRepository<Parki
      * @return
      */
     ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId);
+
+    /**
+     * 通过第三方停车场Id获取停车场配置
+     *
+     * @param thirdId
+     * @param operatorId
+     * @return
+     */
+    ParkingLotConfiguration findParkingLotConfigurationByThirdId(String thirdId,Integer operatorId);
 }

@@ -10,11 +10,11 @@ import lombok.Data;
 @Data
 public class ParkingLotConfiguration<T> {
 
-    private String parkingLotId;
+    private String id;
 
     private T config;
 
-    private String parkingType;
+    private String managerType;
 
     private String description;
 }

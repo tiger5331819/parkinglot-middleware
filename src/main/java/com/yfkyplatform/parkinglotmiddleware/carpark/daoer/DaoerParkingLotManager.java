@@ -35,7 +35,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
             return null;
         }
         DaoerConfiguration daoerCfg = cfg.getConfig();
-        DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(cfg.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
+        DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(cfg.getId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
         return new DaoerParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -51,7 +51,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
 
         for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
             DaoerConfiguration daoerCfg = item.getConfig();
-            DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(item.getParkingLotId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
+            DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(item.getId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
             dataList.add(new DaoerParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;
@@ -85,8 +85,8 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
         cfg.setBaseUrl(daoerParkingLotConfiguration.getBaseUrl());
 
         ParkingLotConfiguration data = new ParkingLotConfiguration();
-        data.setParkingLotId(daoerParkingLotConfiguration.getId());
-        data.setParkingType("Daoer");
+        data.setId(daoerParkingLotConfiguration.getId());
+        data.setManagerType("Daoer");
         data.setDescription(daoerParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 

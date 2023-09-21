@@ -37,8 +37,8 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
         if (parkingType.equals("Daoer")) {
             config.getDaoer().forEach(item -> {
                 ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-                cfg.setParkingLotId(item.get("parkingLotId"));
-                cfg.setParkingType("Daoer");
+                cfg.setId(item.get("parkingLotId"));
+                cfg.setManagerType("Daoer");
                 cfg.setDescription(item.get("description"));
 
                 DaoerConfiguration daoerCfg = new DaoerConfiguration();
@@ -49,7 +49,7 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
                 daoerCfg.setBackTrack(Boolean.valueOf(item.get("config." + "backTrack")));
 
                 cfg.setConfig(daoerCfg);
-                cache.put(cfg.getParkingLotId(), cfg);
+                cache.put(cfg.getId(), cfg);
             });
         }
         return cache;
@@ -77,6 +77,11 @@ public class ParkingLotConfigurationRepositoryByConfiguration implements IParkin
     public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
         Map<String, ParkingLotConfiguration> cache = makeConfigurationCache(parkingType);
         return cache.get(parkingLotId);
+    }
+
+    @Override
+    public ParkingLotConfiguration findParkingLotConfigurationByThirdId(String thirdId,Integer operatorId) {
+        throw new UnsupportedOperationException();
     }
 
     @Override

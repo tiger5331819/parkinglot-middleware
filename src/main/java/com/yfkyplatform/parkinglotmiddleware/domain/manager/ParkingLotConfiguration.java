@@ -1,14 +1,14 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 
 /**
  * 停车场基本信息
  *
  * @author Suhuyuan
  */
-@Getter
+@Data
 @AllArgsConstructor
 public class ParkingLotConfiguration {
     /**

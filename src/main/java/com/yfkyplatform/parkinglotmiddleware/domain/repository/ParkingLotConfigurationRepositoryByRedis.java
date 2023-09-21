@@ -47,8 +47,8 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
             cache = list.stream().map(item -> {
                 String saasParkingLotConfigPrefix = "saasParkingLotConfig.Daoer.";
                 ParkingLotConfiguration<DaoerConfiguration> cfg = new ParkingLotConfiguration<>();
-                cfg.setParkingLotId((String) item.get("parkNo"));
-                cfg.setParkingType("Daoer");
+                cfg.setId((String) item.get("parkNo"));
+                cfg.setManagerType("Daoer");
                 cfg.setDescription((String) item.get("parkName"));
 
                 DaoerConfiguration daoerCfg = new DaoerConfiguration();
@@ -94,15 +94,20 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
     }
 
     @Override
+    public ParkingLotConfiguration findParkingLotConfigurationByThirdId(String thirdId,Integer operatorId) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
     public <S extends ParkingLotConfiguration> S save(S s) {
-        redis.hash().put(redis.MakeKey(prefix + s.getParkingType()), s.getParkingLotId(), s);
+        redis.hash().put(redis.MakeKey(prefix + s.getManagerType()), s.getId(), s);
         return s;
     }
 
     @Override
     public <S extends ParkingLotConfiguration> Iterable<S> saveAll(Iterable<S> iterable) {
         for (S data : iterable) {
-            redis.hash().put(redis.MakeKey(prefix+data.getParkingType()),data.getParkingLotId(),data);
+            redis.hash().put(redis.MakeKey(prefix+data.getManagerType()),data.getId(),data);
         }
         return iterable;
     }
@@ -139,13 +144,13 @@ public class ParkingLotConfigurationRepositoryByRedis implements IParkingLotConf
 
     @Override
     public void delete(ParkingLotConfiguration parkingLotConfiguration) {
-        redis.hash().delete(redis.MakeKey(prefix+parkingLotConfiguration.getParkingType()),parkingLotConfiguration.getParkingLotId());
+        redis.hash().delete(redis.MakeKey(prefix+parkingLotConfiguration.getManagerType()),parkingLotConfiguration.getId());
     }
 
     @Override
     public void deleteAll(Iterable<? extends ParkingLotConfiguration> iterable) {
         for (ParkingLotConfiguration data:iterable) {
-            redis.hash().delete(redis.MakeKey(prefix+data.getParkingType()),data.getParkingLotId());
+            redis.hash().delete(redis.MakeKey(prefix+data.getManagerType()),data.getId());
         }
     }
 

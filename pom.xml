@@ -193,6 +193,12 @@
             <version>1.0.38-RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.yfkyplatform.presspay</groupId>
+            <artifactId>presspay-api</artifactId>
+            <version>1.0.9-SNAPSHOT</version>
+        </dependency>
+
         <!-- YfkyFramework -->
         <dependency>
             <groupId>com.yfkyframework</groupId>

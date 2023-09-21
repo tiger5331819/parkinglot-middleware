@@ -1,6 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager;
 
+import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.StrUtil;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Nullable;
@@ -16,7 +18,10 @@ import java.util.concurrent.ConcurrentHashMap;
 public class ParkingLotManagerFactory {
     private final Map<String, ParkingLotManager> parkingLotManagerMap = new ConcurrentHashMap<>();
 
-    public ParkingLotManagerFactory(List<ParkingLotManager> parkingLotManagerList){
+    private final IParkingLotConfigurationRepository configurationRepository;
+
+    public ParkingLotManagerFactory(List<ParkingLotManager> parkingLotManagerList, IParkingLotConfigurationRepository configurationRepository){
+        this.configurationRepository = configurationRepository;
         loadParkingLotManager(parkingLotManagerList);
     }
 
@@ -74,6 +79,16 @@ public class ParkingLotManagerFactory {
     }
 
     /**
+     * 通过第三方车场ID 获取配置文件
+     *
+     * @param parkingLotId
+     * @return
+     */
+    public ParkingLotConfiguration getParkingLotConfigurationByThirdId(String parkingLotId,Integer operatorId) {
+        return BeanUtil.copyProperties(configurationRepository.findParkingLotConfigurationByThirdId(parkingLotId,operatorId),ParkingLotConfiguration.class);
+    }
+
+    /**
      * 健康检查
      *
      * @param parkingLotManagerName
@@ -86,9 +101,7 @@ public class ParkingLotManagerFactory {
             ParkingLotManager manager = parkingLotManagerMap.get(parkingLotManagerName);
             dataMap.put(parkingLotManagerName, manager.parkingLotHealthCheck(parkingLotId));
         } else {
-            parkingLotManagerMap.forEach((name, manager) -> {
-                dataMap.put(name, manager.parkingLotHealthCheck(parkingLotId));
-            });
+            parkingLotManagerMap.forEach((name, manager) -> dataMap.put(name, manager.parkingLotHealthCheck(parkingLotId)));
         }
         return dataMap;
     }

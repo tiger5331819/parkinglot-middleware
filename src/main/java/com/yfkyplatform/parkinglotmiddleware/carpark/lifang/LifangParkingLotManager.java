@@ -36,7 +36,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
             return null;
         }
         LifangConfiguration lifangCfg = cfg.getConfig();
-        LifangParkingLotConfiguration parkingLotConfiguration = new LifangParkingLotConfiguration(cfg.getParkingLotId(), lifangCfg.getSecret(), lifangCfg.getBaseUrl(), cfg.getDescription());
+        LifangParkingLotConfiguration parkingLotConfiguration = new LifangParkingLotConfiguration(cfg.getId(), lifangCfg.getSecret(), lifangCfg.getBaseUrl(), cfg.getDescription());
         return new LifangParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -52,7 +52,7 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
 
         for (ParkingLotConfiguration<LifangConfiguration> item : cfgList) {
             LifangConfiguration lifangCfg = item.getConfig();
-            LifangParkingLotConfiguration parkingLotConfiguration = new LifangParkingLotConfiguration(item.getParkingLotId(), lifangCfg.getSecret(), lifangCfg.getBaseUrl(), item.getDescription());
+            LifangParkingLotConfiguration parkingLotConfiguration = new LifangParkingLotConfiguration(item.getId(), lifangCfg.getSecret(), lifangCfg.getBaseUrl(), item.getDescription());
             dataList.add(new LifangParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;
@@ -85,8 +85,8 @@ public class LifangParkingLotManager extends ParkingLotManager<LifangParkingLot,
         cfg.setBaseUrl(LifangParkingLotConfiguration.getBaseUrl());
 
         ParkingLotConfiguration data = new ParkingLotConfiguration();
-        data.setParkingLotId(LifangParkingLotConfiguration.getId());
-        data.setParkingType("Lifang");
+        data.setId(LifangParkingLotConfiguration.getId());
+        data.setManagerType("Lifang");
         data.setDescription(LifangParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 

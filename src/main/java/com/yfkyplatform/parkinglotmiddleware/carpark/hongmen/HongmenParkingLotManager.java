@@ -35,7 +35,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
             return null;
         }
         HongmenConfiguration hongmenCfg = cfg.getConfig();
-        HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(cfg.getParkingLotId(), hongmenCfg.getAppId(), hongmenCfg.getSecret(), hongmenCfg.getBaseUrl(), cfg.getDescription());
+        HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(cfg.getId(), hongmenCfg.getAppId(), hongmenCfg.getSecret(), hongmenCfg.getBaseUrl(), cfg.getDescription());
         return new HongmenParkingLot(parkingLotConfiguration, redis);
     }
 
@@ -51,7 +51,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
 
         for (ParkingLotConfiguration<HongmenConfiguration> item : cfgList) {
             HongmenConfiguration hongmen = item.getConfig();
-            HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(item.getParkingLotId(), hongmen.getAppId(), hongmen.getSecret(), hongmen.getBaseUrl(), item.getDescription());
+            HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(item.getId(), hongmen.getAppId(), hongmen.getSecret(), hongmen.getBaseUrl(), item.getDescription());
             dataList.add(new HongmenParkingLot(parkingLotConfiguration, redis));
         }
         return dataList;
@@ -85,8 +85,8 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
         cfg.setBaseUrl(HongmenParkingLotConfiguration.getBaseUrl());
 
         ParkingLotConfiguration data = new ParkingLotConfiguration();
-        data.setParkingLotId(HongmenParkingLotConfiguration.getId());
-        data.setParkingType("Hongmen");
+        data.setId(HongmenParkingLotConfiguration.getId());
+        data.setManagerType("Hongmen");
         data.setDescription(HongmenParkingLotConfiguration.getDescription());
         data.setConfig(cfg);
 

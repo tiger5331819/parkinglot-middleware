@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import com.yfkyplatform.passthrough.api.mgnt.resp.GetPtParkingLotRpcResp;
 import com.yfkyplatform.passthrough.api.micro.PtParkingLotServiceMicroApi;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +29,7 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
     @DubboReference(check = false)
     private PtParkingLotServiceMicroApi ptParkingLotServiceMicroApi;
 
+
     public ParkingLotConfigurationRepositoryBySaaS(Environment environment) {
         this.env = environment;
     }
@@ -43,23 +45,14 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
         throw new UnsupportedOperationException();
     }
 
-    /**
-     * 通过停车场类型与停车场Id获取停车场配置
-     *
-     * @param parkingType  停车场类型
-     * @param parkingLotId 停车场Id
-     * @return
-     */
-    @Override
-    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
-        Integer operatorId = AccountRpcContext.getOperatorId();
-        log.info("查询SaaS车场信息，operatorId: " + operatorId);
-        GetPtParkingLotRpcResp resp = ptParkingLotServiceMicroApi.getPtParkingLotMicroForOutside(Long.valueOf(parkingLotId), operatorId);
+
+    private ParkingLotConfiguration makeConfiguration(GetPtParkingLotRpcResp resp){
+        String parkingType= ParkingLotManagerEnum.fromCode(resp.getMfrId()).getName();
 
         String prefix = "saasParkingLotConfig." + parkingType + ".";
 
         ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-        cfg.setParkingLotId(parkingLotId);
+        cfg.setId(String.valueOf(resp.getParkinglotId()));
 
         if (parkingType.equals("Daoer")) {
             DaoerConfiguration daoerCfg = new DaoerConfiguration();
@@ -73,10 +66,32 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
             cfg.setConfig(new Object());
         }
 
-        cfg.setParkingType(parkingType);
+        cfg.setManagerType(parkingType);
         cfg.setDescription(resp.getName());
 
         return cfg;
+    }
+
+    /**
+     * 通过停车场类型与停车场Id获取停车场配置
+     *
+     * @param parkingType  停车场类型
+     * @param parkingLotId 停车场Id
+     * @return
+     */
+    @Override
+    public ParkingLotConfiguration findParkingLotConfigurationByParkingTypeAndParkingLotId(String parkingType, String parkingLotId) {
+        Integer operatorId = AccountRpcContext.getOperatorId();
+        log.info("查询SaaS车场信息，operatorId: " + operatorId);
+        GetPtParkingLotRpcResp resp = ptParkingLotServiceMicroApi.getPtParkingLotMicroForOutside(Long.valueOf(parkingLotId), operatorId);
+
+        return makeConfiguration(resp);
+    }
+
+    @Override
+    public ParkingLotConfiguration findParkingLotConfigurationByThirdId(String thirdId,Integer operatorId) {
+        GetPtParkingLotRpcResp resp = ptParkingLotServiceMicroApi.getParkingLotByThirdId(thirdId, operatorId);
+        return makeConfiguration(resp);
     }
 
     @Override
