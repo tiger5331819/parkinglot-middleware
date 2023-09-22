@@ -31,13 +31,13 @@ import org.springframework.web.bind.annotation.*;
 @Tag(name = "联合催缴")
 @RestController
 @RequestMapping("/duecar")
-public class DueCarController {
+public class DueCarOpenController {
 
     private final DueCarProxy dueCarService;
 
     private final ParkingLotManagerFactory factory;
 
-    public DueCarController(DueCarProxy dueCarService, ParkingLotManagerFactory factory) {
+    public DueCarOpenController(DueCarProxy dueCarService, ParkingLotManagerFactory factory) {
         this.dueCarService = dueCarService;
         this.factory = factory;
     }
