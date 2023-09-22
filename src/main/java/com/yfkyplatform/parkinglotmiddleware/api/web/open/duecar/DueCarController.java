@@ -4,6 +4,7 @@ import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.common.core.exception.GlobalException;
+import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.DueCarConfigurationSyncReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.FindDueCarConfigurationReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.FindDueCarReq;
@@ -57,6 +58,7 @@ public class DueCarController {
         dueCar.setPlateColor(findDueCarReq.getPlateColor());
         dueCar.setVehicleType(findDueCarReq.getVehicleType());
 
+        AccountRpcContext.setOperatorId(operatorId);
         CarPortMessage carPort=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId()).carPort().parkingLotMessage();
 
         Optional<ChannelInfoResult> channelInfoOptional=carPort.getChannelList().stream().filter(item-> StrUtil.equals(item.getChannelId(),findDueCarReq.getDsn())).findFirst();
