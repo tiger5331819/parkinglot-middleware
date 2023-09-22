@@ -235,11 +235,13 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      */
     @Override
     public Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
-        try{
-            return api.configDueCar(notIn, notOut, startTime, closeTime).block().getHead().getStatus()==1;
+        return api.configDueCar(notIn, notOut, startTime, closeTime).block().getHead().getStatus()==1;
+
+/*        try{
+
         }catch (Exception ex){
             log.error(ex.getMessage());
             return false;
-        }
+        }*/
     }
 }

@@ -8,6 +8,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.car
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.BlankCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.ControlChannelRequest;
+import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.DueCarConfigurationRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.carport.request.DueCarSuccessRequest;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.monthly.request.LockMonthlyCarRequest;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
@@ -114,7 +115,7 @@ public class DaoerCarPortController {
 
     @Operation(summary =  "同步联动催缴配置信息")
     @PostMapping("/duecar/configuration")
-    public DaoerBaseResp configDueCar(@PathVariable String parkingLotId, @RequestBody DueCarSuccessRequest request) {
-        return api(parkingLotId).dueCarSuccess(request.getChannelId(), request.getCarNo()).block();
+    public DaoerBaseResp configDueCar(@PathVariable String parkingLotId, @RequestBody DueCarConfigurationRequest request) {
+        return api(parkingLotId).configDueCar(request.getUrgepayNotIn(), request.getUrgepayNotOut(),request.getStartTime(),request.getCloseTime()).block();
     }
 }
