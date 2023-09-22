@@ -80,26 +80,47 @@ public abstract class YfkyWebClient {
     }
 
     protected <R, T> Mono<R> post(T data, String url, ParameterizedTypeReference<R> result) {
-        return postBase(data, url, null)
-                .bodyToMono(result)
-                .doOnError(errFunction());
+        try{
+            return postBase(data, url, null)
+                    .bodyToMono(result)
+                    .doOnError(errFunction());
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            throw new RuntimeException("网络出错");
+        }
     }
 
     protected <R, T> Mono<R> post(T data, String url, Class<R> result) {
-        return postBase(data, url, null)
-                .bodyToMono(result)
-                .doOnError(errFunction());
+        try{
+            return postBase(data, url, null)
+                    .bodyToMono(result)
+                    .doOnError(errFunction());
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            throw new RuntimeException("网络出错");
+        }
     }
 
     protected <R> Mono<R> get(String url, Class<R> result) {
-        return getBase(url, null)
-                .bodyToMono(result)
-                .doOnError(errFunction());
+        try{
+            return getBase(url, null)
+                    .bodyToMono(result)
+                    .doOnError(errFunction());
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            throw new RuntimeException("网络出错");
+        }
     }
 
     protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
-        return getBase(url, null)
-                .bodyToMono(result)
-                .doOnError(errFunction());
+        try{
+            return getBase(url, null)
+                    .bodyToMono(result)
+                    .doOnError(errFunction());
+        }catch (Exception ex){
+            log.error(ex.getMessage());
+            throw new RuntimeException("网络出错");
+        }
+
     }
 }
