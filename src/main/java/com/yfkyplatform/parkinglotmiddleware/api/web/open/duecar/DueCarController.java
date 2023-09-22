@@ -55,7 +55,7 @@ public class DueCarController {
 
         AccountRpcContext.setOperatorId(operatorId);
         ParkingLotPod parkingLot=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
-        parkingLot.dueCar().addDueCar(findDueCarReq.getParkNo(), findDueCarReq.getDsn());
+        parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn());
 
         QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,findDueCarReq.getInOrOut());
         FindDueCarResp resp= BeanUtil.copyProperties(result, FindDueCarResp.class);
@@ -66,7 +66,7 @@ public class DueCarController {
 
     @Operation(summary = "催缴配置同步通知")
     @PostMapping("/{operatorId}/configuration/sync")
-    public void daoerCarOut(@PathVariable Integer operatorId, @RequestBody DueCarConfigurationSyncReq dueCarConfigurationSyncReq) {
+    public void SyncDueCarConfiguration(@PathVariable Integer operatorId, @RequestBody DueCarConfigurationSyncReq dueCarConfigurationSyncReq) {
 
         ParkingLotConfiguration configuration = factory.getParkingLotConfigurationByThirdId(dueCarConfigurationSyncReq.getParkNo(), operatorId);
 
