@@ -1,6 +1,8 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import io.netty.channel.ChannelOption;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.SslProvider;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -24,8 +26,11 @@ public abstract class YfkyWebClient {
     private final WebClient client;
 
     public YfkyWebClient(String baseUrl, int readTimeOutSeconds) {
+        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().sslProvider(SslProvider.JDK);
+
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
+                .secure(spec->spec.sslContext(sslContextBuilder))
                 .doOnConnected(connection ->
                         connection.addHandlerLast(new ReadTimeoutHandler(readTimeOutSeconds)));
 

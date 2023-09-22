@@ -58,20 +58,28 @@ public class DueCarController {
         dueCar.setPlateColor(findDueCarReq.getPlateColor());
         dueCar.setVehicleType(findDueCarReq.getVehicleType());
 
-        AccountRpcContext.setOperatorId(operatorId);
-        CarPortMessage carPort=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId()).carPort().parkingLotMessage();
+        try{
+            AccountRpcContext.setOperatorId(operatorId);
+            CarPortMessage carPort=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId()).carPort().parkingLotMessage();
 
-        Optional<ChannelInfoResult> channelInfoOptional=carPort.getChannelList().stream().filter(item-> StrUtil.equals(item.getChannelId(),findDueCarReq.getDsn())).findFirst();
+            Optional<ChannelInfoResult> channelInfoOptional=carPort.getChannelList().stream().filter(item-> StrUtil.equals(item.getChannelId(),findDueCarReq.getDsn())).findFirst();
 
-        if(channelInfoOptional.isPresent()){
-            ChannelInfoResult channel=channelInfoOptional.get();
-            QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,channel.getType()==0?1:2);
+            if(channelInfoOptional.isPresent()){
+                ChannelInfoResult channel=channelInfoOptional.get();
+                QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,channel.getType()==0?1:2);
 
+                return BeanUtil.copyProperties(result, FindDueCarResp.class);
+            }else{
+                log.error("通道查询催缴车辆异常："+findDueCarReq.getDsn()+"通道不存在");
+                throw new GlobalException(1000001, "通道不存在");
+            }
+        }catch (Exception ex){
+            log.error("联动催缴车场通道校验失败，不进行车场通道校验");
+
+            QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,findDueCarReq.getInOrOut());
             return BeanUtil.copyProperties(result, FindDueCarResp.class);
-        }else{
-            log.error("通道查询催缴车辆异常："+findDueCarReq.getDsn()+"通道不存在");
-            throw new GlobalException(1000001, "通道不存在");
         }
+
     }
 
     @Operation(summary = "催缴配置同步通知")

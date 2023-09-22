@@ -19,6 +19,9 @@ public class FindDueCarReq extends BaseModel {
     @Schema(description = "通道编号")
     private String dsn;
 
+    @Schema(description = "通道属性 1：入口，2：出口")
+    private Integer inOrOut;
+
     @Schema(description = "车牌号")
     @Length(max = 9, message = "车牌长度过长")
     private String plateNumber;

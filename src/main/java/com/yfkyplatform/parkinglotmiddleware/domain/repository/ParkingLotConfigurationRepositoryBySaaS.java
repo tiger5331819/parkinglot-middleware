@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
+import cn.hutool.core.util.StrUtil;
 import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.HongmenConfiguration;
@@ -59,9 +60,17 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
             case "Daoer":{
                 DaoerConfiguration daoerCfg = new DaoerConfiguration();
                 daoerCfg.setAppName(resp.getThirdOSName());
-                daoerCfg.setParkId(resp.getThirdId());
-                daoerCfg.setBaseUrl(env.getProperty(prefix + "baseUrl"));
-                daoerCfg.setImgUrl(env.getProperty(prefix + "imgUrl"));
+
+                if(StrUtil.contains(resp.getThirdId(),"H")){
+                    daoerCfg.setParkId(resp.getThirdId());
+                    daoerCfg.setBaseUrl(env.getProperty(prefix + resp.getThirdId() + ".baseUrl"));
+                    daoerCfg.setImgUrl(env.getProperty(prefix + resp.getThirdId() + ".imgUrl"));
+                }else{
+                    daoerCfg.setParkId(resp.getThirdId());
+                    daoerCfg.setBaseUrl(env.getProperty(prefix + "baseUrl"));
+                    daoerCfg.setImgUrl(env.getProperty(prefix + "imgUrl"));
+                }
+
                 daoerCfg.setBackTrack(resp.getBacktrack());
                 cfg.setConfig(daoerCfg);
             }break;
