@@ -26,11 +26,11 @@ public class DueCarConfiguration extends DaoerBase {
     /**
      * 生效开始时间 HH:mm:ss
      */
-    private LocalTime startTime;
+    private String startTime;
 
     /**·
      * 生效结束时间 HH:mm:ss
      */
-    private LocalTime closeTime;
+    private String closeTime;
 
 }

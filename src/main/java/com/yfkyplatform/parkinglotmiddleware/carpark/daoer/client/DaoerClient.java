@@ -40,6 +40,7 @@ import reactor.core.publisher.Mono;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -569,8 +570,8 @@ public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoer
         DueCarConfiguration model = new DueCarConfiguration();
         model.setUrgepayNotIn(notIn == 1 ? 0:1);
         model.setUrgepayNotOut(notOut == 1 ? 0:1);
-        model.setStartTime(startTime);
-        model.setCloseTime(closeTime);
+        model.setStartTime(startTime.format(DateTimeFormatter.ISO_LOCAL_TIME));
+        model.setCloseTime(closeTime.format(DateTimeFormatter.ISO_LOCAL_TIME));
 
         return post(model, "api/index/arrears/configuration", DaoerBaseResp.class);
     }
