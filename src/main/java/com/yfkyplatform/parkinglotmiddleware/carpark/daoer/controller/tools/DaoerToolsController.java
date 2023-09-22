@@ -18,16 +18,22 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.SaaSWebClient;
+import io.netty.channel.ChannelOption;
+import io.netty.handler.ssl.SslContextBuilder;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
+import reactor.netty.tcp.TcpClient;
 
 import java.util.List;
 import java.util.Map;
@@ -221,7 +227,17 @@ public class DaoerToolsController {
     @Operation(summary =  "WebClient 代理")
     @PostMapping("/webclientproxy")
     public Map<String,Object> webClientProxy(@RequestBody ViewHttpApiProxy apiProxy) throws JsonProcessingException,RuntimeException {
-        Mono<String> result=WebClient.create().method(HttpMethod.resolve(apiProxy.getMethod()))
+        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
+
+        TcpClient tcpClient = TcpClient.create()
+                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
+                .secure(spec->spec.sslContext(sslContextBuilder))
+                .doOnConnected(connection ->
+                        connection.addHandlerLast(new ReadTimeoutHandler(60)));
+
+        Mono<String> result=WebClient.builder()
+                .clientConnector(new ReactorClientHttpConnector(reactor.netty.http.client.HttpClient.from(tcpClient)))
+                .build().method(HttpMethod.resolve(apiProxy.getMethod()))
                 .uri(apiProxy.getUrl())
                 .headers(httpHeaders -> {
                     if(!apiProxy.getToken().isEmpty()) {
