@@ -40,8 +40,11 @@ public class DueCarServiceExposer implements IDueCarService {
 
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
-
-        return parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
+        try{
+            return parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
+        }catch (Exception ex){
+            return false;
+        }
     }
 
     /**
@@ -56,8 +59,12 @@ public class DueCarServiceExposer implements IDueCarService {
 
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarConfigurationRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarConfigurationRpcReq.getParkingLotId());
+        try{
+            return parkingLot.ability().carport().configDueCar(dueCarConfigurationRpcReq.getUrgepayNotIn(),dueCarConfigurationRpcReq.getUrgepayNotOut(),
+                    dueCarConfigurationRpcReq.getStartTime(),dueCarConfigurationRpcReq.getCloseTime());
+        }catch (Exception ex){
+            return false;
+        }
 
-        return parkingLot.ability().carport().configDueCar(dueCarConfigurationRpcReq.getUrgepayNotIn(),dueCarConfigurationRpcReq.getUrgepayNotOut(),
-                dueCarConfigurationRpcReq.getStartTime(),dueCarConfigurationRpcReq.getCloseTime());
     }
 }

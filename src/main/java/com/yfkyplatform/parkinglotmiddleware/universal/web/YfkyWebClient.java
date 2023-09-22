@@ -50,7 +50,7 @@ public abstract class YfkyWebClient {
         return (Throwable err) -> {
             if (err instanceof WebClientResponseException) {
                 String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
-                log.error(errResult);
+                log.error("网络错误:"+errResult);
                 throw new RuntimeException("网络错误");
             } else {
                 log.error(err.toString());
