@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @Slf4j
 @Tag(name = "联合催缴控制器")
-@RequestMapping(value= "api/{parkingLotManager}/{parkingLotId}/carport")
+@RequestMapping(value= "api/{parkingLotManager}/{parkingLotId}/duecar")
 @RestController
 public class DueCarController {
 
