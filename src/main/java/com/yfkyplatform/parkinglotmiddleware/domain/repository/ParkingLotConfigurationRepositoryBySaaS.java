@@ -2,6 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.HongmenConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import com.yfkyplatform.passthrough.api.mgnt.resp.GetPtParkingLotRpcResp;
@@ -54,17 +55,27 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
         ParkingLotConfiguration cfg = new ParkingLotConfiguration();
         cfg.setId(String.valueOf(resp.getParkinglotId()));
 
-        if (parkingType.equals("Daoer")) {
-            DaoerConfiguration daoerCfg = new DaoerConfiguration();
-            daoerCfg.setAppName(resp.getThirdOSName());
-            daoerCfg.setParkId(resp.getThirdId());
-            daoerCfg.setBaseUrl(env.getProperty(prefix + "baseUrl"));
-            daoerCfg.setImgUrl(env.getProperty(prefix + "imgUrl"));
-            daoerCfg.setBackTrack(resp.getBacktrack());
-            cfg.setConfig(daoerCfg);
-        } else {
-            cfg.setConfig(new Object());
+        switch (parkingType){
+            case "Daoer":{
+                DaoerConfiguration daoerCfg = new DaoerConfiguration();
+                daoerCfg.setAppName(resp.getThirdOSName());
+                daoerCfg.setParkId(resp.getThirdId());
+                daoerCfg.setBaseUrl(env.getProperty(prefix + "baseUrl"));
+                daoerCfg.setImgUrl(env.getProperty(prefix + "imgUrl"));
+                daoerCfg.setBackTrack(resp.getBacktrack());
+                cfg.setConfig(daoerCfg);
+            }break;
+            case "Hongmen":{
+                HongmenConfiguration hongmenCfg=new HongmenConfiguration();
+                hongmenCfg.setAppId(resp.getThirdId());
+                hongmenCfg.setSecret(null);
+                hongmenCfg.setBaseUrl(null);
+                cfg.setConfig(hongmenCfg);
+            }break;
+            default:cfg.setConfig(new Object());break;
         }
+
+
 
         cfg.setManagerType(parkingType);
         cfg.setDescription(resp.getName());
