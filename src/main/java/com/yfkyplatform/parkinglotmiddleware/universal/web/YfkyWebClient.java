@@ -2,7 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.SslProvider;
+import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -14,6 +14,12 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import reactor.core.publisher.Mono;
 import reactor.netty.tcp.TcpClient;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
 import java.util.function.Consumer;
 
 /**
@@ -26,7 +32,7 @@ public abstract class YfkyWebClient {
     private final WebClient client;
 
     public YfkyWebClient(String baseUrl, int readTimeOutSeconds) {
-        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().sslProvider(SslProvider.JDK);
+        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
 
         TcpClient tcpClient = TcpClient.create()
                 .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
@@ -40,6 +46,32 @@ public abstract class YfkyWebClient {
                 .defaultHeaders(headersConsumer())
                 .clientConnector(new ReactorClientHttpConnector(reactor.netty.http.client.HttpClient.from(tcpClient)))
                 .build();
+    }
+
+    public static SSLContext createIgnoreVerifySSL() throws NoSuchAlgorithmException, KeyManagementException {
+        SSLContext sc = SSLContext.getInstance("TLS");
+        // 实现一个X509TrustManager接口，用于绕过验证，不用修改里面的方法
+        X509TrustManager trustManager = new X509TrustManager() {
+            @Override
+            public void checkClientTrusted(
+                    java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                    String paramString) throws CertificateException {
+            }
+
+            @Override
+            public void checkServerTrusted(
+                    java.security.cert.X509Certificate[] paramArrayOfX509Certificate,
+                    String paramString) throws CertificateException {
+            }
+
+            @Override
+            public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                return null;
+            }
+        };
+
+        sc.init(null, new TrustManager[]{trustManager}, null);
+        return sc;
     }
 
     protected Consumer<HttpHeaders> headersConsumer() {

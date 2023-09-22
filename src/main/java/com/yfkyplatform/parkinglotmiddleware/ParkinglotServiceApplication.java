@@ -20,8 +20,6 @@ import org.springframework.context.annotation.Bean;
 public class ParkinglotServiceApplication {
 
     public static void main(String[] args) {
-        System.setProperty("javax.net.ssl.trustStore", "$JAVA_HOME/lib/security/cacerts");
-        System.setProperty("javax.net.ssl.trustStorePassword", "changeit");
         SpringApplication.run(ParkinglotServiceApplication.class, args);
     }
 

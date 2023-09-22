@@ -1,12 +1,6 @@
 server:
   port: 9000
 
-Dio:
-  netty:
-    handler:
-      ssl:
-        noOpenSsl: true
-
 app:
   version: @project.version@
 
