@@ -1,11 +1,11 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness;
 
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.yfkyframework.common.mvc.advice.commonresponsebody.IgnoreCommonResponse;
-import com.yfkyplatform.parkinglotmiddleware.api.web.req.CleanCarReq;
-import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarListResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.resp.CleanCarResp;
+import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.req.CleanCarReq;
+import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.resp.CleanCarListResp;
+import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.resp.CleanCarResp;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools.resp.CarCheckResultResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;

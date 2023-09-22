@@ -180,7 +180,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
                     payType,
                     payMessage.getPaymentTransactionId(),
                     payMessage.getPayFee().movePointLeft(2),
-                    channelId).block().getHead();
+                    payMessage.getChannelId()).block().getHead();
         }
 
         if (payState.getStatus() == 1) {

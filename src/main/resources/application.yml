@@ -13,7 +13,7 @@ springdoc:
     - group: '停车场业务'
       display-name: '停车场API'
       paths-to-match: '/**'
-      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web
+      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web.bussiness
     - group: '道尔云API代理'
       display-name: '道尔云API'
       paths-to-match: '/**'

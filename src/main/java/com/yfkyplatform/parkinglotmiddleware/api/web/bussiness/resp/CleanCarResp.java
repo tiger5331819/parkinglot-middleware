@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web.resp;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.resp;
 
 import lombok.Data;
 

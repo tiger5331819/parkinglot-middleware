@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness;
 
 import com.yfkyplatform.parkinglotmiddleware.api.ParkingLotRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.monthlycar.IMonthlyCarService;

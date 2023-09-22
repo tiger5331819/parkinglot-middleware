@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness;
 
 import com.yfkyplatform.parkinglotmiddleware.api.manager.configuration.IManagerConfigurationService;
 import io.swagger.v3.oas.annotations.Operation;

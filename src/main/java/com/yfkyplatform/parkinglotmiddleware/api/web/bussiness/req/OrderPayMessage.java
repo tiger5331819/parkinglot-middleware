@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web.req;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.req;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.yfkyframework.common.core.domain.BaseRpcReq;

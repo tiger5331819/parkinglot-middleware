@@ -1,11 +1,11 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness;
 
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.ICarFeeService;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.CarFeeRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultByListRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.web.req.OrderPayMessage;
+import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.req.OrderPayMessage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;

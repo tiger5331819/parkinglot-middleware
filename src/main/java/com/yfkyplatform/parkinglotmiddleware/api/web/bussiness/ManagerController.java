@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness;
 
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;

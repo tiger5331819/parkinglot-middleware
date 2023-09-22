@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.api.web.req;
+package com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.req;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
