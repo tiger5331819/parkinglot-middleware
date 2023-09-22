@@ -4,6 +4,7 @@ import com.yfkyframework.common.core.model.BaseModel;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalTime;
 
 /**
@@ -15,12 +16,15 @@ import java.time.LocalTime;
 public class DueCarConfigurationSyncReq extends BaseModel {
 
     @Schema(description = "车场ID（第三方车场ID）")
+    @NotNull(message = "车场ID（第三方车场ID）不能为空")
     private String parkNo;
 
     @Schema(description = "是否不可进 0:启用,1:禁用")
+    @NotNull(message = "是否不可进不能为空")
     private Integer urgepayNotIn;
 
     @Schema(description = "是否不可出 0:启用,1:禁用")
+    @NotNull(message = "是否不可进不能为空")
     private Integer urgepayNotOut;
 
     @Schema(description = "生效开始时间")
