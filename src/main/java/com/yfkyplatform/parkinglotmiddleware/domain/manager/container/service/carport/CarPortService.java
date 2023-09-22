@@ -7,7 +7,6 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLot
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.PageResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderPayMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderResult;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderWithArrearResultByList;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.CarInResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.CarPortSpaceResult;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
@@ -15,12 +14,12 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ab
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.ContextService;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.PayMessage;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Space;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 车场服务
@@ -96,9 +95,21 @@ public class CarPortService {
 
     public Car calculatePayMessage(String carNo) {
         Car car = getCar(carNo);
-        CarOrderResult carOrderResult = parkingLot.ability().fee().getCarFeeInfo(carNo);
 
-        setOrder(car, carOrderResult);
+        CarOrderResult carOrderResult;
+
+        Space carSpace = car.getCarSpace();
+        if (StrUtil.isNotBlank(carSpace.getChannelId())) {
+            car = calculatePayMessage(carSpace.getChannelId(), 0, null);
+            if (StrUtil.isNotBlank(car.getCarNo())) {
+                return car;
+            }
+        }
+
+        carOrderResult = parkingLot.ability().fee().getCarFeeInfo(carNo);
+
+        car.makeOrder(carOrderResult);
+        contextService.update(car);
         return car;
     }
 
@@ -107,60 +118,15 @@ public class CarPortService {
         CarOrderResult carOrderResult = parkingLot.ability().fee().getCarFeeInfoByChannel(channelId, scanType, openId);
         if (StrUtil.isNotBlank(carOrderResult.getCarNo())) {
             car = getCar(carOrderResult.getCarNo());
-            setOrder(car, carOrderResult);
+            car.makeOrder(carOrderResult);
+            Space carSpace=car.getCarSpace();
+            carSpace.setChannelId(channelId);
+
+            contextService.update(car);
         } else {
             car = new Car();
         }
         return car;
-    }
-
-    private void setOrder(Car car, CarOrderResult carOrderResult) {
-        PayMessage payMessage = new PayMessage();
-        payMessage.setCreateTime(carOrderResult.getCreateTime());
-        payMessage.setInTime(carOrderResult.getStartTime());
-        payMessage.setTotalFee(carOrderResult.getTotalFee());
-        payMessage.setPayFee(carOrderResult.getPayFee());
-        payMessage.setDiscountFee(carOrderResult.getDiscountFee());
-
-        car.setOrder(payMessage);
-
-        if (carOrderResult instanceof CarOrderWithArrearResultByList) {
-            CarOrderWithArrearResultByList arrearResultByList = (CarOrderWithArrearResultByList) carOrderResult;
-            payMessage.setInId(arrearResultByList.getInId());
-            payMessage.setOverTime(arrearResultByList.getOverTime());
-
-            if (AssertTool.checkCollectionNotNull(arrearResultByList.getArrearList())) {
-                car.setArrearOrder(arrearResultByList.getArrearList().stream().map(arrear -> {
-                    PayMessage arrearPayMessage = new PayMessage();
-                    arrearPayMessage.setCreateTime(arrear.getCreateTime());
-                    arrearPayMessage.setInTime(arrear.getStartTime());
-                    arrearPayMessage.setTotalFee(arrear.getTotalFee());
-                    arrearPayMessage.setPayFee(arrear.getPayFee());
-                    arrearPayMessage.setDiscountFee(arrear.getDiscountFee());
-                    arrearPayMessage.setInId(arrear.getInId());
-                    arrearPayMessage.setOverTime(arrear.getOverTime());
-                    return arrearPayMessage;
-                }).collect(Collectors.toList()));
-            }
-        }
-
-        contextService.update(car);
-    }
-
-    private PayMessage findOrder(Car car, String inId) {
-        if (ObjectUtil.isNotNull(car.getOrder())) {
-            if (StrUtil.equals(car.getOrder().getInId(), inId)) {
-                return car.getOrder();
-            }
-        }
-        if (AssertTool.checkCollectionNotNull(car.getArrearOrder())) {
-            List<PayMessage> orderList = car.getArrearOrder();
-            Optional<PayMessage> orderOptional = orderList.stream().filter(item -> StrUtil.equals(item.getInId(), inId)).findFirst();
-            if (orderOptional.isPresent()) {
-                return orderOptional.get();
-            }
-        }
-        return null;
     }
 
     public Boolean payFee(CarOrderPayMessage payMessage) {
@@ -168,10 +134,10 @@ public class CarPortService {
         PayMessage order = null;
         //根据inId查询订单
         if (ObjectUtil.isNotNull(payMessage.getInId())) {
-            order = findOrder(car, payMessage.getInId());
+            order =car.findOrder(payMessage.getInId());
             if (ObjectUtil.isNull(order)) {
                 car = calculatePayMessage(payMessage.getCarNo());
-                order = findOrder(car, payMessage.getInId());
+                order = car.findOrder(payMessage.getInId());
             }
         }
         //获取当前订单
@@ -193,10 +159,25 @@ public class CarPortService {
         payMessage.setCreateTime(order.getCreateTime());
         payMessage.setInId(order.getInId());
 
+        Space carSpace = car.getCarSpace();
+        if (StrUtil.isNotBlank(carSpace.getChannelId())) {
+            payMessage.setChannelId(carSpace.getChannelId());
+        }
+
+
         Boolean success = parkingLot.ability().fee().payCarFee(payMessage);
         if (success) {
             contextService.remove(payMessage.getCarNo());
         }
         return success;
+    }
+
+    public Car updateSpace(String carNo,Space newCarSpace){
+        Car car=getCar(carNo);
+        if(ObjectUtil.isNotNull(newCarSpace)){
+            car.setCarSpace(newCarSpace);
+        }
+        contextService.update(car);
+        return car;
     }
 }

@@ -41,7 +41,7 @@ public class DueCarServiceExposer implements IDueCarService {
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
 
-        return parkingLot.ability().carport().dueCarAccess(dueCarSuccessRpcReq.getChannelId(), dueCarSuccessRpcReq.getCarNo());
+        return parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
     }
 
     /**

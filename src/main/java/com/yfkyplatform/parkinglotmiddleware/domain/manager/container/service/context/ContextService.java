@@ -45,6 +45,7 @@ public class ContextService {
     public Car createCar(String carNo) {
         Car car = new Car();
         car.setCarNo(carNo);
+        car.setCarSpace(new Space());
         add(car);
         return car;
     }

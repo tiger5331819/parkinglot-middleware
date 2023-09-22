@@ -2,6 +2,8 @@ package com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar;
 
 import cn.hutool.core.bean.BeanUtil;
 import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.yfkyframework.common.core.exception.GlobalException;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.DueCarConfigurationSyncReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.FindDueCarConfigurationReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.req.FindDueCarReq;
@@ -9,6 +11,8 @@ import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.resp.FindDueCar
 import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.resp.FindDueCarResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ChannelInfoResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCar;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCarProxy;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueConfiguration;
@@ -19,6 +23,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 /**
  * 联合催缴接口
@@ -51,9 +57,19 @@ public class DueCarController {
         dueCar.setPlateColor(findDueCarReq.getPlateColor());
         dueCar.setVehicleType(findDueCarReq.getVehicleType());
 
-        QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar);
+        CarPortMessage carPort=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId()).carPort().parkingLotMessage();
 
-        return BeanUtil.copyProperties(result, FindDueCarResp.class);
+        Optional<ChannelInfoResult> channelInfoOptional=carPort.getChannelList().stream().filter(item-> StrUtil.equals(item.getChannelId(),findDueCarReq.getDsn())).findFirst();
+
+        if(channelInfoOptional.isPresent()){
+            ChannelInfoResult channel=channelInfoOptional.get();
+            QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,channel.getType()==0?1:2);
+
+            return BeanUtil.copyProperties(result, FindDueCarResp.class);
+        }else{
+            log.error("通道查询催缴车辆异常："+findDueCarReq.getDsn()+"通道不存在");
+            throw new GlobalException(1000001, "通道不存在");
+        }
     }
 
     @Operation(summary = "催缴配置同步通知")

@@ -61,4 +61,9 @@ public class CarOrderPayMessage {
      * 入场记录ID
      */
     private String inId;
+
+    /**
+     * 通道ID
+     */
+    private String channelId;
 }

@@ -1,9 +1,16 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context;
 
+import cn.hutool.core.util.ObjectUtil;
+import cn.hutool.core.util.StrUtil;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderResult;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderWithArrearResultByList;
+import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 车辆基础信息
@@ -12,6 +19,10 @@ import java.util.List;
  */
 @Data
 public class Car {
+
+    /**
+     * 车牌号
+     */
     private String carNo;
 
     /**
@@ -68,4 +79,67 @@ public class Car {
      * 历史欠费订单信息
      */
     private List<PayMessage> arrearOrder;
+
+    /**
+     * 车辆所处位置
+     */
+    private Space carSpace;
+
+    /**
+     * 领域规则：通过查询第三方系统的车辆费用生成订单信息
+     *
+     * @param carOrderResult 第三方系统的车辆费用
+     */
+    public void makeOrder(CarOrderResult carOrderResult) {
+        PayMessage payMessage = new PayMessage();
+        payMessage.setCreateTime(carOrderResult.getCreateTime());
+        payMessage.setInTime(carOrderResult.getStartTime());
+        payMessage.setTotalFee(carOrderResult.getTotalFee());
+        payMessage.setPayFee(carOrderResult.getPayFee());
+        payMessage.setDiscountFee(carOrderResult.getDiscountFee());
+
+        this.setOrder(payMessage);
+
+        if (carOrderResult instanceof CarOrderWithArrearResultByList) {
+            CarOrderWithArrearResultByList arrearResultByList = (CarOrderWithArrearResultByList) carOrderResult;
+            payMessage.setInId(arrearResultByList.getInId());
+            payMessage.setOverTime(arrearResultByList.getOverTime());
+
+            if (AssertTool.checkCollectionNotNull(arrearResultByList.getArrearList())) {
+                this.setArrearOrder(arrearResultByList.getArrearList().stream().map(arrear -> {
+                    PayMessage arrearPayMessage = new PayMessage();
+                    arrearPayMessage.setCreateTime(arrear.getCreateTime());
+                    arrearPayMessage.setInTime(arrear.getStartTime());
+                    arrearPayMessage.setTotalFee(arrear.getTotalFee());
+                    arrearPayMessage.setPayFee(arrear.getPayFee());
+                    arrearPayMessage.setDiscountFee(arrear.getDiscountFee());
+                    arrearPayMessage.setInId(arrear.getInId());
+                    arrearPayMessage.setOverTime(arrear.getOverTime());
+                    return arrearPayMessage;
+                }).collect(Collectors.toList()));
+            }
+        }
+    }
+
+    /**
+     * 领域规则：通过入场唯一ID定位订单
+     *
+     * @param inId 入场唯一ID
+     * @return
+     */
+    public PayMessage findOrder(String inId) {
+        if (ObjectUtil.isNotNull(this.getOrder())) {
+            if (StrUtil.equals(this.getOrder().getInId(), inId)) {
+                return this.getOrder();
+            }
+        }
+        if (AssertTool.checkCollectionNotNull(this.getArrearOrder())) {
+            List<PayMessage> orderList = this.getArrearOrder();
+            Optional<PayMessage> orderOptional = orderList.stream().filter(item -> StrUtil.equals(item.getInId(), inId)).findFirst();
+            if (orderOptional.isPresent()) {
+                return orderOptional.get();
+            }
+        }
+        return null;
+    }
 }

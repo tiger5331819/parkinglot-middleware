@@ -79,10 +79,10 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
     @Override
     public CarOrderResult getCarFeeInfoByChannel(String channelId, int scanType, String openId) {
         if (configuration.getBackTrack()) {
-            DaoerBaseResp<CarFeeResultWithArrear> resp = api.blankCarOutWithArrear(openId, scanType, channelId).block();
-/*            if (ObjectUtil.isNull(resp.getBody()) || StrUtil.isBlank(resp.getBody().getCharge().getCarNo())) {
-                resp = api.blankCarOutWithArrear(openId, scanType, channelId).block();
-            }*/
+            DaoerBaseResp<CarFeeResultWithArrear> resp=StrUtil.isNotBlank(openId)?
+                    api.blankCarOutWithArrear(openId, scanType, channelId).block():
+                    api.getChannelCarFeeWithArrear(channelId).block();
+
             CarFeeResultWithArrearByCharge result = checkCarFeeWithArrearResult(resp);
 
             if (StrUtil.isNotBlank(result.getCarNo())) {
@@ -145,8 +145,6 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
      */
     @Override
     public Boolean payCarFee(CarOrderPayMessage payMessage) {
-        String key = "order:daoer:" + payMessage.getCarNo();
-        String channelId = redis.check(key) ? redis.get(key) : "";
 
         String inKey = "order:daoer:" + payMessage.getInId();
         String parkNo = redis.check(inKey) ? redis.getWithDelete(inKey) : "";
@@ -168,7 +166,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
                     payType,
                     payMessage.getPaymentTransactionId(),
                     payMessage.getPayFee().movePointLeft(2),
-                    channelId,
+                    payMessage.getChannelId(),
                     payMessage.getInId(),
                     parkNo).block().getHead();
         } else {

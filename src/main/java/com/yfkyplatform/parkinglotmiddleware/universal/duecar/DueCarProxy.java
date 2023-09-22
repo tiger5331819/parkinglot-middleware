@@ -27,7 +27,7 @@ public class DueCarProxy {
      *
      * @return
      */
-    public QueryUrgePayMsgRpcResp checkDueCar(Integer operatorId, ParkingLotConfiguration parkingLotCfg, DueCar dueCar) {
+    public QueryUrgePayMsgRpcResp checkDueCar(Integer operatorId, ParkingLotConfiguration parkingLotCfg, DueCar dueCar,Integer inOrOut) {
         QueryUrgePayMsgRpcReq queryUrgePayMsgRpcReq = new QueryUrgePayMsgRpcReq();
         queryUrgePayMsgRpcReq.setMfrCode(ParkingLotManagerEnum.fromMessage(parkingLotCfg.getManagerType()).getCode());
         queryUrgePayMsgRpcReq.setParkinglotId(Long.valueOf(parkingLotCfg.getId()));
@@ -35,6 +35,7 @@ public class DueCarProxy {
         queryUrgePayMsgRpcReq.setPlateColor(dueCar.getPlateColor());
         queryUrgePayMsgRpcReq.setVehicleType(dueCar.getVehicleType());
         queryUrgePayMsgRpcReq.setOperatorId(operatorId);
+        queryUrgePayMsgRpcReq.setInOrOut(inOrOut);
 
         return presspayLinkedServiceApi.queryUrgePayByPlateNumber(queryUrgePayMsgRpcReq);
     }
