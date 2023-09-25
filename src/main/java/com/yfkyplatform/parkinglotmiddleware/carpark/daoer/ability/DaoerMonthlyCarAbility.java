@@ -143,7 +143,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            throw new ExposerException(-1,result.getMessage());
+            throw new ExposerException(-1,monthlyCarRenewal.getCarNo()+"路外车场异常:"+result.getMessage());
         }
     }
 
@@ -160,7 +160,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            throw new ExposerException(-1,result.getMessage());
+            throw new ExposerException(-1,carNo+"路外车场异常:"+result.getMessage());
         }
     }
 
@@ -182,7 +182,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            throw new ExposerException(-1,result.getMessage());
+            throw new ExposerException(-1,createMonthlyCar.getCarNo()+"路外车场异常:"+result.getMessage());
         }
     }
 
