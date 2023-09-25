@@ -3,6 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.ability;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.api.IDaoerMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
@@ -142,7 +143,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            return false;
+            throw new ExposerException(-1,result.getMessage());
         }
     }
 
@@ -159,7 +160,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            return false;
+            throw new ExposerException(-1,result.getMessage());
         }
     }
 
@@ -181,7 +182,7 @@ public class DaoerMonthlyCarAbility implements IMonthlyAblitity {
             return true;
         } else {
             log.error(result.getMessage());
-            return false;
+            throw new ExposerException(-1,result.getMessage());
         }
     }
 
