@@ -19,6 +19,7 @@ import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 /**
@@ -129,7 +130,7 @@ public class CarPortService {
         return car;
     }
 
-    public Boolean payFee(CarOrderPayMessage payMessage) {
+    public void payFee(CarOrderPayMessage payMessage) {
         Car car = refresh(payMessage.getCarNo());
         PayMessage order = null;
         //根据inId查询订单
@@ -152,7 +153,7 @@ public class CarPortService {
             log.error(parkingLot.carPort().parkingLotMessage().toString());
             log.error(car.toString());
             log.error("找不到订单，支付信息： " + payMessage);
-            return false;
+            throw new NoSuchElementException("支付失败，找不到需要支付的订单");
         }
 
         payMessage.setInTime(order.getInTime());
@@ -164,12 +165,10 @@ public class CarPortService {
             payMessage.setChannelId(carSpace.getChannelId());
         }
 
-
         Boolean success = parkingLot.ability().fee().payCarFee(payMessage);
         if (success) {
             contextService.remove(payMessage.getCarNo());
         }
-        return success;
     }
 
     public Car updateSpace(String carNo,Space newCarSpace){

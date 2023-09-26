@@ -35,16 +35,12 @@ public class DueCarServiceExposer implements IDueCarService {
      * @return
      */
     @Override
-    public Boolean dueCarAccess(DueCarSuccessRpcReq dueCarSuccessRpcReq) throws ExposerException {
+    public void dueCarAccess(DueCarSuccessRpcReq dueCarSuccessRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(dueCarSuccessRpcReq.getOperatorId());
 
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
-        try{
-            return parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
-        }catch (Exception ex){
-            return false;
-        }
+        parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
     }
 
     /**
@@ -54,17 +50,14 @@ public class DueCarServiceExposer implements IDueCarService {
      * @return
      */
     @Override
-    public Boolean configDueCar(DueCarConfigurationRpcReq dueCarConfigurationRpcReq) throws ExposerException {
+    public void configDueCar(DueCarConfigurationRpcReq dueCarConfigurationRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(dueCarConfigurationRpcReq.getOperatorId());
 
         DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarConfigurationRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarConfigurationRpcReq.getParkingLotId());
-        try{
-            return parkingLot.ability().carport().configDueCar(dueCarConfigurationRpcReq.getUrgepayNotIn(),dueCarConfigurationRpcReq.getUrgepayNotOut(),
-                    dueCarConfigurationRpcReq.getStartTime(),dueCarConfigurationRpcReq.getCloseTime());
-        }catch (Exception ex){
-            return false;
-        }
+
+        parkingLot.ability().carport().configDueCar(dueCarConfigurationRpcReq.getUrgepayNotIn(),dueCarConfigurationRpcReq.getUrgepayNotOut(),
+                dueCarConfigurationRpcReq.getStartTime(),dueCarConfigurationRpcReq.getCloseTime());
 
     }
 }

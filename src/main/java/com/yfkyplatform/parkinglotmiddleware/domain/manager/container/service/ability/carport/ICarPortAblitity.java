@@ -77,7 +77,7 @@ public interface ICarPortAblitity {
      * @param carNo 车牌号码
      * @return
      */
-    Boolean dueCarAccess(String channelId,String carNo);
+    void dueCarAccess(String channelId,String carNo);
 
     /**
      * 同步补缴配置信息
@@ -88,5 +88,5 @@ public interface ICarPortAblitity {
      * @param closeTime 生效结束时间
      * @return
      */
-    Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime);
+    void configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime);
 }

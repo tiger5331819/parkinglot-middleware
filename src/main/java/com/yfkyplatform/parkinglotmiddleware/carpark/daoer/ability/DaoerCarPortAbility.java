@@ -220,12 +220,15 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public Boolean dueCarAccess(String channelId, String carNo) {
-        return api.dueCarSuccess(channelId, carNo).block().getHead().getStatus()==1;
+    public void dueCarAccess(String channelId, String carNo) {
+        DaoerBaseResp daoerBaseResp=api.dueCarSuccess(channelId, carNo).block();
+       if(daoerBaseResp.getHead().getStatus()!=1){
+           throw new RuntimeException("补缴成功通知："+daoerBaseResp.getHead().getMessage());
+       }
     }
 
     /**
-     * 补缴成功通知
+     * 同步补缴配置信息
      *
      * @param notIn     是否不可进 0不可进，1可进
      * @param notOut    是否不可出 0不可出，1可出
@@ -234,14 +237,10 @@ public class DaoerCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
-        return api.configDueCar(notIn, notOut, startTime, closeTime).block().getHead().getStatus()==1;
-
-/*        try{
-
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-            return false;
-        }*/
+    public void configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
+        DaoerBaseResp daoerBaseResp=api.configDueCar(notIn, notOut, startTime, closeTime).block();
+        if(daoerBaseResp.getHead().getStatus()!=1){
+            throw new RuntimeException("同步补缴配置信息失败："+daoerBaseResp.getHead().getMessage());
+        }
     }
 }

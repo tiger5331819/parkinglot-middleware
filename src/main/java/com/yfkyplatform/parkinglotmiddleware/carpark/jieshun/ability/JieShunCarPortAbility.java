@@ -214,8 +214,8 @@ public class JieShunCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public Boolean dueCarAccess(String channelId, String carNo) {
-        return null;
+    public void dueCarAccess(String channelId, String carNo) {
+
     }
 
     /**
@@ -228,7 +228,6 @@ public class JieShunCarPortAbility implements ICarPortAblitity {
      * @return
      */
     @Override
-    public Boolean configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
-        return null;
+    public void configDueCar(Integer notIn, Integer notOut, LocalTime startTime, LocalTime closeTime) {
     }
 }

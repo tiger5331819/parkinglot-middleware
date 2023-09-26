@@ -51,7 +51,7 @@ public class DueCarService {
      * @param carNo
      * @return
      */
-    public boolean dueCarSuccess(String carNo){
+    public void dueCarSuccess(String carNo){
         Car car=carPortService.getCar(carNo);
 
         if(redis.check(makeKey(car.getCarNo()))){
@@ -60,7 +60,7 @@ public class DueCarService {
             carSpace.setChannelId(channelId);
             carPortService.updateSpace(carNo,carSpace);
             log.info("催缴车辆"+carNo+"在通道完成催缴，通道ID："+channelId);
-            return parkingLot.ability().carport().dueCarAccess(channelId,carNo);
+            parkingLot.ability().carport().dueCarAccess(channelId,carNo);
         }else{
             throw new ExposerException(-1,"催缴车辆"+car.getCarNo()+"不存在通道催缴记录");
         }
