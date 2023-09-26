@@ -150,9 +150,7 @@ public class CarPortService {
         }
 
         if (ObjectUtil.isNull(order)) {
-            log.error(parkingLot.carPort().parkingLotMessage().toString());
-            log.error(car.toString());
-            log.error("找不到订单，支付信息： " + payMessage);
+            log.error(parkingLot.carPort().parkingLotMessage().toString()+"\n"+car+"\n"+"找不到订单，支付信息： " + payMessage);
             throw new NoSuchElementException("支付失败，找不到需要支付的订单");
         }
 
@@ -168,6 +166,9 @@ public class CarPortService {
         Boolean success = parkingLot.ability().fee().payCarFee(payMessage);
         if (success) {
             contextService.remove(payMessage.getCarNo());
+        }else{
+            log.error("支付异常："+parkingLot.carPort().parkingLotMessage().toString()+"\n"+car+"\n"+"支付信息： " + payMessage);
+            throw new RuntimeException("支付失败，请查看异常信息");
         }
     }
 

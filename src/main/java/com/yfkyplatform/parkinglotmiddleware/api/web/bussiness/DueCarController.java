@@ -27,20 +27,20 @@ public class DueCarController {
 
     @Operation(summary = "同步补缴配置信息")
     @PostMapping("/configDueCar")
-    public Boolean configDueCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@RequestBody DueCarConfigurationRpcReq rpcReq) {
+    public void configDueCar(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@RequestBody DueCarConfigurationRpcReq rpcReq) {
         rpcReq.setParkingLotManagerCode(parkingLotManager);
         rpcReq.setParkingLotId(parkingLotId);
 
-        return dueCarService.configDueCar(rpcReq);
+        dueCarService.configDueCar(rpcReq);
     }
 
     @Operation(summary =  "补缴成功通知")
     @PostMapping("/dueCarAccess")
-    public Boolean dueCarAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody DueCarSuccessRpcReq rpcReq) {
+    public void dueCarAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody DueCarSuccessRpcReq rpcReq) {
         rpcReq.setParkingLotManagerCode(parkingLotManager);
         rpcReq.setParkingLotId(parkingLotId);
 
-        return dueCarService.dueCarAccess(rpcReq);
+        dueCarService.dueCarAccess(rpcReq);
     }
 
 }

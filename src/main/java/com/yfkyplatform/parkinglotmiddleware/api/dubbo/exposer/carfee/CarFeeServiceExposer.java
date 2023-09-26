@@ -84,7 +84,7 @@ public class CarFeeServiceExposer implements ICarFeeService {
      * @return
      */
     @Override
-    public Boolean payAccess(OrderPayMessageRpcReq orderPayMessageRpcReq) throws ExposerException {
+    public void payAccess(OrderPayMessageRpcReq orderPayMessageRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(orderPayMessageRpcReq.getOperatorId());
 
         CarPortService carPortService = factory.manager(ParkingLotManagerEnum.fromCode(orderPayMessageRpcReq.getParkingLotManagerCode()).getName())
@@ -101,10 +101,10 @@ public class CarFeeServiceExposer implements ICarFeeService {
         message.setInId(orderPayMessageRpcReq.getInId());
 
         if (testBox.changeFee().enable() && StrUtil.contains(orderPayMessageRpcReq.getInId(), "Mock")) {
-            return true;
+            return;
         }
 
-        return carPortService.payFee(message);
+        carPortService.payFee(message);
     }
 
     /**

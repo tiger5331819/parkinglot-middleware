@@ -43,7 +43,7 @@ public class CarFeeController {
 
     @Operation(summary =  "车辆缴费")
     @PatchMapping("/{carNo}/Fee")
-    public Boolean payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@PathVariable String carNo,@RequestBody OrderPayMessage payData) {
+    public void payAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId,@PathVariable String carNo,@RequestBody OrderPayMessage payData) {
 
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
         orderPayMessageRpcReq.setCarNo(carNo);
@@ -56,7 +56,7 @@ public class CarFeeController {
         orderPayMessageRpcReq.setParkingLotManagerCode(parkingLotManager);
         orderPayMessageRpcReq.setParkingLotId(parkingLotId);
 
-        return carPortService.payAccess(orderPayMessageRpcReq);
+        carPortService.payAccess(orderPayMessageRpcReq);
     }
 
     @Operation(summary =  "根据通道号获取车辆费用信息")

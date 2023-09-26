@@ -99,7 +99,7 @@ public class ToolController {
 
     @Operation(summary =  "直接支付金额")
     @PostMapping("/{parkingLotManager}/{parkingLotDescription}/carport/FeeTest")
-    public Boolean payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription,@RequestBody PayAccessReq payAccess) {
+    public void payAccessTest(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotDescription,@RequestBody PayAccessReq payAccess) {
         CarOrderResultRpcResp rpcResp = null;
         ParkingLotPod parkingLot = findByDescription(parkingLotManager, parkingLotDescription);
         CarPortMessage carPortMessage = parkingLot.carPort().parkingLotMessage();
@@ -130,7 +130,7 @@ public class ToolController {
 
 
         if (ObjectUtil.isNull(rpcResp)) {
-            return false;
+            return ;
         }
 
         OrderPayMessageRpcReq orderPayMessageRpcReq = new OrderPayMessageRpcReq();
@@ -144,7 +144,7 @@ public class ToolController {
         orderPayMessageRpcReq.setParkingLotManagerCode(parkingLotManager);
         orderPayMessageRpcReq.setCarNo(rpcResp.getCarNo());
 
-        return carFeeService.payAccess(orderPayMessageRpcReq);
+        carFeeService.payAccess(orderPayMessageRpcReq);
     }
 
     @Operation(summary =  "获取车辆信息")
