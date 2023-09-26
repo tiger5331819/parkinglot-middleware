@@ -168,7 +168,7 @@ public class CarPortService {
             contextService.remove(payMessage.getCarNo());
         }else{
             log.error("支付异常："+parkingLot.carPort().parkingLotMessage().toString()+"\n"+car+"\n"+"支付信息： " + payMessage);
-            throw new RuntimeException("支付失败，请查看异常信息");
+            throw new RuntimeException(payMessage.getCarNo()+"支付失败，请查看异常信息");
         }
     }
 
