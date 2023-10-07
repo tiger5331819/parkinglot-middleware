@@ -60,10 +60,6 @@ public class WebClientTest {
                     data.setChannelId(channelResult.getChannelId());
                     data.setChannelName(channelResult.getChannelName());
                     data.setType(channelResult.getType());
-                    data.setBoard(channelStateResult.getBoard());
-                    data.setCamera(channelStateResult.getCamera());
-                    data.setDoor(channelStateResult.getDoor());
-                    data.setSense(channelStateResult.getSense());
                     return data;
                 } else {
                     return null;

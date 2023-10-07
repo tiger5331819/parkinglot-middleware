@@ -25,7 +25,7 @@ public class EnvironmentTest {
             String prefix2 = "parkingLotConfig." + parkingType + "." + cfgId + ".";
 
             ParkingLotConfiguration cfg = new ParkingLotConfiguration();
-            cfg.setParkingLotId(prefix2 + "parkingLotId");
+            cfg.setId(prefix2 + "parkingLotId");
 
             switch (parkingType) {
                 case "Daoer": {
@@ -41,7 +41,7 @@ public class EnvironmentTest {
                     break;
             }
 
-            cfg.setParkingType(parkingType);
+            cfg.setManagerType(parkingType);
             cfg.setDescription(env.getProperty(prefix2 + "description"));
         }
         System.out.println();

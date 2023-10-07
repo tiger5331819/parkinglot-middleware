@@ -7,6 +7,8 @@ import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.math.BigDecimal;
+
 @SpringBootTest
 class ParkinglotServiceApplicationTests {
 
@@ -23,5 +25,18 @@ class ParkinglotServiceApplicationTests {
         resp = ptParkingLotApi.getPtParkingLot(100102001120010000L);
         System.out.println(ObjectSizeCalculator.getObjectSize(resp));
         System.out.println(resp);
+    }
+
+    @Test
+    void test(){
+        BigDecimal money=new BigDecimal(6000);
+        BigDecimal resultMoney=new BigDecimal(0);
+        for(int i=1;i<=20;i++){
+            resultMoney=resultMoney.add(money);
+            resultMoney=resultMoney.add(resultMoney.multiply(new BigDecimal(0.04)));
+
+        }
+        resultMoney=resultMoney.add(new BigDecimal(1000).multiply(new BigDecimal(20)));
+        System.out.println(resultMoney);
     }
 }

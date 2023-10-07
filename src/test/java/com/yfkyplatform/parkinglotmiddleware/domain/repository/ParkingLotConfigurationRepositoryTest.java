@@ -27,8 +27,8 @@ class ParkingLotConfigurationRepositoryTest {
 
 
         ParkingLotConfiguration<DaoerConfiguration> data = new ParkingLotConfiguration();
-        data.setParkingLotId("24400000001");
-        data.setParkingType("Daoer");
+        data.setId("24400000001");
+        data.setManagerType("Daoer");
         data.setDescription("道尔测试");
         data.setConfig(cfg);
 
