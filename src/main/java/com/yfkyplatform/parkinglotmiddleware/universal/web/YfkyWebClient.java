@@ -8,7 +8,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 import reactor.netty.tcp.TcpClient;
 
@@ -43,14 +42,8 @@ public abstract class YfkyWebClient {
 
     protected Consumer<? super Throwable> errFunction() {
         return (Throwable err) -> {
-            if (err instanceof WebClientResponseException) {
-                String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
-                log.error(errResult);
-                throw new RuntimeException("网络错误");
-            } else {
-                log.error(err.toString());
-                throw new RuntimeException(err.getMessage());
-            }
+            log.error("远端车场链接异常:"+err.toString());
+            throw new RuntimeException("远端车场链接异常");
         };
     }
 
