@@ -1,7 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.carport;
 
 import cn.hutool.core.bean.BeanUtil;
-import cn.hutool.core.util.ObjectUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.api.ParkingLotRpcReq;
@@ -9,22 +8,15 @@ import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.BlankCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.request.CarInfoRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarMessageRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carport.response.CarPortSpaceRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carport.ICarPortAblitity;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortService;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.PayMessage;
-import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
-
-import java.util.stream.Collectors;
 
 /**
  * 车场服务
@@ -38,46 +30,9 @@ public class CarportServiceExposer implements ICarPortService {
 
     private final ParkingLotManagerFactory factory;
 
-    private final TestBox testBox;
-
-    public CarportServiceExposer(ParkingLotManagerFactory factory, TestBox testBox) {
+    public CarportServiceExposer(ParkingLotManagerFactory factory) {
         this.factory = factory;
-        this.testBox = testBox;
     }
-
-    private CarOrderResultByListRpcResp makeCarOrderResultByListRpcResp(Car car) {
-
-        CarOrderResultByListRpcResp result = makeCarOrderResultRpcResp(car.getCarNo(), car.getOrder());
-
-        if (AssertTool.checkCollectionNotNull(car.getArrearOrder())) {
-            result.setArrearList(car.getArrearOrder().stream().map(item -> makeCarOrderResultRpcResp(car.getCarNo(), item)).collect(Collectors.toList()));
-        }
-
-        return result;
-    }
-
-    private CarOrderResultByListRpcResp makeCarOrderResultRpcResp(String carNo, PayMessage payMessage) {
-
-        if (ObjectUtil.isNull(payMessage)) {
-            payMessage = new PayMessage();
-        }
-        CarOrderResultByListRpcResp result = new CarOrderResultByListRpcResp();
-
-        result.setCarNo(carNo);
-        result.setStartTime(payMessage.getInTime());
-        result.setCreateTime(payMessage.getCreateTime());
-        result.setServiceTime(payMessage.serviceTime());
-        result.setTotalFee(payMessage.getTotalFee());
-        result.setPayFee(payMessage.getPayFee());
-        result.setDiscountFee(payMessage.getDiscountFee());
-        result.setOverTime(payMessage.getOverTime());
-        result.setInId(payMessage.getInId());
-
-        testBox.changeFee().ifCanChange(result::setFee);
-
-        return result;
-    }
-
 
     /**
      * 无牌车入场
