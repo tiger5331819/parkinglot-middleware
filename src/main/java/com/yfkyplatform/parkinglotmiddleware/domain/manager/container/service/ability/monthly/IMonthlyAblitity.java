@@ -38,7 +38,7 @@ public interface IMonthlyAblitity {
      * @param monthlyCarRenewal
      * @return
      */
-    Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal);
+    void renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal);
 
     /**
      * 月租车销户
@@ -46,7 +46,7 @@ public interface IMonthlyAblitity {
      * @param carNo
      * @return
      */
-    Boolean removeMonthlyCar(String carNo);
+    void removeMonthlyCar(String carNo);
 
     /**
      * 月租车开户
@@ -54,5 +54,5 @@ public interface IMonthlyAblitity {
      * @param createMonthlyCar
      * @return
      */
-    Boolean createMonthlyCar(CreateMonthlyCar createMonthlyCar);
+    void createMonthlyCar(CreateMonthlyCar createMonthlyCar);
 }

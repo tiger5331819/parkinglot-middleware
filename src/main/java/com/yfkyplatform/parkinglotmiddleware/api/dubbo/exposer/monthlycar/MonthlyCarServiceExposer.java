@@ -185,7 +185,8 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         create.setContactName(createMonthlyCarRpcReq.getContactName());
         create.setContactPhone(createMonthlyCarRpcReq.getContactPhone());
 
-        return monthlyAblitity.createMonthlyCar(create);
+        monthlyAblitity.createMonthlyCar(create);
+        return true;
     }
 
     /**
@@ -208,8 +209,8 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         renewal.setMoney(monthlyCarRenewalRpcReq.getMoney());
         renewal.setPayType(monthlyCarRenewalRpcReq.getPayType());
 
-
-        return monthlyAblitity.renewalMonthlyCar(renewal);
+        monthlyAblitity.renewalMonthlyCar(renewal);
+        return true;
     }
 
     /**
@@ -224,6 +225,7 @@ public class MonthlyCarServiceExposer implements IMonthlyCarService {
         IMonthlyAblitity monthlyAblitity = factory.manager(ParkingLotManagerEnum.fromCode(removeMonthlyCarRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(removeMonthlyCarRpcReq.getParkingLotId()).ability().monthly();
 
-        return monthlyAblitity.removeMonthlyCar(removeMonthlyCarRpcReq.getCarNo());
+        monthlyAblitity.removeMonthlyCar(removeMonthlyCarRpcReq.getCarNo());
+        return true;
     }
 }
