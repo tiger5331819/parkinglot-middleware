@@ -48,14 +48,8 @@ public abstract class YfkyWebClient {
 
     protected Consumer<? super Throwable> errFunction() {
         return (Throwable err) -> {
-            if (err instanceof WebClientResponseException) {
-                String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
-                log.error("网络错误:"+errResult);
-                throw new RuntimeException("网络错误");
-            } else {
-                log.error(err.toString());
-                throw new RuntimeException(err.getMessage());
-            }
+            log.error("远端车场链接异常:"+err.toString());
+            throw new RuntimeException("远端车场链接异常");
         };
     }
 
@@ -80,47 +74,26 @@ public abstract class YfkyWebClient {
     }
 
     protected <R, T> Mono<R> post(T data, String url, ParameterizedTypeReference<R> result) {
-        try{
-            return postBase(data, url, null)
-                    .bodyToMono(result)
-                    .doOnError(errFunction());
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-            throw new RuntimeException("网络出错");
-        }
+        return postBase(data, url, null)
+                .bodyToMono(result)
+                .doOnError(errFunction());
     }
 
     protected <R, T> Mono<R> post(T data, String url, Class<R> result) {
-        try{
-            return postBase(data, url, null)
-                    .bodyToMono(result)
-                    .doOnError(errFunction());
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-            throw new RuntimeException("网络出错");
-        }
+        return postBase(data, url, null)
+                .bodyToMono(result)
+                .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, Class<R> result) {
-        try{
-            return getBase(url, null)
-                    .bodyToMono(result)
-                    .doOnError(errFunction());
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-            throw new RuntimeException("网络出错");
-        }
+        return getBase(url, null)
+                .bodyToMono(result)
+                .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
-        try{
-            return getBase(url, null)
-                    .bodyToMono(result)
-                    .doOnError(errFunction());
-        }catch (Exception ex){
-            log.error(ex.getMessage());
-            throw new RuntimeException("网络出错");
-        }
-
+        return getBase(url, null)
+                .bodyToMono(result)
+                .doOnError(errFunction());
     }
 }
