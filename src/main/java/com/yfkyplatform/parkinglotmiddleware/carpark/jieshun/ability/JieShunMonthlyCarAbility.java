@@ -3,6 +3,8 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.ability;
 import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.date.LocalDateTimeUtil;
 import cn.hutool.core.util.ObjectUtil;
+import com.yfkyframework.common.core.constant.responsecode.MemberResponseCode;
+import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.api.IJieShunMonthlyCar;
 import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.resp.daoerbase.DaoerBaseRespHead;
 import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.resp.monthlycar.MonthlyCarHistoryResult;
@@ -131,18 +133,15 @@ public class JieShunMonthlyCarAbility implements IMonthlyAblitity {
      * @return
      */
     @Override
-    public Boolean renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
+    public void renewalMonthlyCar(MonthlyCarRenewal monthlyCarRenewal) {
         DaoerBaseRespHead result = api.renewalMonthlyCar(monthlyCarRenewal.getCarNo(),
                         LocalDateTimeUtil.format(monthlyCarRenewal.getNewStartTime(), DatePattern.NORM_DATETIME_PATTERN),
                         LocalDateTimeUtil.format(monthlyCarRenewal.getNewEndTime(), DatePattern.NORM_DATETIME_PATTERN),
                         monthlyCarRenewal.getMoney().movePointLeft(2).toString(), monthlyCarRenewal.getPayType())
                 .block().getHead();
 
-        if (result.getStatus() == 1) {
-            return true;
-        } else {
-            log.error(result.getMessage());
-            return false;
+        if (result.getStatus() != 1) {
+            throw new ExposerException(MemberResponseCode.DEFAULT,result.getMessage());
         }
     }
 
@@ -153,13 +152,10 @@ public class JieShunMonthlyCarAbility implements IMonthlyAblitity {
      * @return
      */
     @Override
-    public Boolean removeMonthlyCar(String carNo) {
+    public void removeMonthlyCar(String carNo) {
         DaoerBaseRespHead result = api.removeMonthlyCar(carNo).block().getHead();
-        if (result.getStatus() == 1) {
-            return true;
-        } else {
-            log.error(result.getMessage());
-            return false;
+        if (result.getStatus() != 1) {
+            throw new ExposerException(MemberResponseCode.DEFAULT,result.getMessage());
         }
     }
 
@@ -170,18 +166,15 @@ public class JieShunMonthlyCarAbility implements IMonthlyAblitity {
      * @return
      */
     @Override
-    public Boolean createMonthlyCar(CreateMonthlyCar createMonthlyCar) {
+    public void createMonthlyCar(CreateMonthlyCar createMonthlyCar) {
         DaoerBaseRespHead result = api.createMonthlyCar(createMonthlyCar.getCarNo(), createMonthlyCar.getCardTypeId(),
                         LocalDateTimeUtil.format(createMonthlyCar.getStartTime(), DatePattern.NORM_DATETIME_PATTERN),
                         LocalDateTimeUtil.format(createMonthlyCar.getEndTime(), DatePattern.NORM_DATETIME_PATTERN),
                         createMonthlyCar.getMoney().movePointLeft(2).toString(), createMonthlyCar.getPayType(), createMonthlyCar.getContactName(), createMonthlyCar.getContactPhone())
                 .block().getHead();
 
-        if (result.getStatus() == 1) {
-            return true;
-        } else {
-            log.error(result.getMessage());
-            return false;
+        if (result.getStatus() != 1) {
+            throw new ExposerException(MemberResponseCode.DEFAULT,result.getMessage());
         }
     }
 
