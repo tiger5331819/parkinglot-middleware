@@ -101,9 +101,9 @@ public class CarPortService {
 
         Space carSpace = car.getCarSpace();
         if (StrUtil.isNotBlank(carSpace.getChannelId())) {
-            car = calculatePayMessage(carSpace.getChannelId(), 0, null);
-            if (StrUtil.isNotBlank(car.getCarNo())) {
-                return car;
+            Car channelCar = calculatePayMessage(carSpace.getChannelId(), 0, null);
+            if (StrUtil.isNotBlank(channelCar.getCarNo())&&StrUtil.equals(car.getCarNo(),channelCar.getCarNo())) {
+                return channelCar;
             }
         }
 
