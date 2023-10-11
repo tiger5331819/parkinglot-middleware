@@ -72,7 +72,7 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         TokenResult result;
         int retryCount = 0;
         do {
-            result = postBase(token, "api/index/auth/token", null).bodyToMono(TokenResult.class).doOnError(errFunction()).block();
+            result = postBase(token, "api/index/auth/token", null).bodyToMono(TokenResult.class).onErrorContinue(errFunction()).block();
             retryCount++;
         } while (StrUtil.isBlank(result.getData()) && retryCount < 3);
         token.setToken(result.getData());

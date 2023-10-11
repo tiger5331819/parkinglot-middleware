@@ -8,6 +8,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 /**
@@ -23,8 +24,8 @@ public class SaaSWebClient extends YfkyWebClient {
     }
 
     @Override
-    protected Consumer<? super Throwable> errFunction() {
-        return (Throwable err) -> {
+    protected BiConsumer<Throwable, Object> errFunction() {
+        return (Throwable err,Object val) -> {
             if (err instanceof WebClientResponseException) {
                 String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
                 log.error(errResult);
@@ -58,7 +59,7 @@ public class SaaSWebClient extends YfkyWebClient {
     public Map<String, Object> post(String data, String url, String token) throws JsonProcessingException {
         String result = postBase(data, url, token)
                 .bodyToMono(String.class)
-                .doOnError(errFunction())
+                .onErrorContinue(errFunction())
                 .block();
 
         return getData(result);
@@ -67,7 +68,7 @@ public class SaaSWebClient extends YfkyWebClient {
     public Map<String, Object> get(String url, String token) throws JsonProcessingException {
         String result = getBase(url, token)
                 .bodyToMono(String.class)
-                .doOnError(errFunction())
+                .onErrorContinue(errFunction())
                 .block();
 
         return getData(result);
