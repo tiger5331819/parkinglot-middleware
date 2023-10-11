@@ -58,16 +58,15 @@ public class DueCarOpenController {
         dueCar.setPlateColor(findDueCarReq.getPlateColor());
         dueCar.setVehicleType(findDueCarReq.getVehicleType());
 
-        AccountRpcContext.setOperatorId(operatorId);
-        ParkingLotPod parkingLot=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
-        parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn());
-
         QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,findDueCarReq.getInOrOut());
         FindDueCarResp resp= BeanUtil.copyProperties(result, FindDueCarResp.class);
 
         resp.setDueCar(result.getDueCar()==1?2:1);
 
         if(result.getDueCar()==1){
+            AccountRpcContext.setOperatorId(operatorId);
+            ParkingLotPod parkingLot=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
+            parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn());
             redisTool.set("dueMessage:"+findDueCarReq.getPlateNumber(), JSONUtil.toJsonStr(configuration));
             log.info("车辆："+findDueCarReq.getPlateNumber()+"被联动催缴,车场配置信息："+configuration);
         }
