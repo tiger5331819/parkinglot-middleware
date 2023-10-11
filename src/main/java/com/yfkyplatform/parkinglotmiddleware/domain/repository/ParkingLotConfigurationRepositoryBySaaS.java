@@ -61,7 +61,7 @@ public class ParkingLotConfigurationRepositoryBySaaS implements IParkingLotConfi
                 DaoerConfiguration daoerCfg = new DaoerConfiguration();
                 daoerCfg.setAppName(resp.getThirdOSName());
 
-                if(StrUtil.contains(resp.getThirdId(),"H")){
+                if(StrUtil.contains(resp.getThirdId(),"K")){
                     daoerCfg.setParkId(resp.getThirdId());
                     daoerCfg.setBaseUrl(env.getProperty(prefix + resp.getThirdId() + ".baseUrl"));
                     daoerCfg.setImgUrl(env.getProperty(prefix + resp.getThirdId() + ".imgUrl"));
