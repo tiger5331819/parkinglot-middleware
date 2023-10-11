@@ -48,7 +48,11 @@ public abstract class YfkyWebClient {
 
     protected Consumer<? super Throwable> errFunction() {
         return (Throwable err) -> {
-            log.error("远端车场链接异常:"+err.toString());
+            String body=null;
+            if(err instanceof WebClientResponseException){
+                body = ((WebClientResponseException) err).getResponseBodyAsString();
+            }
+            log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+err.toString());
             throw new RuntimeException("远端车场链接异常");
         };
     }
