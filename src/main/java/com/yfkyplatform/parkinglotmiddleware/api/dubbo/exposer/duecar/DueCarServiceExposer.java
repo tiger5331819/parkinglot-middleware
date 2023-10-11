@@ -1,13 +1,11 @@
 package com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.duecar;
 
-import cn.hutool.json.JSONUtil;
 import com.yfkyframework.common.core.exception.ExposerException;
 import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.IDueCarService;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarConfigurationRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarSuccessRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
@@ -42,12 +40,10 @@ public class DueCarServiceExposer implements IDueCarService {
      */
     @Override
     public void dueCarAccess(DueCarSuccessRpcReq dueCarSuccessRpcReq) throws ExposerException {
-        ParkingLotConfiguration configuration=JSONUtil.toBean((String) redisTool.getWithDelete("dueMessage:"+dueCarSuccessRpcReq.getCarNo()), ParkingLotConfiguration.class);
-        log.info("车辆："+dueCarSuccessRpcReq.getCarNo()+"联动催缴补缴成功通知,车场配置信息："+configuration);
         AccountRpcContext.setOperatorId(dueCarSuccessRpcReq.getOperatorId());
 
-        DaoerParkingLot parkingLot = factory.manager(configuration.getManagerType())
-                .parkingLot(configuration.getId());
+        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
+                .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
         parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
     }
 

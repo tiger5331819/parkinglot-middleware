@@ -37,6 +37,9 @@ public class DueCarController {
     @Operation(summary =  "补缴成功通知")
     @PostMapping("/dueCarAccess")
     public void dueCarAccess(@PathVariable Integer parkingLotManager, @PathVariable String parkingLotId, @RequestBody DueCarSuccessRpcReq rpcReq) {
+        rpcReq.setParkingLotManagerCode(parkingLotManager);
+        rpcReq.setParkingLotId(parkingLotId);
+
         dueCarService.dueCarAccess(rpcReq);
     }
 
