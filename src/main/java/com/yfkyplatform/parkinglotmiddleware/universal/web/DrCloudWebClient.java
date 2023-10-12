@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * @author Suhuyuan
  */
 @Slf4j
-public class DrCloudWebClient extends YfkyWebClient {
+public class DrCloudWebClient extends ParkingLotWebClient {
     /**
      * 令牌名称
      */
@@ -47,7 +47,7 @@ public class DrCloudWebClient extends YfkyWebClient {
     public Map<String, Object> post(String data, String url) throws JsonProcessingException {
         String result = postBase(data, url, null)
                 .bodyToMono(String.class)
-                .onErrorContinue(errFunction())
+                .onErrorContinue(errContinueFunction())
                 .block();
 
         return getData(result);
@@ -67,7 +67,7 @@ public class DrCloudWebClient extends YfkyWebClient {
 
     private String token() throws JsonProcessingException {
         String result = postBase("", "login/oauth/token?grant_type=password&client_id=SampleClientId&client_secret=123456&username=admin&password=62c1c48636b618319f9414999ccfb420c8fc7943&inputStr=5sse", null)
-                .bodyToMono(String.class).onErrorContinue(errFunction()).block();
+                .bodyToMono(String.class).onErrorContinue(errContinueFunction()).block();
 
         Map<String, Object> resultData = getData(result);
 

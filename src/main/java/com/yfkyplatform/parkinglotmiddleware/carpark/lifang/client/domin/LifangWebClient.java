@@ -5,7 +5,7 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.Sign;
 import cn.hutool.crypto.asymmetric.SignAlgorithm;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import reactor.core.publisher.Mono;
@@ -18,7 +18,7 @@ import java.util.Arrays;
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class LifangWebClient extends YfkyWebClient {
+public abstract class LifangWebClient extends ParkingLotWebClient {
     protected String secret;
 
     protected String appId;

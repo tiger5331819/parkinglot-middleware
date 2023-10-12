@@ -17,14 +17,14 @@ import java.util.function.Consumer;
  * @author Suhuyuan
  */
 @Slf4j
-public class SaaSWebClient extends YfkyWebClient {
+public class SaaSWebClient extends ParkingLotWebClient {
 
     public SaaSWebClient(String saasBaseUrl) {
         super(saasBaseUrl, 30);
     }
 
     @Override
-    protected BiConsumer<Throwable, Object> errFunction() {
+    protected BiConsumer<Throwable, Object> errContinueFunction() {
         return (Throwable err,Object val) -> {
             if (err instanceof WebClientResponseException) {
                 String errResult = ((WebClientResponseException) err).getResponseBodyAsString();
@@ -59,7 +59,7 @@ public class SaaSWebClient extends YfkyWebClient {
     public Map<String, Object> post(String data, String url, String token) throws JsonProcessingException {
         String result = postBase(data, url, token)
                 .bodyToMono(String.class)
-                .onErrorContinue(errFunction())
+                .onErrorContinue(errContinueFunction())
                 .block();
 
         return getData(result);
@@ -68,7 +68,7 @@ public class SaaSWebClient extends YfkyWebClient {
     public Map<String, Object> get(String url, String token) throws JsonProcessingException {
         String result = getBase(url, token)
                 .bodyToMono(String.class)
-                .onErrorContinue(errFunction())
+                .onErrorContinue(errContinueFunction())
                 .block();
 
         return getData(result);

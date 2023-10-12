@@ -7,7 +7,7 @@ import com.alibaba.fastjson.parser.Feature;
 import com.yfkyframework.common.core.constant.responsecode.MemberResponseCode;
 import com.yfkyframework.common.core.exception.BizException;
 import com.yfkyplatform.parkinglotmiddleware.carpark.jieshun.client.domin.model.JieShunBase;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -23,7 +23,7 @@ import java.util.Base64;
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class JieShunWebClient extends YfkyWebClient {
+public abstract class JieShunWebClient extends ParkingLotWebClient {
     /**
      * 应用私钥
      */

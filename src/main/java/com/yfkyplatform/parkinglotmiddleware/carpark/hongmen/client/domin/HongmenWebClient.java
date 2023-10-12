@@ -3,7 +3,7 @@ package com.yfkyplatform.parkinglotmiddleware.carpark.hongmen.client.domin;
 import cn.hutool.core.util.IdUtil;
 import cn.hutool.crypto.SecureUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.hongmen.client.domin.model.HongmenBase;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import reactor.core.publisher.Mono;
@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class HongmenWebClient extends YfkyWebClient {
+public abstract class HongmenWebClient extends ParkingLotWebClient {
     protected String secret;
 
     protected String appId;

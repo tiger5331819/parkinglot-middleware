@@ -60,7 +60,7 @@ public class DaoerCarFeeAbility implements ICarFeeAblitity {
                 resp = api.getCarFeeInfoWithArrear(carNo).block();
             }
             CarFeeResultWithArrearByCharge result = checkCarFeeWithArrearResult(resp);
-            return carFeeToCarOrder(result, resp.getBody().getArrears());
+            return carFeeToCarOrder(result, ObjectUtil.isNull(resp.getBody()) ? null :resp.getBody().getArrears());
         } else {
             DaoerBaseResp<CarFeeResult> resp = api.getCarFeeInfo(carNo).block();
             CarFeeResult result = checkCarFeeResult(resp);

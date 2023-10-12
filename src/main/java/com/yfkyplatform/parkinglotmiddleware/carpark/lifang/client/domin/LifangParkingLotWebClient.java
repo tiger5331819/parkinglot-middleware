@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -15,7 +15,7 @@ import static com.yfkyplatform.parkinglotmiddleware.carpark.lifang.client.domin.
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class LifangParkingLotWebClient extends YfkyWebClient {
+public abstract class LifangParkingLotWebClient extends ParkingLotWebClient {
     protected String secret;
 
     public LifangParkingLotWebClient(String secret, String baseUrl) {

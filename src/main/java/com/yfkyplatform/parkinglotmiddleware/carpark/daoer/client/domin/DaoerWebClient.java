@@ -5,7 +5,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.Da
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.DaoerToken;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.TokenResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
-import com.yfkyplatform.parkinglotmiddleware.universal.web.YfkyWebClient;
+import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -19,7 +19,7 @@ import java.util.function.Consumer;
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class DaoerWebClient extends YfkyWebClient {
+public abstract class DaoerWebClient extends ParkingLotWebClient {
     /**
      * 令牌名称
      */
@@ -72,7 +72,11 @@ public abstract class DaoerWebClient extends YfkyWebClient {
         TokenResult result;
         int retryCount = 0;
         do {
-            result = postBase(token, "api/index/auth/token", null).bodyToMono(TokenResult.class).onErrorContinue(errFunction()).block();
+            result = postBase(token, "api/index/auth/token", null)
+                    .bodyToMono(TokenResult.class)
+                    .onErrorContinue(errContinueFunction())
+                    .doOnError(errFunction())
+                    .block();
             retryCount++;
         } while (StrUtil.isBlank(result.getData()) && retryCount < 3);
         token.setToken(result.getData());

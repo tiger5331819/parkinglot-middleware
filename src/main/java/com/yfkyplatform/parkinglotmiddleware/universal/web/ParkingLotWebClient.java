@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
+import cn.hutool.core.util.StrUtil;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
@@ -25,10 +26,10 @@ import java.util.function.Consumer;
  * @author Suhuyuan
  */
 @Slf4j
-public abstract class YfkyWebClient {
+public abstract class ParkingLotWebClient {
     private final WebClient client;
 
-    public YfkyWebClient(String baseUrl, int readTimeOutSeconds) {
+    public ParkingLotWebClient(String baseUrl, int readTimeOutSeconds) {
         SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
 
         TcpClient tcpClient = TcpClient.create()
@@ -49,17 +50,30 @@ public abstract class YfkyWebClient {
         return (HttpHeaders httpHeaders) -> httpHeaders.setContentType(MediaType.APPLICATION_JSON);
     }
 
-    protected BiConsumer<Throwable, Object> errFunction() {
+    protected BiConsumer<Throwable, Object> errContinueFunction() {
         return (Throwable err,Object val) -> {
             String body = null;
             if(val instanceof NettyDataBuffer){
                 body =((NettyDataBuffer)val).toString(CharsetUtil.UTF_8);
-            }else if(err instanceof WebClientResponseException){
-                body = ((WebClientResponseException) err).getResponseBodyAsString();
             }
+            if(StrUtil.isNotBlank(body)){
+                log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
+            }
+            throw new ParkingLotConnectException();
+        };
+    }
 
-            log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
-            throw new RuntimeException("远端车场链接异常");
+    protected Consumer<? super Throwable> errFunction() {
+        return (Throwable err) -> {
+            if (err instanceof WebClientResponseException) {
+                String body = ((WebClientResponseException) err).getResponseBodyAsString();
+                log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
+            } else if(err instanceof ParkingLotConnectException){
+                throw new RuntimeException(err);
+            } else{
+                log.error("远端车场链接异常:"+err);
+                throw new RuntimeException("远端车场链接异常",err);
+            }
         };
     }
 
@@ -86,25 +100,28 @@ public abstract class YfkyWebClient {
     protected <R, T> Mono<R> post(T data, String url, ParameterizedTypeReference<R> result) {
         return postBase(data, url, null)
                 .bodyToMono(result)
-                .onErrorContinue(errFunction());
+                .onErrorContinue(errContinueFunction());
     }
 
     protected <R, T> Mono<R> post(T data, String url, Class<R> result) {
 
         return postBase(data, url, null)
                 .bodyToMono(result)
-                .onErrorContinue(errFunction());
+                .onErrorContinue(errContinueFunction())
+                .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, Class<R> result) {
         return getBase(url, null)
                 .bodyToMono(result)
-                .onErrorContinue(errFunction());
+                .onErrorContinue(errContinueFunction())
+                .doOnError(errFunction());
     }
 
     protected <R> Mono<R> get(String url, ParameterizedTypeReference<R> result) {
         return getBase(url, null)
                 .bodyToMono(result)
-                .onErrorContinue(errFunction());
+                .onErrorContinue(errContinueFunction())
+                .doOnError(errFunction());
     }
 }
