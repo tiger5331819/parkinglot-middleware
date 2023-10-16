@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class DueCarProxy {
-    @DubboReference
+    @DubboReference(retries = 0)
     private PresspayLinkedServiceApi presspayLinkedServiceApi;
 
     /**
