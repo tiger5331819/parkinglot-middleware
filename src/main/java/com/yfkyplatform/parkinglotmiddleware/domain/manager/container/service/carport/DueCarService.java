@@ -7,6 +7,8 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.co
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
+import java.time.Duration;
+
 /**
  * 车场服务
  *
@@ -42,7 +44,7 @@ public class DueCarService {
         carSpace.setChannelId(channelId);
 
         redis.set(makeKey(carNo), channelId);
-        log.info("催缴车辆"+carNo+"在通道被催缴，通道ID："+channelId);
+        log.info("催缴车辆"+carNo+"在通道被催缴，通道ID："+channelId, Duration.ofMinutes(10));
         carPortService.updateSpace(carNo,carSpace);
     }
 
