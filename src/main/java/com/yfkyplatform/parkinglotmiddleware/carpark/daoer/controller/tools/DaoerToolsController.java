@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.controller.tools;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -37,7 +38,6 @@ import reactor.netty.tcp.TcpClient;
 
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -137,22 +137,26 @@ public class DaoerToolsController {
         SaaSWebClient saaSWebClient = testBox.saasClient(environment);
         Map<String, Object> data = saaSWebClient.get("mgntpc/tenant/get-tenant", token);
         Integer tenantId = (Integer) data.get("tenantId");
-        AtomicReference<Long> aliThirdId = new AtomicReference<>(null);
-        AtomicReference<Long> wxThirdId = new AtomicReference<>(null);
+        Long aliThirdId = null;
+        Long wxThirdId = null;
 
 
         Map<String, Object> data2 = saaSWebClient.get("mgntpc/tenant/get-tenant-thirdparty", token);
         Map<String, Object> aliApp = (Map<String, Object>) data2.get("aliApp");
-        aliThirdId.set((Long) aliApp.get("thirdpartyAppId"));
+        if(ObjectUtil.isNotNull(aliApp)){
+            aliThirdId=(Long) aliApp.get("thirdpartyAppId");
+        }
+
 
         Map<String, Object> wxMPApp = (Map<String, Object>) data2.get("wxMpApp");
-        wxThirdId.set((Long) wxMPApp.get("thirdpartyAppId"));
-
+        if(ObjectUtil.isNotNull(wxMPApp)){
+            wxThirdId=(Long) wxMPApp.get("thirdpartyAppId");
+        }
 
         SaaSPayMessageResultResp resp = new SaaSPayMessageResultResp();
         resp.setTenantId(tenantId);
-        resp.setAliThirdId(aliThirdId.get());
-        resp.setWxThirdId(wxThirdId.get());
+        resp.setAliThirdId(aliThirdId);
+        resp.setWxThirdId(wxThirdId);
 
         return resp;
     }

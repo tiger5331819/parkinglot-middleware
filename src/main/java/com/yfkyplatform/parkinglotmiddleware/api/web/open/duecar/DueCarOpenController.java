@@ -11,7 +11,6 @@ import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.resp.FindDueCar
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
-import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCar;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCarProxy;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueConfiguration;
@@ -38,12 +37,9 @@ public class DueCarOpenController {
 
     private final ParkingLotManagerFactory factory;
 
-    private final RedisTool redisTool;
-
-    public DueCarOpenController(DueCarProxy dueCarService, ParkingLotManagerFactory factory, RedisTool redisTool) {
+    public DueCarOpenController(DueCarProxy dueCarService, ParkingLotManagerFactory factory) {
         this.dueCarService = dueCarService;
         this.factory = factory;
-        this.redisTool = redisTool;
     }
 
     @Operation(summary = "查询是否是催缴车辆")
