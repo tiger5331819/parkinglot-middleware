@@ -43,8 +43,8 @@ public class DueCarService {
         Space carSpace=new Space();
         carSpace.setChannelId(channelId);
 
-        redis.set(makeKey(carNo), channelId);
-        log.info("催缴车辆"+carNo+"在通道被催缴，通道ID："+channelId, Duration.ofMinutes(10));
+        redis.set(makeKey(carNo), channelId, Duration.ofMinutes(10));
+        log.info("催缴车辆"+carNo+"在通道被催缴，通道ID："+channelId);
         carPortService.updateSpace(carNo,carSpace);
     }
 
