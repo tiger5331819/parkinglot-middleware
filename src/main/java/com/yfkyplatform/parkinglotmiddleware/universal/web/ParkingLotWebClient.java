@@ -68,8 +68,9 @@ public abstract class ParkingLotWebClient {
             if (err instanceof WebClientResponseException) {
                 String body = ((WebClientResponseException) err).getResponseBodyAsString();
                 log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
+                throw new RuntimeException("远端车场链接异常",err);
             } else if(err instanceof ParkingLotConnectException){
-                throw new RuntimeException(err);
+                throw new RuntimeException("远端车场链接异常",err);
             } else{
                 log.error("远端车场链接异常:"+err);
                 throw new RuntimeException("远端车场链接异常",err);
