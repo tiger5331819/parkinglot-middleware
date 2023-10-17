@@ -7,12 +7,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarConfigurat
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarSuccessRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.DueCarService;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Space;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCar;
-import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCarProxy;
-import com.yfkyplatform.presspay.api.resp.QueryUrgePayMsgRpcResp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
@@ -29,11 +24,8 @@ public class DueCarServiceExposer implements IDueCarService {
 
     private final ParkingLotManagerFactory factory;
 
-    private final DueCarProxy dueCarProxy;
-
-    public DueCarServiceExposer(ParkingLotManagerFactory factory, DueCarProxy dueCarProxy) {
+    public DueCarServiceExposer(ParkingLotManagerFactory factory) {
         this.factory = factory;
-        this.dueCarProxy = dueCarProxy;
     }
 
     /**
@@ -48,19 +40,6 @@ public class DueCarServiceExposer implements IDueCarService {
 
         ParkingLotPod parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
-
-        DueCarService dueCarService=parkingLot.dueCar();
-        Space space=dueCarService.findDucCar(dueCarSuccessRpcReq.getCarNo());
-
-        DueCar dueCar = new DueCar();
-        dueCar.setPlateNumber(dueCarSuccessRpcReq.getCarNo());
-
-        QueryUrgePayMsgRpcResp result = dueCarProxy.checkDueCar(dueCarSuccessRpcReq.getOperatorId(), parkingLot.configuration(), dueCar,space.getLocation());
-
-        if(result.getDueCar()==1){
-            log.warn("车辆"+dueCarSuccessRpcReq.getCarNo()+" 补缴情况不达标"+result);
-            return;
-        }
 
         parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
     }
