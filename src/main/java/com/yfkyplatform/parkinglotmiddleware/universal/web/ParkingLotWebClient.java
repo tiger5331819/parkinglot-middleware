@@ -72,7 +72,6 @@ public abstract class ParkingLotWebClient {
             } else if(err instanceof ParkingLotConnectException){
                 throw new RuntimeException("远端车场链接异常",err);
             } else{
-                log.error("远端车场链接异常:"+err);
                 throw new RuntimeException("远端车场链接异常",err);
             }
         };
