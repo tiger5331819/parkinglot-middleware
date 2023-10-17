@@ -88,6 +88,7 @@ public class DueCarService {
             }
 
             log.info("催缴车辆"+carNo+"在通道完成催缴，通道ID："+carSpace.getChannelId());
+            redis.delete(makeKey(car.getCarNo()));
         }else{
             throw new ExposerException(-1,"催缴车辆"+car.getCarNo()+"不存在通道催缴记录");
         }

@@ -64,7 +64,7 @@ public class ContextService {
 
 
     public void remove(String carNo) {
-        redis.getWithDelete(makeKey(carNo));
+        redis.delete(makeKey(carNo));
     }
 
     public void update(Car car) {

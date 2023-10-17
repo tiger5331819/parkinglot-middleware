@@ -46,6 +46,10 @@ public class RedisTool {
         return data;
     }
 
+    public <K> void delete(K key) {
+        redisTemplate.delete(MakeKey(key));
+    }
+
     public <K> Boolean check(K key) {
         return redisTemplate.hasKey(MakeKey(key));
     }
