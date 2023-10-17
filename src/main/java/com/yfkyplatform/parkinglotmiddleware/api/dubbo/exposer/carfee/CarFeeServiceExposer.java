@@ -9,8 +9,8 @@ import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.CarFeeRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.ChannelCarRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultByListRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.carfee.CarOrderPayMessage;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.CarPortService;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
@@ -117,7 +117,7 @@ public class CarFeeServiceExposer implements ICarFeeService {
     public CarOrderResultByListRpcResp getCarFee(CarFeeRpcReq carFeeRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(carFeeRpcReq.getOperatorId());
 
-        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(carFeeRpcReq.getParkingLotManagerCode()).getName())
+        ParkingLotPod parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(carFeeRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(carFeeRpcReq.getParkingLotId());
 
         return makeCarOrderResultByListRpcResp(parkingLot.carPort().calculatePayMessage(carFeeRpcReq.getCarNo()));
@@ -133,7 +133,7 @@ public class CarFeeServiceExposer implements ICarFeeService {
     public CarOrderResultByListRpcResp getChannelCarFee(ChannelCarRpcReq channelCarRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(channelCarRpcReq.getOperatorId());
 
-        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(channelCarRpcReq.getParkingLotManagerCode()).getName())
+        ParkingLotPod parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(channelCarRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(channelCarRpcReq.getParkingLotId());
         return makeCarOrderResultByListRpcResp(parkingLot.carPort()
                 .calculatePayMessage(channelCarRpcReq.getChannelId(), channelCarRpcReq.getScanType(), channelCarRpcReq.getOpenId()));

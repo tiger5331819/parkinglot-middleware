@@ -5,10 +5,14 @@ import com.yfkyframework.util.context.AccountRpcContext;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.IDueCarService;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarConfigurationRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.duecar.request.DueCarSuccessRpcReq;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLot;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.carport.DueCarService;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Space;
 import com.yfkyplatform.parkinglotmiddleware.universal.ParkingLotManagerEnum;
-import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCar;
+import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCarProxy;
+import com.yfkyplatform.presspay.api.resp.QueryUrgePayMsgRpcResp;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.dubbo.config.annotation.DubboService;
 import org.springframework.stereotype.Component;
@@ -25,11 +29,11 @@ public class DueCarServiceExposer implements IDueCarService {
 
     private final ParkingLotManagerFactory factory;
 
-    private final RedisTool redisTool;
+    private final DueCarProxy dueCarProxy;
 
-    public DueCarServiceExposer(ParkingLotManagerFactory factory, RedisTool redisTool) {
+    public DueCarServiceExposer(ParkingLotManagerFactory factory, DueCarProxy dueCarProxy) {
         this.factory = factory;
-        this.redisTool = redisTool;
+        this.dueCarProxy = dueCarProxy;
     }
 
     /**
@@ -42,8 +46,22 @@ public class DueCarServiceExposer implements IDueCarService {
     public void dueCarAccess(DueCarSuccessRpcReq dueCarSuccessRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(dueCarSuccessRpcReq.getOperatorId());
 
-        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
+        ParkingLotPod parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarSuccessRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarSuccessRpcReq.getParkingLotId());
+
+        DueCarService dueCarService=parkingLot.dueCar();
+        Space space=dueCarService.findDucCar(dueCarSuccessRpcReq.getCarNo());
+
+        DueCar dueCar = new DueCar();
+        dueCar.setPlateNumber(dueCarSuccessRpcReq.getCarNo());
+
+        QueryUrgePayMsgRpcResp result = dueCarProxy.checkDueCar(dueCarSuccessRpcReq.getOperatorId(), parkingLot.configuration(), dueCar,space.getLocation());
+
+        if(result.getDueCar()!=1){
+            log.warn("车辆"+dueCarSuccessRpcReq.getCarNo()+" 补缴情况不达标");
+            return;
+        }
+
         parkingLot.dueCar().dueCarSuccess(dueCarSuccessRpcReq.getCarNo());
     }
 
@@ -57,7 +75,7 @@ public class DueCarServiceExposer implements IDueCarService {
     public void configDueCar(DueCarConfigurationRpcReq dueCarConfigurationRpcReq) throws ExposerException {
         AccountRpcContext.setOperatorId(dueCarConfigurationRpcReq.getOperatorId());
 
-        DaoerParkingLot parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarConfigurationRpcReq.getParkingLotManagerCode()).getName())
+        ParkingLotPod parkingLot = factory.manager(ParkingLotManagerEnum.fromCode(dueCarConfigurationRpcReq.getParkingLotManagerCode()).getName())
                 .parkingLot(dueCarConfigurationRpcReq.getParkingLotId());
 
         parkingLot.ability().carport().configDueCar(dueCarConfigurationRpcReq.getUrgepayNotIn(),dueCarConfigurationRpcReq.getUrgepayNotOut(),

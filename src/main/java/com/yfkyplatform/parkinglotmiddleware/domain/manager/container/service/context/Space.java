@@ -14,4 +14,9 @@ public class Space {
      * 通道Id
      */
     private String channelId;
+
+    /**
+     * 位置 1：入口 2：出口
+     */
+    private Integer location;
 }

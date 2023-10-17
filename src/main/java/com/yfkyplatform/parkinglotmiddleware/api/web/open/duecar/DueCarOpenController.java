@@ -61,7 +61,7 @@ public class DueCarOpenController {
         if(result.getDueCar()==1&&findDueCarReq.getInOrOut()==1){
             AccountRpcContext.setOperatorId(operatorId);
             ParkingLotPod parkingLot=factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
-            parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn());
+            parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn(),1);
             log.info("联动催缴返回参数："+resp);
         }
         return resp;

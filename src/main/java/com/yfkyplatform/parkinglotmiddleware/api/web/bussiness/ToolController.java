@@ -11,7 +11,6 @@ import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.ChannelCarRpcReq
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.request.OrderPayMessageRpcReq;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultByListRpcResp;
 import com.yfkyplatform.parkinglotmiddleware.api.carfee.response.CarOrderResultRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.carport.ICarPortService;
 import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.req.PayAccessReq;
 import com.yfkyplatform.parkinglotmiddleware.api.web.bussiness.resp.CarResp;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
@@ -42,14 +41,11 @@ import java.util.stream.Collectors;
 @RestController
 public class ToolController {
 
-    private final ICarPortService carPortService;
-
     private final ICarFeeService carFeeService;
 
     private final ParkingLotManagerFactory factory;
 
-    public ToolController(ICarPortService carPortService, ICarFeeService carFeeService, ParkingLotManagerFactory factory) {
-        this.carPortService = carPortService;
+    public ToolController(ICarFeeService carFeeService, ParkingLotManagerFactory factory) {
         this.carFeeService = carFeeService;
         this.factory = factory;
     }
