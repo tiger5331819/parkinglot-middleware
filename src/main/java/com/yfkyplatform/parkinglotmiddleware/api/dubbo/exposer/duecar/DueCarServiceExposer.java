@@ -57,7 +57,7 @@ public class DueCarServiceExposer implements IDueCarService {
 
         QueryUrgePayMsgRpcResp result = dueCarProxy.checkDueCar(dueCarSuccessRpcReq.getOperatorId(), parkingLot.configuration(), dueCar,space.getLocation());
 
-        if(result.getDueCar()!=1){
+        if(result.getDueCar()==1){
             log.warn("车辆"+dueCarSuccessRpcReq.getCarNo()+" 补缴情况不达标");
             return;
         }
