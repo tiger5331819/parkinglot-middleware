@@ -205,6 +205,7 @@ public class DaoerToolsController {
             allURLResultResp.setCarInListUrl(origin + "/daoer/in/list");
             allURLResultResp.setCarOutUrl(origin + "/daoer/out");
             allURLResultResp.setCarOutListUrl(origin + "/daoer/out/list");
+            allURLResultResp.setDueUrl(testBox.envUrl().environmentGateWayURL(environment)+ "outside/duecar/"+ resultResp.getTenantId());
 
             return allURLResultResp;
         }).collect(Collectors.toList());

@@ -33,6 +33,9 @@ public class AllURLResultResp {
     @Schema(description =  "入场通知")
     private String carInUrl;
 
+    @Schema(description = "联动催缴URL")
+    private String dueUrl;
+
     @Schema(description =  "批量入场通知")
     private String carInListUrl;
 
