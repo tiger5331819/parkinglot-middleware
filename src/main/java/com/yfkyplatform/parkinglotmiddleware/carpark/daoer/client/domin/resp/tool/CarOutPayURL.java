@@ -15,6 +15,11 @@ public class CarOutPayURL {
     private String url;
 
     /**
+     * 通道出场缴费URL（当前通道费用）
+     */
+    private String onlyChannelUrl;
+
+    /**
      * 通道ID
      */
     private String channelId;

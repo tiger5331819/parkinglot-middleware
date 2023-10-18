@@ -122,6 +122,9 @@ public class DaoerToolsController {
             stringBuilder.append(item.getUrl());
 
             item.setUrl(stringBuilder.toString());
+
+            StringBuilder onlyChannelStringBuilder=new StringBuilder(stringBuilder.toString());
+            item.setOnlyChannelUrl(onlyChannelStringBuilder.append("&callSwitch=0").toString());
         });
 
         URLResultResp resp = new URLResultResp();
