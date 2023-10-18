@@ -196,7 +196,7 @@
         <dependency>
             <groupId>com.yfkyplatform.presspay</groupId>
             <artifactId>presspay-api</artifactId>
-            <version>1.0.9-SNAPSHOT</version>
+            <version>1.1.0-RELEASE</version>
         </dependency>
 
         <!-- YfkyFramework -->
