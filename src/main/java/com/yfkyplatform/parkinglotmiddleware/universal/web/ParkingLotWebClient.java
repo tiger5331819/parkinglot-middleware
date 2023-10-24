@@ -5,6 +5,7 @@ import io.netty.channel.ChannelOption;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
+import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -15,7 +16,7 @@ import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
-import reactor.netty.tcp.TcpClient;
+import reactor.netty.http.client.HttpClient;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -29,20 +30,23 @@ import java.util.function.Consumer;
 public abstract class ParkingLotWebClient {
     private final WebClient client;
 
-    public ParkingLotWebClient(String baseUrl, int readTimeOutSeconds) {
+    public ParkingLotWebClient(String baseUrl, int timeOutSeconds) {
         SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
 
-        TcpClient tcpClient = TcpClient.create()
-                .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-                .secure(spec->spec.sslContext(sslContextBuilder))
-                .doOnConnected(connection ->
-                        connection.addHandlerLast(new ReadTimeoutHandler(readTimeOutSeconds)));
+
+        HttpClient httpClient = HttpClient.create()
+                .tcpConfiguration(client -> client
+                        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
+                        .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds))
+                                .addHandlerLast(new WriteTimeoutHandler(timeOutSeconds)))
+                )
+                .secure(spec -> spec.sslContext(sslContextBuilder));
 
         client = WebClient
                 .builder()
                 .baseUrl(baseUrl)
                 .defaultHeaders(headersConsumer())
-                .clientConnector(new ReactorClientHttpConnector(reactor.netty.http.client.HttpClient.from(tcpClient)))
+                .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
     }
 
@@ -54,12 +58,13 @@ public abstract class ParkingLotWebClient {
         return (Throwable err,Object val) -> {
             String body = null;
             if(val instanceof NettyDataBuffer){
-                body =((NettyDataBuffer)val).toString(CharsetUtil.UTF_8);
+                NettyDataBuffer nettyDataBuffer=((NettyDataBuffer)val);
+                body =nettyDataBuffer.toString(CharsetUtil.UTF_8);
+                nettyDataBuffer.release();
             }
             if(StrUtil.isNotBlank(body)){
                 log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
             }
-            throw new ParkingLotConnectException();
         };
     }
 
@@ -68,11 +73,9 @@ public abstract class ParkingLotWebClient {
             if (err instanceof WebClientResponseException) {
                 String body = ((WebClientResponseException) err).getResponseBodyAsString();
                 log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
-                throw new RuntimeException("远端车场链接异常",err);
-            } else if(err instanceof ParkingLotConnectException){
-                throw new RuntimeException("远端车场链接异常",err);
+                throw new ParkingLotConnectException(err);
             } else{
-                throw new RuntimeException("远端车场链接异常",err);
+                throw new ParkingLotConnectException(err);
             }
         };
     }

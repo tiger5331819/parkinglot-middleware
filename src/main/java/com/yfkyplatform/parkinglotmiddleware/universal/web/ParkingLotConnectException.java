@@ -7,12 +7,12 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
  */
 
 public class ParkingLotConnectException extends RuntimeException{
-    private static final String message="远端车场链接异常";
-    public ParkingLotConnectException() {
-        super(message);
+    private static final String MESSAGE ="远端车场链接异常";
+    ParkingLotConnectException() {
+        super(MESSAGE);
     }
 
     public ParkingLotConnectException(Throwable cause) {
-        super(message,cause);
+        super(MESSAGE,cause);
     }
 }
