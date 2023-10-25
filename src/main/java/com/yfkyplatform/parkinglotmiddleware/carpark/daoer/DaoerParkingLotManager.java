@@ -36,7 +36,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
         }
         DaoerConfiguration daoerCfg = cfg.getConfig();
         DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(cfg.getId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), cfg.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
-        return new DaoerParkingLot(parkingLotConfiguration, redis);
+        return new DaoerParkingLot(parkingLotConfiguration, infrastructure.getRedis(),infrastructure.getTestBox());
     }
 
     /**
@@ -52,7 +52,7 @@ public class DaoerParkingLotManager extends ParkingLotManager<DaoerParkingLot, D
         for (ParkingLotConfiguration<DaoerConfiguration> item : cfgList) {
             DaoerConfiguration daoerCfg = item.getConfig();
             DaoerParkingLotConfiguration parkingLotConfiguration = new DaoerParkingLotConfiguration(item.getId(), daoerCfg.getAppName(), daoerCfg.getParkId(), daoerCfg.getBaseUrl(), item.getDescription(), daoerCfg.getImgUrl(), daoerCfg.getBackTrack());
-            dataList.add(new DaoerParkingLot(parkingLotConfiguration, redis));
+            dataList.add(new DaoerParkingLot(parkingLotConfiguration, infrastructure.getRedis(),infrastructure.getTestBox()));
         }
         return dataList;
     }

@@ -36,7 +36,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
         }
         HongmenConfiguration hongmenCfg = cfg.getConfig();
         HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(cfg.getId(), hongmenCfg.getAppId(), hongmenCfg.getSecret(), hongmenCfg.getBaseUrl(), cfg.getDescription());
-        return new HongmenParkingLot(parkingLotConfiguration, redis);
+        return new HongmenParkingLot(parkingLotConfiguration, infrastructure.getRedis());
     }
 
     /**
@@ -52,7 +52,7 @@ public class HongmenParkingLotManager extends ParkingLotManager<HongmenParkingLo
         for (ParkingLotConfiguration<HongmenConfiguration> item : cfgList) {
             HongmenConfiguration hongmen = item.getConfig();
             HongmenParkingLotConfiguration parkingLotConfiguration = new HongmenParkingLotConfiguration(item.getId(), hongmen.getAppId(), hongmen.getSecret(), hongmen.getBaseUrl(), item.getDescription());
-            dataList.add(new HongmenParkingLot(parkingLotConfiguration, redis));
+            dataList.add(new HongmenParkingLot(parkingLotConfiguration, infrastructure.getRedis()));
         }
         return dataList;
     }

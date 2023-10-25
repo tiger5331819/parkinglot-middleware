@@ -9,6 +9,7 @@ import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLot
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.ability.ParkingLotAbilityService;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -23,9 +24,12 @@ import java.util.Optional;
 public class DaoerParkingLot extends ParkingLotPod{
     private final DaoerClient daoer;
 
-    public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis) {
+    private final TestBox testBox;
+
+    public DaoerParkingLot(DaoerParkingLotConfiguration daoerParkingLotInfo, RedisTool redis, TestBox testBox) {
         super(daoerParkingLotInfo, redis);
-        daoer = new DaoerClient(daoerParkingLotInfo.getId(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), daoerParkingLotInfo.getImgUrl(), redis, 6);
+        this.testBox=testBox;
+        daoer = new DaoerClient(daoerParkingLotInfo.getId(), daoerParkingLotInfo.getAppName(), daoerParkingLotInfo.getParkId(), daoerParkingLotInfo.getBaseUrl(), daoerParkingLotInfo.getImgUrl(), redis, 6,testBox);
     }
 
     @Override
@@ -36,7 +40,7 @@ public class DaoerParkingLot extends ParkingLotPod{
     @Override
     public <T> T client() {
         DaoerParkingLotConfiguration configuration = (DaoerParkingLotConfiguration) cfg;
-        return (T) new DaoerClient(configuration.getId(), configuration.getAppName(), configuration.getParkId(), configuration.getBaseUrl(), configuration.getImgUrl(), redis, -1);
+        return (T) new DaoerClient(configuration.getId(), configuration.getAppName(), configuration.getParkId(), configuration.getBaseUrl(), configuration.getImgUrl(), redis, -1,testBox);
     }
 
     @Override

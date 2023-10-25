@@ -31,6 +31,7 @@ import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.too
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.CarOutPayURL;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.URLResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -52,8 +53,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DaoerClient extends DaoerWebClient implements IDaoerCarPort, IDaoerCarFee, IDaoerMonthlyCar, IDaoerGuest, IDaoerCoupon, IDaoerTool {
 
-    public DaoerClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int readTimeOutSeconds) {
-        super(id, appName, parkId, baseUrl, imgUrl, redisTool, readTimeOutSeconds);
+    public DaoerClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int readTimeOutSeconds, TestBox testBox) {
+        super(id, appName, parkId, baseUrl, imgUrl, redisTool,testBox,readTimeOutSeconds);
     }
 
     /**

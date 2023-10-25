@@ -4,7 +4,6 @@ import cn.hutool.core.util.ObjectUtil;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
 import com.yfkyplatform.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
 import com.yfkyplatform.parkinglotmiddleware.universal.AssertTool;
-import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
 import lombok.extern.slf4j.Slf4j;
 
 import javax.annotation.Nullable;
@@ -19,15 +18,12 @@ import java.util.stream.Collectors;
 @Slf4j
 public abstract class ParkingLotManager<T extends ParkingLotPod, Data extends ParkingLotConfiguration> {
 
-    private final ParkingLotManagerInfrastructure infrastructure;
+    protected final ParkingLotManagerInfrastructure infrastructure;
 
     public ParkingLotManager(ParkingLotManagerInfrastructure infrastructure, String managerType) {
-        this.redis = infrastructure.getRedis();
         this.infrastructure = infrastructure;
         this.managerType = managerType;
     }
-
-    protected RedisTool redis;
 
     protected String managerType;
 
