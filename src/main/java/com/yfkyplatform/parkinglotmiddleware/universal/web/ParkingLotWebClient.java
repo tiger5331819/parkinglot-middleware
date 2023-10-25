@@ -1,5 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import io.netty.channel.ChannelOption;
 import io.netty.handler.timeout.ReadTimeoutHandler;
@@ -26,25 +27,35 @@ import java.util.function.Function;
  */
 @Slf4j
 public abstract class ParkingLotWebClient {
-    private final WebClient client;
+    private WebClient client;
 
     protected final int timeOutSeconds;
 
+    private final String baseUrl;
+
     public ParkingLotWebClient(String baseUrl, int timeOutSeconds) {
         this.timeOutSeconds=timeOutSeconds;
+        this.baseUrl=baseUrl;
+    }
 
-        HttpClient httpClient= bootstrap().apply(HttpClient.create()
-                .tcpConfiguration(client -> client
-                        .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-                        .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds)))
-                ));
+    private WebClient webClient(){
+        if(ObjectUtil.isNotNull(client)){
+            return client;
+        }else {
+            HttpClient httpClient= bootstrap().apply(HttpClient.create()
+                    .tcpConfiguration(client -> client
+                            .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
+                            .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds)))
+                    ));
 
-        client = WebClient
-                .builder()
-                .baseUrl(baseUrl)
-                .defaultHeaders(headersConsumer())
-                .clientConnector(new ReactorClientHttpConnector(httpClient))
-                .build();
+            client = WebClient
+                    .builder()
+                    .baseUrl(baseUrl)
+                    .defaultHeaders(headersConsumer())
+                    .clientConnector(new ReactorClientHttpConnector(httpClient))
+                    .build();
+            return client;
+        }
     }
 
     protected Function<HttpClient,HttpClient> bootstrap(){
@@ -85,7 +96,7 @@ public abstract class ParkingLotWebClient {
     }
 
     protected <T> WebClient.ResponseSpec postBase(T data, String url, Object headerData) {
-        return client.post()
+        return webClient().post()
                 .uri(url)
                 .headers(httpHeadersFunction(headerData))
                 .bodyValue(data)
@@ -93,7 +104,7 @@ public abstract class ParkingLotWebClient {
     }
 
     protected WebClient.ResponseSpec getBase(String url, Object headerData) {
-        return client.get()
+        return webClient().get()
                 .uri(url)
                 .headers(httpHeadersFunction(headerData))
                 .retrieve();

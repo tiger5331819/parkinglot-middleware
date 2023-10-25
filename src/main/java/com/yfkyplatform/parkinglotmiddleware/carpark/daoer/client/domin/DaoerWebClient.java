@@ -63,7 +63,7 @@ public abstract class DaoerWebClient extends ParkingLotWebClient {
     @Override
     protected Function<HttpClient, HttpClient> bootstrap() {
         return (httpClient -> {
-            SslContextBuilder sslContextBuilder=testBox.ssl().getIgnoreSSLBuilder();
+            SslContextBuilder sslContextBuilder=this.testBox.ssl().getIgnoreSSLBuilder();
             return ObjectUtil.isNotNull(sslContextBuilder)?httpClient.secure(spec -> spec.sslContext(sslContextBuilder)):httpClient;
         });
     }
