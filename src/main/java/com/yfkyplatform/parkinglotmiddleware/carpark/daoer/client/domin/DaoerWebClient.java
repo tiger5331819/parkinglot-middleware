@@ -1,17 +1,22 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin;
 
+import cn.hutool.core.util.ObjectUtil;
 import cn.hutool.core.util.StrUtil;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.DaoerBase;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.DaoerToken;
 import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.domin.model.token.TokenResult;
 import com.yfkyplatform.parkinglotmiddleware.universal.RedisTool;
+import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
 import com.yfkyplatform.parkinglotmiddleware.universal.web.ParkingLotWebClient;
+import io.netty.handler.ssl.SslContextBuilder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.netty.http.client.HttpClient;
 
 import java.time.Duration;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * 道尔云WebClient
@@ -42,13 +47,25 @@ public abstract class DaoerWebClient extends ParkingLotWebClient {
 
     private boolean refreshToken = false;
 
-    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, int readTimeOutSeconds) {
+    private final TestBox testBox;
+
+
+    public DaoerWebClient(String id, String appName, String parkId, String baseUrl, String imgUrl, RedisTool redisTool, TestBox testBox, int readTimeOutSeconds) {
         super(baseUrl, readTimeOutSeconds);
         redis = redisTool;
         this.appName = appName;
         this.parkId = parkId;
         this.imgUrl = imgUrl;
         tokenName = "token:" + id;
+        this.testBox=testBox;
+    }
+
+    @Override
+    protected Function<HttpClient, HttpClient> bootstrap() {
+        return (httpClient -> {
+            SslContextBuilder sslContextBuilder=testBox.ssl().getIgnoreSSLBuilder();
+            return ObjectUtil.isNotNull(sslContextBuilder)?httpClient.secure(spec -> spec.sslContext(sslContextBuilder)):httpClient;
+        });
     }
 
     @Override

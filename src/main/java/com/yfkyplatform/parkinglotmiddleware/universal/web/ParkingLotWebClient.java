@@ -2,10 +2,7 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import cn.hutool.core.util.StrUtil;
 import io.netty.channel.ChannelOption;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
-import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.netty.util.CharsetUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -20,6 +17,7 @@ import reactor.netty.http.client.HttpClient;
 
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
+import java.util.function.Function;
 
 /**
  * HTTP客户端(WebFlux)
@@ -29,18 +27,17 @@ import java.util.function.Consumer;
 @Slf4j
 public abstract class ParkingLotWebClient {
     private final WebClient client;
-    private final static SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
+
+    protected final int timeOutSeconds;
 
     public ParkingLotWebClient(String baseUrl, int timeOutSeconds) {
+        this.timeOutSeconds=timeOutSeconds;
 
-
-
-        HttpClient httpClient = HttpClient.create()
+        HttpClient httpClient= bootstrap().apply(HttpClient.create()
                 .tcpConfiguration(client -> client
                         .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
-                        .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds))
-                                .addHandlerLast(new WriteTimeoutHandler(timeOutSeconds)))
-                ).secure(spec -> spec.sslContext(sslContextBuilder));
+                        .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds)))
+                ));
 
         client = WebClient
                 .builder()
@@ -48,6 +45,10 @@ public abstract class ParkingLotWebClient {
                 .defaultHeaders(headersConsumer())
                 .clientConnector(new ReactorClientHttpConnector(httpClient))
                 .build();
+    }
+
+    protected Function<HttpClient,HttpClient> bootstrap(){
+        return (httpClient)->httpClient;
     }
 
     protected Consumer<HttpHeaders> headersConsumer() {
@@ -73,10 +74,8 @@ public abstract class ParkingLotWebClient {
             if (err instanceof WebClientResponseException) {
                 String body = ((WebClientResponseException) err).getResponseBodyAsString();
                 log.error("远端车场链接异常。异常包信息："+body+"\n错误信息:"+ err);
-                throw new ParkingLotConnectException(err);
-            } else{
-                throw new ParkingLotConnectException(err);
             }
+            throw new ParkingLotConnectException(err);
         };
     }
 

@@ -20,6 +20,8 @@ public class TestBox {
 
     private final EnvUrlBox envUrlBox;
 
+    private final SSLBox sslBox;
+
     private final RedisTool redis;
 
     public TestBox(Environment env, RedisTool redis) {
@@ -27,6 +29,7 @@ public class TestBox {
         changeFeeBox = new ChangeFeeBox(env);
         envUrlBox = new EnvUrlBox(env);
         this.redis = redis;
+        this.sslBox = new SSLBox(env);
     }
 
     public ChangeFeeBox changeFee() {
@@ -35,6 +38,10 @@ public class TestBox {
 
     public EnvUrlBox envUrl() {
         return envUrlBox;
+    }
+
+    public SSLBox ssl() {
+        return sslBox;
     }
 
     /**
