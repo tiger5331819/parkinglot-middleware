@@ -2,8 +2,6 @@ package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import cn.hutool.core.util.StrUtil;
 import io.netty.channel.ChannelOption;
-import io.netty.handler.ssl.SslContextBuilder;
-import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
 import io.netty.handler.timeout.ReadTimeoutHandler;
 import io.netty.handler.timeout.WriteTimeoutHandler;
 import io.netty.util.CharsetUtil;
@@ -31,7 +29,7 @@ public abstract class ParkingLotWebClient {
     private final WebClient client;
 
     public ParkingLotWebClient(String baseUrl, int timeOutSeconds) {
-        SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
+        //SslContextBuilder sslContextBuilder = SslContextBuilder.forClient().trustManager(InsecureTrustManagerFactory.INSTANCE);
 
 
         HttpClient httpClient = HttpClient.create()
@@ -39,8 +37,8 @@ public abstract class ParkingLotWebClient {
                         .option(ChannelOption.CONNECT_TIMEOUT_MILLIS, 10_000)
                         .doOnConnected(conn -> conn.addHandlerLast(new ReadTimeoutHandler(timeOutSeconds))
                                 .addHandlerLast(new WriteTimeoutHandler(timeOutSeconds)))
-                )
-                .secure(spec -> spec.sslContext(sslContextBuilder));
+                );
+                //.secure(spec -> spec.sslContext(sslContextBuilder));
 
         client = WebClient
                 .builder()
