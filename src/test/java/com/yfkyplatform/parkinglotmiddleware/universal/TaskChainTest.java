@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import cn.hutool.core.util.StrUtil;
-import com.yfkyplatform.parkinglotmiddleware.universal.middleware.TaskChain;
+import com.yfkyplatform.parkinglotmiddleware.universal.tool.TaskChain;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

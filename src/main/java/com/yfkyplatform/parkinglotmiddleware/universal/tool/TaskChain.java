@@ -1,4 +1,4 @@
-package com.yfkyplatform.parkinglotmiddleware.universal.middleware;
+package com.yfkyplatform.parkinglotmiddleware.universal.tool;
 
 import lombok.extern.slf4j.Slf4j;
 
