@@ -55,3 +55,48 @@ rocketmq:
   # Producer 配置项
   producer:
     group: parkinglot-middleware-producer-group # 生产者分组
+
+
+parking-lot-config:
+  Daoer:
+    - 道尔测试:
+      description: 科盈测试
+      config:
+        appName: 5547a609a61a46b4b8cb30b9c1f31588
+        parkId: X52361700001
+        backTrack: true
+      parkingLotId: X52361700001
+
+saasParkingLotConfig:
+  Daoer:
+    baseUrl: https://drparklot.q-parking.com
+    imgUrl: https://drpic.q-parking.com//
+    backTrack: true
+    K51810900005:
+      baseUrl: https://cloud-beta.drzk.cn
+      imgUrl: https://cloud-beta.drzk.cn/
+    K51810900008:
+      baseUrl: https://cloud-beta.drzk.cn
+      imgUrl: https://cloud-beta.drzk.cn/
+
+TestBox:
+  configRepository: true
+  ignoreSSL: true
+  changeFee:
+    enable: false
+    newFee:
+    discountFee:
+  env:
+    gateway:
+      dev: http://mgnt-gw-dev.q-parking.com.cn/
+      test: http://open-test.q-parking.com.cn/
+      prod: https://open.q-parking.com/
+    web:
+      dev: https://h5-fast-dev.q-parking.com.cn/
+      test: https://h5-fast.q-parking.com.cn/
+      prod: https://h5-fast.q-parking.com/
+  saas:
+    dev: http://mgnt-dev.q-parking.com.cn/api/
+    test: https://mgnt-test.q-parking.com.cn/api/
+    prod: https://mgnt-pc.q-parking.com/api/
+  drcloud: https://drparklot.q-parking.com/
