@@ -69,7 +69,7 @@ public class DrCloudWebClient extends ParkingLotWebClient {
     }
 
     private String token() throws JsonProcessingException {
-        String result = postBase("", "login/oauth/token?grant_type=password&client_id=SampleClientId&client_secret=123456&username=admin&password="+password+"&inputStr=5sse", null)
+        String result = postBase("", "login/oauth/token?grant_type=password&client_id=SampleClientId&client_secret=123456&username=admin&password="+password+"&inputStr=4p9k", null)
                 .bodyToMono(String.class).onErrorContinue(errContinueFunction()).block();
 
         Map<String, Object> resultData = getData(result);
