@@ -68,6 +68,6 @@ public class TestBox {
      * @return
      */
     public DrCloudWebClient drCloudClient() {
-        return new DrCloudWebClient(env.getProperty(prefix + ".drcloud"), redis);
+        return new DrCloudWebClient(env.getProperty(prefix + ".drcloud"), redis,env.getProperty(prefix + ".password"));
     }
 }

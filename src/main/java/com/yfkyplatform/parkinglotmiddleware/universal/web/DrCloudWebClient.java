@@ -29,10 +29,13 @@ public class DrCloudWebClient extends ParkingLotWebClient {
 
     private boolean refreshToken = false;
 
-    public DrCloudWebClient(String drCloudBaseUrl, RedisTool redisTool) {
+    private String password;
+
+    public DrCloudWebClient(String drCloudBaseUrl, RedisTool redisTool,String password) {
         super(drCloudBaseUrl, 30);
         redis = redisTool;
         tokenName = "DRCloudtoken";
+        this.password=password;
     }
 
     @Override
@@ -66,7 +69,7 @@ public class DrCloudWebClient extends ParkingLotWebClient {
     }
 
     private String token() throws JsonProcessingException {
-        String result = postBase("", "login/oauth/token?grant_type=password&client_id=SampleClientId&client_secret=123456&username=admin&password=62c1c48636b618319f9414999ccfb420c8fc7943&inputStr=5sse", null)
+        String result = postBase("", "login/oauth/token?grant_type=password&client_id=SampleClientId&client_secret=123456&username=admin&password="+password+"&inputStr=5sse", null)
                 .bodyToMono(String.class).onErrorContinue(errContinueFunction()).block();
 
         Map<String, Object> resultData = getData(result);

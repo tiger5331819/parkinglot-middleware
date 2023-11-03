@@ -11,6 +11,7 @@ import com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar.resp.FindDueCar
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.ParkingLotPod;
+import com.yfkyplatform.parkinglotmiddleware.domain.manager.container.service.context.Car;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCar;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueCarProxy;
 import com.yfkyplatform.parkinglotmiddleware.universal.duecar.DueConfiguration;
@@ -61,8 +62,19 @@ public class DueCarOpenController {
         if (result.getDueCar() == 1) {
             AccountRpcContext.setOperatorId(operatorId);
             ParkingLotPod parkingLot = factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
-            parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn(), findDueCarReq.getInOrOut());
-            log.info("联动催缴返回参数：" + resp);
+
+            Car car=parkingLot.carPort().calculatePayMessage(findDueCarReq.getDsn(),1,null);
+            if(ObjectUtil.isNull(car.getOrder())){
+                resp.setDueCar(1);
+                log.info("不进行联动催缴，返回参数：" + resp);
+            }else{
+                parkingLot.dueCar().addDueCar(findDueCarReq.getPlateNumber(), findDueCarReq.getDsn(), findDueCarReq.getInOrOut());
+                resp.setDueCar(2);
+                log.info("联动催缴返回参数：" + resp);
+            }
+
+        }else{
+            resp.setDueCar(1);
         }
         return resp;
     }
