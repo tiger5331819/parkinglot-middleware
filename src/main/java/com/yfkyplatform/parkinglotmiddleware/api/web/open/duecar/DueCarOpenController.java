@@ -57,8 +57,6 @@ public class DueCarOpenController {
         QueryUrgePayMsgRpcResp result = dueCarService.checkDueCar(operatorId, configuration, dueCar,findDueCarReq.getInOrOut());
         FindDueCarResp resp= BeanUtil.copyProperties(result, FindDueCarResp.class);
 
-        resp.setDueCar(result.getDueCar()==1?2:1);
-
         if (result.getDueCar() == 1) {
             AccountRpcContext.setOperatorId(operatorId);
             ParkingLotPod parkingLot = factory.manager(configuration.getManagerType()).parkingLot(configuration.getId());
