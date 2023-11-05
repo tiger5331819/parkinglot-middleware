@@ -1,6 +1,6 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo;
+package com.parkinglotmiddleware.api.dubbo.service.dubbo;
 
-import com.yfkyplatform.parkinglotmiddleware.api.dubbo.exposer.ITestService;
+import com.parkinglotmiddleware.api.dubbo.exposer.ITestService;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

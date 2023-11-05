@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.universal.web;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
+import com.parkinglotmiddleware.universal.testbox.TestBox;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

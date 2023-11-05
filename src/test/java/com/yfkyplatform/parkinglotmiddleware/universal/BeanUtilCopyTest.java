@@ -1,11 +1,11 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
 import cn.hutool.core.bean.BeanUtil;
-import com.yfkyplatform.parkinglotmiddleware.api.manager.response.DaoerParkingLotCfgRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.parkinglotmiddleware.api.dubbo.service.manager.response.DaoerParkingLotCfgRpcResp;
+import com.parkinglotmiddleware.api.dubbo.service.manager.response.ParkingLotCfgRpcResp;
+import com.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
+import com.parkinglotmiddleware.domain.manager.ParkingLotConfiguration;
+import com.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

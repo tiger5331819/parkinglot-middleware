@@ -1,8 +1,9 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import com.parkinglotmiddleware.domain.repository.IParkingLotConfigurationRepository;
+import com.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

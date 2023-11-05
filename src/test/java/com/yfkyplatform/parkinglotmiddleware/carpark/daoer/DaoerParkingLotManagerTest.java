@@ -1,9 +1,10 @@
 package com.yfkyplatform.parkinglotmiddleware.carpark.daoer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.yfkyplatform.parkinglotmiddleware.carpark.daoer.client.DaoerClient;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManager;
-import com.yfkyplatform.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
+import com.parkinglotmiddleware.carpark.daoer.DaoerParkingLotConfiguration;
+import com.parkinglotmiddleware.carpark.daoer.client.DaoerClient;
+import com.parkinglotmiddleware.domain.manager.ParkingLotManager;
+import com.parkinglotmiddleware.domain.manager.ParkingLotManagerFactory;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;
