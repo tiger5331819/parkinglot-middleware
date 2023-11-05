@@ -13,7 +13,7 @@ springdoc:
     - group: '停车场业务'
       display-name: '停车场API'
       paths-to-match: '/**'
-      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web.bussiness
+      packages-to-scan: com.parkinglotmiddleware.api.dubbo.service.web.bussiness
     - group: '道尔云API代理'
       display-name: '道尔云API'
       paths-to-match: '/**'
@@ -21,7 +21,7 @@ springdoc:
     - group: '联合催缴业务'
       display-name: '联合催缴API'
       paths-to-match: '/**'
-      packages-to-scan: com.yfkyplatform.parkinglotmiddleware.api.web.open.duecar
+      packages-to-scan: com.parkinglotmiddleware.api.dubbo.service.web.open.duecar
 
 dubbo:
   protocol:

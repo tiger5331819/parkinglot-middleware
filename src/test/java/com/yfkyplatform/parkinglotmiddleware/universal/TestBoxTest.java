@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
-import com.yfkyplatform.parkinglotmiddleware.universal.testbox.TestBox;
+import com.parkinglotmiddleware.universal.testbox.TestBox;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

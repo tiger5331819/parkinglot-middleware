@@ -1,6 +1,6 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
-import com.yfkyplatform.parkinglotmiddleware.universal.migration.MigrationManager;
+import com.parkinglotmiddleware.universal.migration.MigrationManager;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package com.yfkyplatform.parkinglotmiddleware.api.dubbo.manager;
+package com.parkinglotmiddleware.api.dubbo.service.dubbo.manager;
 
-import com.yfkyplatform.parkinglotmiddleware.api.manager.IManagerService;
-import com.yfkyplatform.parkinglotmiddleware.api.manager.response.ParkingLotCfgRpcResp;
+import com.parkinglotmiddleware.api.dubbo.service.manager.IManagerService;
+import com.parkinglotmiddleware.api.dubbo.service.manager.response.ParkingLotCfgRpcResp;
 import org.apache.dubbo.config.annotation.DubboReference;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvSource;

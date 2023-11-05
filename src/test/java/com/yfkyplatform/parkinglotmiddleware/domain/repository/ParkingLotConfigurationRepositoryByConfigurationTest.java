@@ -1,6 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.domain.repository;
 
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import com.parkinglotmiddleware.domain.repository.ParkingLotConfigurationRepositoryByConfiguration;
+import com.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;

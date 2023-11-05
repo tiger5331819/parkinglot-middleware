@@ -1,7 +1,7 @@
 package com.yfkyplatform.parkinglotmiddleware.universal;
 
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
-import com.yfkyplatform.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
+import com.parkinglotmiddleware.domain.repository.model.DaoerConfiguration;
+import com.parkinglotmiddleware.domain.repository.model.ParkingLotConfiguration;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

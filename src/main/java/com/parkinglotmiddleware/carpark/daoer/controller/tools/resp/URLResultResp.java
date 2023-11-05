@@ -1,0 +1,23 @@
+package com.parkinglotmiddleware.carpark.daoer.controller.tools.resp;
+
+import com.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.BlankCarURL;
+import com.parkinglotmiddleware.carpark.daoer.client.domin.resp.tool.CarOutPayURL;
+import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.Data;
+
+import java.util.List;
+
+/**
+ * 各类地址生成结果
+ *
+ * @author Suhuyuan
+ */
+@Data
+public class URLResultResp {
+
+    @Schema(description =  "无牌车入场通知")
+    private List<BlankCarURL> blankCarURLList;
+
+    @Schema(description =  "通道出场缴费信息")
+    private List<CarOutPayURL> carOutPayURLList;
+}
